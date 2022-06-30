@@ -1,0 +1,12 @@
+{
+  "Id": "DADTankSubPack",
+  "DisplayName": "D.A.D. & S.O.C.K. Vehicle Pack",
+  "Author": "Lee23, Ryferion, ShirubaFoxy, Socksfor1",
+  "Version": "1.0.0",
+  "VersionDependencies": {
+    "SMLHelper": "2.9"
+  },
+  "Enable": true,
+  "Game": "Subnautica",
+  "AssemblyName": "Socksfor1Subs.dll"
+}
