@@ -96,6 +96,7 @@ namespace Socksfor1Subs
 
             // TANK - SFX
 
+            AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_Boost"), "TankBoost");
             AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_Death"), "TankDeath");
             AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_DriveLoop"), "TankDriveLoop");
             AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_EngineLoop"), "TankEngineLoop");
@@ -107,6 +108,9 @@ namespace Socksfor1Subs
             AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_ReloadTorpedo"), "TankReloadTorpedo");
             AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_HarpoonLoop"), "TankHarpoonLoop");
             AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_Rotate"), "TankRotate");
+            AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_CancelReelIn"), "TankCancelReelIn");
+            AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_ReelLoop"), "TankReelLoop", 1f, 100f, "bus:/master/all/SFX/reverbsend/tech");
+            AddWorldSoundEffect(Mod.assetBundle.LoadAsset<AudioClip>("Tank_ReelLoop2"), "TankReelLoop2", 1f, 100f, "bus:/master/all/SFX/reverbsend/tech");
         }
 
         private static void AddSubVoiceLine(AudioClip clip, string soundPath, string subtitles)

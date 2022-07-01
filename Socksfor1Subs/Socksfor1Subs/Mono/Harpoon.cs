@@ -17,7 +17,7 @@ namespace Socksfor1Subs.Mono
         public float fallDownAnglesPerSecond = 50f;
         public float reelInAnglesPerSecond = 200f;
         public float homeDelay = 0.3f;
-        public float harpoonMaxReelInTime = 10f;
+        public float harpoonMaxReelInTime = 15f;
         public float reelInDetachDistance = 10f;
 
         public Vector3 targetPosition;
@@ -30,8 +30,11 @@ namespace Socksfor1Subs.Mono
         private float _timeReelInStart;
 
         private float _chainLimit = 150f;
+        private float _chainLimitWhileAttached = 500f;
 
         private LineRenderer _lineRenderer;
+
+        private FMODAsset _attachSound = Helpers.GetFmodAsset("TankTorpedoExplosionClose");
 
         private Vector3 TargetPosition
         {
@@ -49,6 +52,18 @@ namespace Socksfor1Subs.Mono
                 {
                     return targetPosition;
                 }
+            }
+        }
+
+        private float ChainLimit
+        {
+            get
+            {
+                if (AttachedToAnything)
+                {
+                    return _chainLimitWhileAttached;
+                }
+                return _chainLimit;
             }
         }
 
@@ -149,7 +164,7 @@ namespace Socksfor1Subs.Mono
 
         private void CheckDistances()
         {
-            if (!BeingReeledIn && Vector3.Distance(tank.weapons.barrelEnd.position, chainAttach.position) > _chainLimit)
+            if (!BeingReeledIn && Vector3.Distance(tank.weapons.barrelEnd.position, chainAttach.position) > ChainLimit)
             {
                 CallBack();
             }
@@ -288,14 +303,11 @@ namespace Socksfor1Subs.Mono
         public void CreateNewAttachment(Attachment attachment)
         {
             _currentAttachment = attachment;
+            Utils.PlayFMODAsset(_attachSound, transform.position);
         }
 
         public void CallBack()
         {
-            /*if (!AttachedToCreature)
-            {
-                //Detach();
-            }*/
             ReelIn();
         }
 
@@ -309,6 +321,11 @@ namespace Socksfor1Subs.Mono
         {
             _reelingIn = true;
             _timeReelInStart = Time.time;
+        }
+
+        public void CancelReelIn()
+        {
+            _reelingIn = false;
         }
 
         public class Attachment

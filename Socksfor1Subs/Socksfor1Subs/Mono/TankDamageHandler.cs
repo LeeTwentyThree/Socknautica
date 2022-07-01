@@ -34,9 +34,9 @@ namespace Socksfor1Subs.Mono
 
         public void OnTakeDamage(DamageInfo damageInfo)
         {
-            if (damageInfo.damage > 100f)
+            if (Player.main.currentMountedVehicle == tank)
             {
-                if (Player.main.currentMountedVehicle == tank)
+                if (damageInfo.damage >= 80f)
                 {
                     if (tank.liveMixin != null && tank.liveMixin.health > 0f)
                     {
@@ -54,7 +54,10 @@ namespace Socksfor1Subs.Mono
                         tank.voice.PlayVoiceLine("TankHullIntegrityCritical");
                     }
                 }
-                Utils.PlayFMODAsset(damageSound, Player.main.transform.position);
+                if (damageInfo.damage >= 25f)
+                {
+                    Utils.PlayFMODAsset(damageSound, Player.main.transform.position);
+                }
             }
         }
     }

@@ -8,6 +8,8 @@ namespace Socksfor1Subs.Mono
         public Light[] lights;
 
         public float onIntensity = 3f;
+        public float idleIntensity = 1f;
+        public float offIntensity = 0f;
 
         public Color defaultColor = Color.white;
         public Color stealthColor = new Color(1f, 0f, 0f);
@@ -16,7 +18,7 @@ namespace Socksfor1Subs.Mono
         {
             foreach (var l in lights)
             {
-                l.intensity = onIntensity;
+                l.intensity = GetIntensity();
                 if (sub.stealthManager.StealthEnabled)
                 {
                     l.color = stealthColor;
@@ -26,6 +28,19 @@ namespace Socksfor1Subs.Mono
                     l.color = defaultColor;
                 }
             }
+        }
+
+        private float GetIntensity()
+        {
+            if (!sub.powerRelay.IsPowered())
+            {
+                return offIntensity;
+            }
+            if (Player.main.GetCurrentSub() != sub)
+            {
+                return idleIntensity;
+            }
+            return onIntensity;
         }
     }
 }

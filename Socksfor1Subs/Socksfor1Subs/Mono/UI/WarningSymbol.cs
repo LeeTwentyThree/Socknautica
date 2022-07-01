@@ -24,7 +24,7 @@ namespace Socksfor1Subs.Mono.UI
             warningText.enabled = show;
             if (emitter != null)
             {
-                if (show && Player.main.GetCurrentSub() == sub)
+                if (show && Player.main.GetCurrentSub() == sub && !sub.stealthManager.StealthEnabled)
                 {
                     emitter.Play();
                 }

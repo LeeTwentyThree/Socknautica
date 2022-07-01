@@ -50,6 +50,10 @@ namespace Socksfor1Subs.Mono
             dockedVehicle.SetPlayerInside(false);
             Player.main.ExitLockedMode();
             _timeLastDocked = Time.time;
+            if (dockedVehicle is Tank tank)
+            {
+                SetTankState(tank, true, false);
+            }
             return true;
         }
 
@@ -67,6 +71,10 @@ namespace Socksfor1Subs.Mono
             player.SetCurrentSub(null);
             if (dockedVehicle != null)
             {
+                if (dockedVehicle is Tank tank)
+                {
+                    SetTankState(tank, false, false);
+                }
                 dockedVehicle.OnUndockingComplete(player);
                 SkyEnvironmentChanged.Broadcast(dockedVehicle.gameObject, (Component)null);
             }
@@ -106,6 +114,25 @@ namespace Socksfor1Subs.Mono
                         mainColliderObj.GetComponent<Collider>().enabled = true;
                     }
                 }
+                if (dockedVehicle is Tank tank)
+                {
+                    var chair = Player.main.GetPilotingChair();
+                    var subBeingPiloted = chair != null && chair.subRoot == Player.main.GetCurrentSub();
+                    SetTankState(tank, true, subBeingPiloted);
+                }
+            }
+        }
+
+        private void SetTankState(Tank tank, bool docked, bool subPiloted)
+        {
+            tank.collisionModel.gameObject.SetActive(docked && !subPiloted);
+            if (docked)
+            {
+                tank.DisableVolumetricLights();
+            }
+            else if (!tank.GetPilotingMode())
+            {
+                tank.EnableVolumetricLights();
             }
         }
 

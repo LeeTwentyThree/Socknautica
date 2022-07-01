@@ -7,6 +7,8 @@ namespace Socksfor1Subs.Mono
     {
         public DadSubBehaviour sub;
 
+        public DealDamageOnImpact impactDamage;
+
         public FMOD_CustomLoopingEmitter emergencyMusicEmitter;
 
         public bool forceExplosionImmediately;
@@ -71,6 +73,7 @@ namespace Socksfor1Subs.Mono
             DoVoiceLines();
             HealOverTime();
             ManageDeath();
+            ManageDamageOnImpact();
             var shouldPlayMusic = ShouldPlayMusic();
             if (shouldPlayMusic && !emergencyMusicEmitter.playing)
             {
@@ -98,6 +101,11 @@ namespace Socksfor1Subs.Mono
             }
         }
 
+        private void ManageDamageOnImpact()
+        {
+            impactDamage.enabled = Player.main.GetCurrentSub() == sub;
+        }
+
         private bool ShouldPlayMusic()
         {
             if (Player.main.GetCurrentSub() != sub)
@@ -113,7 +121,7 @@ namespace Socksfor1Subs.Mono
 
         private void HealOverTime()
         {
-            if (Time.time > _timeNextTick && sub.live.IsAlive())
+            if (Time.time > _timeNextTick && sub.live.IsAlive() && sub.powerRelay.IsPowered())
             {
                 _timeNextTick = Time.time + Balance.DadRegenInterval;
                 sub.live.AddHealth(Balance.DadHealthPerRegen);

@@ -5,7 +5,6 @@ namespace Socksfor1Subs.Mono
     public class SolarCharger : MonoBehaviour
     {
 		public DadSubBehaviour sub;
-		public PowerSource powerSource;
 		public PowerRelay relay;
 
 		public float Efficiency
@@ -41,7 +40,8 @@ namespace Socksfor1Subs.Mono
 
         private void Update()
 		{
-			powerSource.power = Mathf.Clamp(powerSource.power + (Efficiency * Time.deltaTime * Balance.DadSolarChargerIdealRate), 0f, powerSource.maxPower);
+            var calculatePower = Efficiency * Time.deltaTime * Balance.DadSolarChargerIdealRate;
+            relay.AddEnergy(calculatePower, out float _);
 		}
 	}
 }

@@ -8,10 +8,15 @@ namespace Socksfor1Subs.Mono
 
         public Transform barrelEnd;
 
+        public FMOD_CustomLoopingEmitter reelEmitter;
+
         private Mode _mode;
 
         private bool _fired;
         private bool _letGo;
+        private bool _boost;
+        private bool _switchingView;
+        private bool _switchingWeapon;
 
         private GameObject _torpedoPrefab;
         private GameObject _harpoonPrefab;
@@ -37,9 +42,15 @@ namespace Socksfor1Subs.Mono
         private float _timeFiredHarpoon;
         private float _harpoonMinRetractTime = 0.3f;
 
+        private float _timeLastBoosted;
+        private float _boostCooldown = 5f;
+        private float _boostForce = 40f;
+
         private FMODAsset _torpedoFireSound = Helpers.GetFmodAsset("event:/sub/seamoth/torpedo_fire");
         private FMODAsset _harpoonFireSound = Helpers.GetFmodAsset("TankShootHarpoon");
         private FMODAsset _harpoonReturnSound = Helpers.GetFmodAsset("TankReloadHarpoon");
+        private FMODAsset _boostSound = Helpers.GetFmodAsset("TankBoost");
+        private FMODAsset _cancelReelInSound = Helpers.GetFmodAsset("TankCancelReelIn");
 
         public bool JustChangedMode
         {
@@ -86,6 +97,18 @@ namespace Socksfor1Subs.Mono
             get
             {
                 return _currentHarpoon != null;
+            }
+        }
+
+        public bool ReelingInHarpoon
+        {
+            get
+            {
+                if (!HarpoonDeployed)
+                {
+                    return false;
+                }
+                return _currentHarpoon.BeingReeledIn;
             }
         }
 
@@ -144,10 +167,10 @@ namespace Socksfor1Subs.Mono
                 {
                     return false;
                 }
-                if (HarpoonDeployed)
+                /*if (HarpoonDeployed)
                 {
                     return false;
-                }
+                }*/
                 return true;
             }
         }
@@ -272,12 +295,23 @@ namespace Socksfor1Subs.Mono
                 Utils.PlayFMODAsset(_harpoonReturnSound, transform.position);
             }
             _harpoonWasDeployed = HarpoonDeployed;
+            if (HarpoonDeployed && _currentHarpoon.BeingReeledIn)
+            {
+                reelEmitter.Play();
+            }
+            else if (reelEmitter.playing)
+            {
+                reelEmitter.Stop();
+            }
         }
 
         private void UpdateWeaponInput()
         {
             _fired = false;
             _letGo = false;
+            _boost = false;
+            _switchingView = false;
+            _switchingWeapon = false;
             if (tank.GetPilotingMode())
             {
                 if (AvatarInputHandler.main.IsEnabled() && !JustChangedMode)
@@ -289,6 +323,18 @@ namespace Socksfor1Subs.Mono
                     if (!GameInput.GetButtonHeld(GameInput.Button.LeftHand))
                     {
                         _letGo = true;
+                    }
+                    if (GameInput.GetButtonDown(GameInput.Button.Sprint))
+                    {
+                        _boost = true;
+                    }
+                    if (GameInput.GetButtonDown(GameInput.Button.AltTool))
+                    {
+                        _switchingView = true;
+                    }
+                    if (GameInput.GetButtonDown(GameInput.Button.Reload))
+                    {
+                        _switchingWeapon = true;
                     }
                 }
 
@@ -331,6 +377,15 @@ namespace Socksfor1Subs.Mono
             }
         }
 
+        private void CancelReelIn()
+        {
+            if (HarpoonDeployed && _currentHarpoon.BeingReeledIn)
+            {
+                _currentHarpoon.CancelReelIn();
+                Utils.PlayFMODAsset(_cancelReelInSound, transform.position);
+            }
+        }
+
         private Vector3 GetAimPosition(float minDistance, float maxDistance, float defaultDistance, out Transform targetTransform)
         {
             var camTransform = MainCameraControl.main.transform;
@@ -366,8 +421,24 @@ namespace Socksfor1Subs.Mono
 
         private void UpdateWeapons()
         {
+            if (_switchingView)
+            {
+                tank.ToggleActiveView();
+            }
             if (!JustChangedMode && !tank.hud.AnyButtonHovered())
             {
+                if (_switchingWeapon)
+                {
+                    if (CurrentMode == Mode.Torpedo)
+                    {
+                        tank.hud.harpoonButton.OnClick();
+                    }
+                    else
+                    {
+                        tank.hud.torpedoButton.OnClick();
+                    }
+                    return;
+                }
                 if (_fired)
                 {
                     if (CurrentMode == Mode.Torpedo && !TorpedoOnCooldown && TorpedoCount > 0)
@@ -394,14 +465,42 @@ namespace Socksfor1Subs.Mono
                         return;
                     }
                 }
-                if (_fired || _letGo)
+                if (CurrentMode == Mode.Harpoon && HarpoonDeployed && !JustShotHarpoon)
                 {
-                    if (CurrentMode == Mode.Harpoon && HarpoonDeployed && !JustShotHarpoon)
+                    if (CurrentHarpoon.BeingReeledIn)
                     {
-                        CallBackHarpoon();
+                        if (_fired)
+                        {
+                            CancelReelIn();
+                        }
+                    }
+                    else
+                    {
+                        if (_fired || _letGo)
+                        {
+                            CallBackHarpoon();
+                        }
+                    }
+                }
+                if (_boost && Time.time > _timeLastBoosted + _boostCooldown)
+                {
+                    if (TryConsumePower(Balance.TankBoostPowerUsage))
+                    {
+                        Boost();
+                    }
+                    else
+                    {
+                        ErrorMessage.AddMessage("Insufficient power!");
                     }
                 }
             }
+        }
+
+        private void Boost()
+        {
+            Utils.PlayFMODAsset(_boostSound, transform.position);
+            tank.useRigidbody.AddForce(MainCameraControl.main.transform.forward * _boostForce, ForceMode.VelocityChange);
+            _timeLastBoosted = Time.time;
         }
     }
 }

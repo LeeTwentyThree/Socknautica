@@ -15,6 +15,7 @@ namespace Socksfor1Subs.Mono.UI
         public Text solarPanelText;
         public Text healthText;
         public Text powerText;
+        public Text stealthText;
 
         private Transform[] anchors;
 
@@ -62,6 +63,7 @@ namespace Socksfor1Subs.Mono.UI
             solarPanelText.text = string.Format("{0}%", sub.SolarPowerPercentFormatted);
             healthText.text = string.Format("{0}%", sub.HealthPercentFormatted);
             powerText.text = string.Format("{0}%", sub.PowerPercentFormatted);
+            stealthText.text = string.Format("{0}%", sub.stealthManager.ChargeFormatted);
         }
 
         private IEnumerator MoveTo(Transform newParent)

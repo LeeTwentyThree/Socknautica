@@ -40,6 +40,77 @@ namespace Socksfor1Subs
         }
     }
 
+    [HarmonyPatch(typeof(Creature))]
+    public static class Creature_Patches
+    {
+        [HarmonyPatch(nameof(Creature.Start))]
+        [HarmonyPostfix()]
+        public static void Start_Postfix(Creature __instance)
+        {
+            if (!(__instance is ReaperLeviathan))
+            {
+                return;
+            }
+            if (Mod.config.MoreViciousReapers)
+            {
+                var melee = __instance.gameObject.GetComponentInChildren<MeleeAttack>();
+                if (melee != null)
+                {
+                    melee.canBiteVehicle = true;
+                }
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(FleeOnDamage))]
+    public static class FleeOnDamage_Patches
+    {
+        [HarmonyPatch(nameof(FleeOnDamage.StartPerform))]
+        [HarmonyPrefix()]
+        public static bool StartPerform_Prefix(FleeOnDamage __instance, Creature creature)
+        {
+            if (Mod.config.DisableLeviathanFear == false)
+            {
+                return true;
+            }
+            if (IsCreatureLeviathan(creature))
+            {
+                __instance.timeNextSwim = float.MaxValue;
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsCreatureLeviathan(Creature creature)
+        {
+            if (creature.liveMixin != null && creature.liveMixin.maxHealth >= 3000)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    [HarmonyPatch(typeof(GhostLeviatanVoid))]
+    public static class GhostLeviatanVoid_Patches
+    {
+        [HarmonyPatch(nameof(GhostLeviatanVoid.UpdateVoidBehaviour))]
+        [HarmonyPostfix()]
+        public static void UpdateVoidBehaviour_Postfix(GhostLeviatanVoid __instance)
+        {
+            var spawner = VoidGhostLeviathansSpawner.main;
+            bool targetPlayer = spawner && spawner.IsPlayerInVoid();
+            if (targetPlayer)
+            {
+                var playerSub = Player.main.GetCurrentSub();
+                if (playerSub != null && playerSub is DadSubBehaviour)
+                {
+                    __instance.lastTarget.target = playerSub.gameObject;
+                }
+            }
+        }
+    }
+
     [HarmonyPatch(typeof(Constructor))]
     public static class Constructor_Patches
     {
@@ -63,7 +134,7 @@ namespace Socksfor1Subs
             var newSpawnPoint = Object.Instantiate(constructor.defaultSpawnPoint, constructor.transform);
             newSpawnPoint.transform.localPosition = position;
             newSpawnPoint.transform.localEulerAngles = eulers;
-            constructor.spawnPoints.Add(new Constructor.SpawnPoint() { techType = techType, transform = newSpawnPoint.transform } );
+            constructor.spawnPoints.Add(new Constructor.SpawnPoint() { techType = techType, transform = newSpawnPoint.transform });
 
         }
     }

@@ -11,11 +11,20 @@ namespace Socksfor1Subs.Mono
     {
         public DadSubDock dock;
 
+        public bool tankOnly;
+
         private void OnTriggerEnter(Collider other)
         {
             var vehicle = other.gameObject.GetComponentInParent<Vehicle>();
             if (vehicle != null)
             {
+                if (tankOnly)
+                {
+                    if (!(vehicle is Tank))
+                    {
+                        return;
+                    }
+                }
                 dock.DockVehicle(vehicle);
             }
         }

@@ -14,7 +14,6 @@ namespace Socksfor1Subs.Mono
         public float velocity = 23f;
         public float spinDegreesPerSecond = 360f;
         public float fuseTimer = 12f;
-        public float damagePerHit = 900f;
         public float damageToSubs = 200f;
         public float rotateToTargetAnglesPerSecond = 120f;
         public float fallDownAnglesPerSecond = 50f;
@@ -121,7 +120,7 @@ namespace Socksfor1Subs.Mono
                         continue;
                     }
                     damagedList.Add(liveMixin);
-                    var damage = damagePerHit;
+                    var damage = Balance.TankTorpedoDamage;
                     bool damagingVehicle = liveMixin.IsWeldable() || liveMixin.gameObject.GetComponent<SubRoot>() != null || liveMixin.gameObject.GetComponent<Vehicle>() != null;
                     if (damagingVehicle)
                     {
@@ -168,7 +167,10 @@ namespace Socksfor1Subs.Mono
             Utils.PlayFMODAsset(sound, location);
             if (distance < 60f)
             {
-                FadingOverlay.PlayFX(Color.white, 0f, 0f, 1f);
+                if (Mod.config.EnableTorpedoFlash)
+                {
+                    FadingOverlay.PlayFX(Color.white, 0f, 0f, 1f);
+                }
             }
             if (distance < 100f)
             {

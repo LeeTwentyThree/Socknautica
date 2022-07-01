@@ -102,6 +102,14 @@ namespace Socksfor1Subs.Mono
             }
         }
 
+        public string ChargeFormatted
+        {
+            get 
+            {
+                return (Charge * 100f).ToString("0.0");
+            }
+        }
+
         public bool Recharging
         {
             get
@@ -141,7 +149,7 @@ namespace Socksfor1Subs.Mono
                 _stealthEnabled = value;
                 bool justChanged = JustToggled;
                 CancelInvoke();
-                FadingOverlay.PlayFX(Color.white, 0.1f, 0.5f, 1f);
+                FadingOverlay.PlayFX(Color.black, 0.1f, 0.5f, 1f);
                 Invoke(nameof(UpdateStealthMaterial), 0.15f);
                 if (StealthEnabled)
                 {

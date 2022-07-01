@@ -25,6 +25,12 @@ namespace Socksfor1Subs.Mono
         private void Scan()
         {
             _timeScanAgain = Time.time + _scanInterval;
+            var ghostSpawner = VoidGhostLeviathansSpawner.main;
+            if (ghostSpawner != null && ghostSpawner.spawnedCreatures != null && ghostSpawner.spawnedCreatures.Count > 0)
+            {
+                Report();
+                return;
+            }
             var target = EcoRegionManager.main.FindNearestTarget(EcoTargetType.Leviathan, transform.position, null, 6);
             if ((Object)target == null || target.GetGameObject() == null)
             {

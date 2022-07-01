@@ -13,8 +13,6 @@ namespace Socksfor1Subs.Mono
 
         public override Vector3[] vehicleDefaultColors => new Vector3[] { new Vector3(0f, 0f, 1f) };
 
-        public float mouseSensitivity = 1f;
-
         public GameObject exteriorGlass;
 
         public EngineRpmSFXManager engineRpmSFX;
@@ -25,12 +23,10 @@ namespace Socksfor1Subs.Mono
 
         public TankHUD hud;
 
-        private float _lookHorizontal;
-        private float _lookHorizontalMin = -120;
-        private float _lookHorizontalMax = 120f;
-        private float _lookVertical;
-        private float _lookVerticalMin = -80f;
-        private float _lookVerticalMax = 50f;
+        public TankView activeView;
+
+        public TankView mainView;
+        public TankView bottomView;
 
         private float _steeringSpeed = 0.08f;
 
@@ -70,6 +66,7 @@ namespace Socksfor1Subs.Mono
         {
             base.Start();
             SetRotationLocked(true);
+            activeView = mainView;
         }
 
         public override void SetPlayerInside(bool inside)
@@ -104,7 +101,21 @@ namespace Socksfor1Subs.Mono
         {
             base.OnPilotModeBegin();
             inTank = true;
-            ResetLook();
+            mainView.SetActiveView(true);
+            bottomView.ForgetRotation();
+            DisableVolumetricLights();
+        }
+
+        public void EnableVolumetricLights()
+        {
+            for (int i = 0; i < volumetricLights.Length; i++)
+            {
+                volumetricLights[i].RestoreVolume();
+            }
+        }
+
+        public void DisableVolumetricLights()
+        {
             for (int i = 0; i < volumetricLights.Length; i++)
             {
                 volumetricLights[i].DisableVolume();
@@ -115,17 +126,19 @@ namespace Socksfor1Subs.Mono
         {
             base.OnPilotModeEnd();
             inTank = false;
-            for (int i = 0; i < volumetricLights.Length; i++)
-            {
-                volumetricLights[i].RestoreVolume();
-            }
+            EnableVolumetricLights();
         }
 
-        private void ResetLook()
+        public void ToggleActiveView()
         {
-            _lookHorizontal = 0f;
-            _lookVertical = 0f;
-            playerPosition.transform.localEulerAngles = Vector3.zero;
+            if (mainView.Active)
+            {
+                bottomView.SetActiveView(true);
+            }
+            else
+            {
+                mainView.SetActiveView(false);
+            }
         }
 
         public override bool CanPilot()
@@ -136,12 +149,11 @@ namespace Socksfor1Subs.Mono
         public override void Update()
         {
             base.Update();
-            DoLook();
             UpdateGlassVisiblity();
             UpdateSounds();
             if (GetPilotingMode())
             {
-                string buttonFormat = LanguageCache.GetButtonFormat("PressToExit", GameInput.Button.Exit);
+                string buttonFormat = GetPrimaryControlText() + " " + LanguageCache.GetButtonFormat("TankControlDisplay2", GameInput.Button.Sprint) + " " + LanguageCache.GetButtonFormat("TankControlDisplay3", GameInput.Button.Reload) + " " + LanguageCache.GetButtonFormat("TankControlDisplay4", GameInput.Button.AltTool) + "\n" + LanguageCache.GetButtonFormat("PressToExit", GameInput.Button.Exit);
                 HandReticle.main.SetUseTextRaw(buttonFormat, string.Empty);
                 Vector3 vector = AvatarInputHandler.main.IsEnabled() ? GameInput.GetMoveDirection() : Vector3.zero;
                 if (vector.magnitude > 0.1f)
@@ -151,14 +163,28 @@ namespace Socksfor1Subs.Mono
             }
         }
 
-        private void DoLook()
+        private string GetPrimaryControlText()
         {
-            Vector2 lookDelta = AvatarInputHandler.main.IsEnabled() ? GameInput.GetLookDelta() : Vector2.zero;
-            _lookHorizontal = _lookHorizontal + lookDelta.x * mouseSensitivity;
-            _lookHorizontal = Mathf.Clamp(_lookHorizontal, _lookHorizontalMin, _lookHorizontalMax);
-            _lookVertical = _lookVertical - lookDelta.y * mouseSensitivity;
-            _lookVertical = Mathf.Clamp(_lookVertical, _lookVerticalMin, _lookVerticalMax);
-            playerPosition.transform.localEulerAngles = new Vector3(_lookVertical, _lookHorizontal, 0f);
+            if (weapons.CurrentMode == TankWeapons.Mode.Torpedo)
+            {
+                return LanguageCache.GetButtonFormat("TankTorpedoControl", GameInput.Button.LeftHand);
+            }
+            if (weapons.CurrentMode == TankWeapons.Mode.Harpoon)
+            {
+                if (!weapons.HarpoonDeployed)
+                {
+                    return LanguageCache.GetButtonFormat("TankHarpoonControlFire", GameInput.Button.LeftHand);
+                }
+                else if (weapons.ReelingInHarpoon)
+                {
+                    return LanguageCache.GetButtonFormat("TankHarpoonControlCancelReel", GameInput.Button.LeftHand);
+                }
+                else
+                {
+                    return LanguageCache.GetButtonFormat("TankHarpoonControlReel", GameInput.Button.LeftHand);
+                }
+            }
+            return LanguageCache.GetButtonFormat("TankControlGeneric", GameInput.Button.LeftHand);
         }
 
         private void UpdateGlassVisiblity()

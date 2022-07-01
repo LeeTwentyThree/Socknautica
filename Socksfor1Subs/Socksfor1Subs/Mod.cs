@@ -24,6 +24,8 @@ namespace Socksfor1Subs
         public static int handTargetLayer = 13;
         public static Vehicle.ControlSheme tankControlScheme = (Vehicle.ControlSheme)42069;
 
+        public static Config config = OptionsPanelHandler.Main.RegisterModOptions<Config>();
+
         [QModPatch()]
         public static void Entry()
         {
@@ -55,6 +57,15 @@ namespace Socksfor1Subs
             AddAcidImmune(sockTank.TechType);
 
             ModAudio.PatchAudio();
+
+            LanguageHandler.SetLanguageLine("TankTorpedoControl", "Fire torpedo ({0})");
+            LanguageHandler.SetLanguageLine("TankHarpoonControlFire", "Launch harpoon ({0})");
+            LanguageHandler.SetLanguageLine("TankHarpoonControlCancelReel", "Lock harpoon ({0})");
+            LanguageHandler.SetLanguageLine("TankHarpoonControlReel", "Reel in harpoon (Release {0})");
+            LanguageHandler.SetLanguageLine("TankControlGeneric", "Use weapon ({0})");
+            LanguageHandler.SetLanguageLine("TankControlDisplay2", "Activate boost ({0})");
+            LanguageHandler.SetLanguageLine("TankControlDisplay3", "Switch weapon ({0})");
+            LanguageHandler.SetLanguageLine("TankControlDisplay4", "Switch view ({0})");
         }
 
         private static void AddAcidImmune(TechType techType)

@@ -283,7 +283,7 @@ namespace Socksfor1Subs.Prefabs
             var damageHandler = prefab.AddComponent<TankDamageHandler>();
             damageHandler.tank = tank;
 
-            tank.volumetricLights = new VFXVolumetricLight[] { AddVolumetricLight(Helpers.FindChild(prefab, "FrontLight_Left"), seamothComponent), AddVolumetricLight(Helpers.FindChild(prefab, "FrontLight_Right"), seamothComponent) };
+            tank.volumetricLights = new VFXVolumetricLight[] { AddVolumetricLight(Helpers.FindChild(prefab, "FrontLight_Left"), seamothComponent), AddVolumetricLight(Helpers.FindChild(prefab, "FrontLight_Right"), seamothComponent), AddVolumetricLight(Helpers.FindChild(prefab, "BarrelLight"), seamothComponent) };
 
             // Movement
 
@@ -323,6 +323,21 @@ namespace Socksfor1Subs.Prefabs
             tank.weapons = weapons;
             weapons.tank = tank;
             weapons.barrelEnd = Helpers.FindChild(barrelPivot, "BarrelEnd").transform;
+            var reelEmitter = prefab.AddComponent<FMOD_CustomLoopingEmitter>();
+            reelEmitter.asset = reelSound;
+            reelEmitter.followParent = true;
+            weapons.reelEmitter = reelEmitter;
+
+            // Viewpoints
+
+            var mainView = Helpers.FindChild(prefab, "MainView").AddComponent<TankViewMain>();
+            mainView.tank = tank;
+
+            var bottomView = Helpers.FindChild(prefab, "BottomView").AddComponent<TankViewBottom>();
+            bottomView.tank = tank;
+
+            tank.mainView = mainView;
+            tank.bottomView = bottomView;
 
             // Finalize
 
@@ -401,6 +416,7 @@ namespace Socksfor1Subs.Prefabs
         private static FMODAsset splashSound = Helpers.GetFmodAsset("event:/sub/common/splash_in_and_out");
         private static FMODAsset rotateSound = Helpers.GetFmodAsset("event:/sub/rocket/call_lift_loop_2");
         private static FMODAsset driveSound = Helpers.GetFmodAsset("event:/sub/cyclops/cyclops_loop_rpm");
+        private static FMODAsset reelSound = Helpers.GetFmodAsset("TankReelLoop2");
 
         public override TechCategory CategoryForPDA => TechCategory.Constructor;
         public override TechGroup GroupForPDA => TechGroup.Constructor;

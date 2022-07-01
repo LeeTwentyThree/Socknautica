@@ -24,8 +24,9 @@ namespace Socksfor1Subs.Prefabs
                 return prefab;
             }
 
-            // Load the rocket platform for reference. I only use it for the constructor animation and sounds.
+            // Load reference prefabs to grab fields
             GameObject rocketPlatformReference = CraftData.GetPrefabForTechType(TechType.RocketBase);
+            GameObject exosuitReference = CraftData.GetPrefabForTechType(TechType.Exosuit);
 
             prefab = Object.Instantiate(Mod.assetBundle.LoadAsset<GameObject>("DadSub_Prefab"));
             prefab.SetActive(false);
@@ -177,25 +178,17 @@ namespace Socksfor1Subs.Prefabs
 
             var solarChargerRoot = Helpers.FindChild(prefab, "SolarCharger");
             var solarCharger = solarChargerRoot.AddComponent<SolarCharger>();
-            solarCharger.powerSource = solarChargerRoot.AddComponent<PowerSource>();
-            solarCharger.powerSource.maxPower = Balance.DadSolarChargerMaxPower;
+            solarCharger.relay = powerRelay;
 
-            solarCharger.relay = solarChargerRoot.EnsureComponent<PowerRelay>();
-            solarCharger.relay.maxOutboundDistance = 20;
-            solarCharger.relay.internalPowerSource = solarCharger.powerSource;
+            // Power cells
 
-            solarCharger.powerSource.connectedRelay = solarCharger.relay;
-
-            PowerFX powerFXComponent = solarChargerRoot.AddComponent<PowerFX>();
-            var solarPanelReference = CraftData.GetPrefabForTechType(TechType.SolarPanel);
-            PowerRelay referenceRelay = solarPanelReference.GetComponent<PowerRelay>();
-            powerFXComponent.vfxPrefab = referenceRelay.powerFX.vfxPrefab;
-            solarCharger.relay.powerFX = powerFXComponent;
-
-            powerFXComponent.attachPoint = solarChargerRoot.transform;
-
-            solarCharger.relay.outboundRelay = solarChargerRoot.GetComponentInParent<PowerRelay>();
-            solarCharger.relay.dontConnectToRelays = true;
+            var powerCellRoot = Helpers.FindChild(prefab, "PowerCells").transform;
+            int powerCellNum = 1;
+            foreach (Transform powerCell in powerCellRoot)
+            {
+                AddBatterySlot(string.Format("DadPowerCell{0}", powerCellNum), powerCell.gameObject, exosuitReference);
+                powerCellNum++;
+            }
 
             // Necessary for SubRoot class Update behaviour so it doesn't return an error every frame.
 
@@ -339,6 +332,10 @@ namespace Socksfor1Subs.Prefabs
             var dockTrigger = Helpers.FindChild(dockRoot, "DockTrigger").AddComponent<DockTrigger>();
             dockTrigger.dock = dock;
 
+            var dockTriggerTank = Helpers.FindChild(dockRoot, "DockTriggerTank").AddComponent<DockTrigger>();
+            dockTriggerTank.dock = dock;
+            dockTriggerTank.tankOnly = true;
+
             // Entrance
 
             var waterTransitionParent = Helpers.FindChild(prefab, "WaterTransition");
@@ -480,6 +477,8 @@ namespace Socksfor1Subs.Prefabs
             miniHud.healthText = Helpers.FindChild(miniHud.gameObject, "Health").GetComponent<Text>();
             miniHud.powerText = Helpers.FindChild(miniHud.gameObject, "Power").GetComponent<Text>();
             miniHud.solarPanelText = Helpers.FindChild(miniHud.gameObject, "SolarPanelEfficiency").GetComponent<Text>();
+            miniHud.stealthText = Helpers.FindChild(miniHud.gameObject, "StealthPercent").GetComponent<Text>();
+            var miniStealthModeButton = HUDButton<DadSubBehaviour>.Create<StealthModeButton>(subBehaviour, Helpers.FindChild(miniHud.gameObject, "StealthButtonMini"), "Enable Stealth Mode", Mod.assetBundle.LoadAsset<Sprite>("Stealth 1"), Mod.assetBundle.LoadAsset<Sprite>("Stealth 2"), Mod.assetBundle.LoadAsset<Sprite>("Stealth 3"));
 
             // Abilities
 
@@ -503,6 +502,21 @@ namespace Socksfor1Subs.Prefabs
             damageHandler.emergencyMusicEmitter = prefab.AddComponent<FMOD_CustomLoopingEmitter>();
             damageHandler.emergencyMusicEmitter.SetAsset(emergencyMusic);
             damageHandler.emergencyMusicEmitter.followParent = true;
+            damageHandler.impactDamage = damageOnImpact;
+
+            // Cameras
+
+            var cameraManager = prefab.AddComponent<CameraManager>();
+            cameraManager.sub = subBehaviour;
+            cameraManager.sittingPosition = Helpers.FindChild(prefab, "SittingPosition").transform;
+            cameraManager.mainViewParent = Helpers.FindChild(prefab, "MainView").transform;
+
+            cameraManager.topCamera = Helpers.FindChild(prefab, "TopCamera").AddComponent<DadSubCamera>();
+            cameraManager.topCamera.cameraManager = cameraManager;
+            cameraManager.bottomCamera = Helpers.FindChild(prefab, "BottomCamera").AddComponent<DadSubCamera>();
+            cameraManager.bottomCamera.cameraManager = cameraManager;
+
+            subBehaviour.cameraManager = cameraManager;
 
             // Finalize
 
@@ -525,6 +539,10 @@ namespace Socksfor1Subs.Prefabs
             var stealthModeButton = HUDButton<DadSubBehaviour>.Create<StealthModeButton>(subBehaviour, Helpers.FindChild(pilotHUD.gameObject, "StealthButton"), "Enable Stealth Mode", Mod.assetBundle.LoadAsset<Sprite>("Stealth 1"), Mod.assetBundle.LoadAsset<Sprite>("Stealth 2"), Mod.assetBundle.LoadAsset<Sprite>("Stealth 3"));
             var deterrenceButton = HUDButton<DadSubBehaviour>.Create<DeterrenceButton>(subBehaviour, Helpers.FindChild(pilotHUD.gameObject, "DeterrenceButton"), "Enable Deterrence System", Mod.assetBundle.LoadAsset<Sprite>("Hypersonic 1"), Mod.assetBundle.LoadAsset<Sprite>("Hypersonic 2"), Mod.assetBundle.LoadAsset<Sprite>("Hypersonic 3"));
             var holographicDecoyButton = HUDButton<DadSubBehaviour>.Create<HolographicDecoyButton>(subBehaviour, Helpers.FindChild(pilotHUD.gameObject, "DecoyButton"), "Enable Holographic Decoy", Mod.assetBundle.LoadAsset<Sprite>("Holographic 1"), Mod.assetBundle.LoadAsset<Sprite>("Holographic 2"), Mod.assetBundle.LoadAsset<Sprite>("Holographic 3"));
+            var cameraTopButton = HUDButton<DadSubBehaviour>.Create<CameraButton>(subBehaviour, Helpers.FindChild(pilotHUD.gameObject, "UpperCameraButton"), "View camera", Mod.assetBundle.LoadAsset<Sprite>("CameraUpper"), null, null);
+            cameraTopButton.upper = true;
+            var cameraBottomButton = HUDButton<DadSubBehaviour>.Create<CameraButton>(subBehaviour, Helpers.FindChild(pilotHUD.gameObject, "LowerCameraButton"), "View camera", Mod.assetBundle.LoadAsset<Sprite>("CameraLower"), null, null);
+            cameraBottomButton.upper = false;
 
             pilotHUD.deterrenceBar = Helpers.FindChild(pilotHUD.gameObject, "HypersonicBar").GetComponent<Image>();
             pilotHUD.stealthBar = Helpers.FindChild(pilotHUD.gameObject, "StealthBar").GetComponent<Image>();
@@ -541,6 +559,40 @@ namespace Socksfor1Subs.Prefabs
             pilotHUD.leviathanWarning = warningSymbol;
 
             return pilotHUD;
+        }
+
+        private BatterySource AddBatterySlot(string name, GameObject root, GameObject exosuitReference)
+        {
+            var modelRoot = Helpers.FindChild(root, "PowerModel").transform;
+            var batterySlot = new GameObject(name);
+            batterySlot.SetActive(false);
+            var identifier = batterySlot.AddComponent<ChildObjectIdentifier>();
+            identifier.ClassId = name;
+            batterySlot.transform.parent = prefab.transform;
+
+            var powerCellModel = Object.Instantiate(Helpers.FindChild(exosuitReference, "engine_power_cell_L"), modelRoot);
+            powerCellModel.transform.localPosition = Vector3.zero;
+            powerCellModel.transform.localEulerAngles = Vector3.zero;
+            powerCellModel.transform.localScale = Vector3.one;
+            var ionPowerCellModel = Object.Instantiate(Helpers.FindChild(exosuitReference, "engine_power_cell_ion_L"), modelRoot);
+            ionPowerCellModel.transform.localPosition = Vector3.zero;
+            ionPowerCellModel.transform.localEulerAngles = Vector3.zero;
+            ionPowerCellModel.transform.localScale = Vector3.one;
+
+            var energyMixin = batterySlot.AddComponent<BatterySource>();
+            energyMixin.storageRoot = identifier;
+            energyMixin.defaultBattery = TechType.PowerCell;
+            energyMixin.defaultBatteryCharge = 1f;
+            energyMixin.compatibleBatteries = new List<TechType>() { TechType.PowerCell, TechType.PrecursorIonPowerCell };
+            energyMixin.batteryModels = new EnergyMixin.BatteryModels[] { new EnergyMixin.BatteryModels() { model = powerCellModel.gameObject, techType = TechType.PowerCell }, new EnergyMixin.BatteryModels() { model = ionPowerCellModel.gameObject, techType = TechType.PrecursorIonPowerCell } };
+
+            var handTarget = Helpers.FindChild(root, "BatteryInput").AddComponent<EnergyMixinTarget>();
+            handTarget.energyMixin = energyMixin;
+            handTarget.gameObject.layer = Mod.handTargetLayer;
+
+            batterySlot.SetActive(true);
+
+            return energyMixin;
         }
 
         private CinematicModeEnder SetCinematicDuration(PlayerCinematicController cinematic, float duration)

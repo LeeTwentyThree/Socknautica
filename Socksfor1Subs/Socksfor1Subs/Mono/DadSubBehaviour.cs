@@ -20,6 +20,7 @@ namespace Socksfor1Subs.Mono
         public SolarCharger solarCharger;
         public DadSubDock dock;
         public DadDamageHandler dadDamageHandler;
+        public CameraManager cameraManager;
 
         private const float kMetersPerKilometer = 1000f;
         private const float kSecondsPerHour = 3600f;
