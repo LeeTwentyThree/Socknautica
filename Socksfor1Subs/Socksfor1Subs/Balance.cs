@@ -19,7 +19,7 @@
 
         public const float TankMaxPower = 400f;
         public static float TankEnginePowerConsumption = 0.1f;
-        public static float TankTorpedoPowerUsage = 6f;
+        public static float TankTorpedoPowerUsage = 3.5f;
         public static float TankHarpoonPowerUsage = 0f; //3f;
         public static float TankHarpoonPowerUsagePerSecond = 1f;
         public static float TankBoostPowerUsage = 14f;
