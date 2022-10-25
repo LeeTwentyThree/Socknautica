@@ -15,8 +15,10 @@ namespace Socksfor1Subs.Mono
         private bool _fired;
         private bool _letGo;
         private bool _boost;
+        private bool _cutCable;
         private bool _switchingView;
         private bool _switchingWeapon;
+        private bool _altFired;
 
         private GameObject _torpedoPrefab;
         private GameObject _harpoonPrefab;
@@ -51,6 +53,7 @@ namespace Socksfor1Subs.Mono
         private FMODAsset _harpoonReturnSound = Helpers.GetFmodAsset("TankReloadHarpoon");
         private FMODAsset _boostSound = Helpers.GetFmodAsset("TankBoost");
         private FMODAsset _cancelReelInSound = Helpers.GetFmodAsset("TankCancelReelIn");
+        private FMODAsset _cutCableSound = Helpers.GetFmodAsset("event:/env/plant_cut");
 
         public bool JustChangedMode
         {
@@ -310,8 +313,10 @@ namespace Socksfor1Subs.Mono
             _fired = false;
             _letGo = false;
             _boost = false;
+            _cutCable = false;
             _switchingView = false;
             _switchingWeapon = false;
+            _altFired = false;
             if (tank.GetPilotingMode())
             {
                 if (AvatarInputHandler.main.IsEnabled() && !JustChangedMode)
@@ -336,8 +341,15 @@ namespace Socksfor1Subs.Mono
                     {
                         _switchingWeapon = true;
                     }
+                    if (GameInput.GetButtonDown(GameInput.Button.Deconstruct))
+                    {
+                        _cutCable = true;
+                    }
+                    if (GameInput.GetButtonDown(GameInput.Button.RightHand))
+                    {
+                        _altFired = true;
+                    }
                 }
-
             }
         }
 
@@ -386,6 +398,14 @@ namespace Socksfor1Subs.Mono
             }
         }
 
+        private void CutCable()
+        {
+            if (HarpoonDeployed)
+            {
+                Utils.PlayFMODAsset(_cutCableSound, transform.position);
+            }
+        }
+
         private Vector3 GetAimPosition(float minDistance, float maxDistance, float defaultDistance, out Transform targetTransform)
         {
             var camTransform = MainCameraControl.main.transform;
@@ -419,6 +439,28 @@ namespace Socksfor1Subs.Mono
             return true;
         }
 
+        private bool TryShootTorpedo()
+        {
+            if (TryConsumePower(Balance.TankTorpedoPowerUsage))
+            {
+                ShootTorpedo();
+                return true;
+            }
+            ErrorMessage.AddMessage("Insufficient power!");
+            return false;
+        }
+
+        private bool TryFireHarpoon()
+        {
+            if (TryConsumePower(Balance.TankHarpoonPowerUsage))
+            {
+                FireHarpoon();
+                return true;
+            }
+            ErrorMessage.AddMessage("Insufficient power!");
+            return false;
+        }
+
         private void UpdateWeapons()
         {
             if (_switchingView)
@@ -439,34 +481,34 @@ namespace Socksfor1Subs.Mono
                     }
                     return;
                 }
+                if (_altFired)
+                {
+                    if (CurrentMode == Mode.Harpoon && !TorpedoOnCooldown && TorpedoCount > 0)
+                    {
+                        TryShootTorpedo();
+                    }
+                }
                 if (_fired)
                 {
                     if (CurrentMode == Mode.Torpedo && !TorpedoOnCooldown && TorpedoCount > 0)
                     {
-                        if (TryConsumePower(Balance.TankTorpedoPowerUsage))
-                        {
-                            ShootTorpedo();
-                        }
-                        else
-                        {
-                            ErrorMessage.AddMessage("Insufficient power!");
-                        }
+                        TryShootTorpedo();
                     }
                     if (CurrentMode == Mode.Harpoon && !HarpoonDeployed)
                     {
-                        if (TryConsumePower(Balance.TankHarpoonPowerUsage))
+                        if (TryFireHarpoon())
                         {
-                            FireHarpoon();
+                            return;
                         }
-                        else
-                        {
-                            ErrorMessage.AddMessage("Insufficient power!");
-                        }
-                        return;
                     }
                 }
                 if (CurrentMode == Mode.Harpoon && HarpoonDeployed && !JustShotHarpoon)
                 {
+                    if (_cutCable)
+                    {
+                        CutCable();
+                        return;
+                    }
                     if (CurrentHarpoon.BeingReeledIn)
                     {
                         if (_fired)
