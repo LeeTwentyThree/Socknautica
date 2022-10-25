@@ -58,14 +58,16 @@ namespace Socksfor1Subs
 
             ModAudio.PatchAudio();
 
-            LanguageHandler.SetLanguageLine("TankTorpedoControl", "Fire torpedo ({0})");
-            LanguageHandler.SetLanguageLine("TankHarpoonControlFire", "Launch harpoon ({0})");
-            LanguageHandler.SetLanguageLine("TankHarpoonControlCancelReel", "Lock harpoon ({0})");
-            LanguageHandler.SetLanguageLine("TankHarpoonControlReel", "Reel in harpoon (Release {0})");
-            LanguageHandler.SetLanguageLine("TankControlGeneric", "Use weapon ({0})");
-            LanguageHandler.SetLanguageLine("TankControlDisplay2", "Activate boost ({0})");
-            LanguageHandler.SetLanguageLine("TankControlDisplay3", "Switch weapon ({0})");
-            LanguageHandler.SetLanguageLine("TankControlDisplay4", "Switch view ({0})");
+            LanguageHandler.SetLanguageLine("TankTorpedoControl", "Fire torpedo: {0}");
+            LanguageHandler.SetLanguageLine("TankTorpedoAltFire", "Fire torpedo: {0}");
+            LanguageHandler.SetLanguageLine("TankHarpoonControlFire", "Launch harpoon: {0}");
+            LanguageHandler.SetLanguageLine("TankHarpoonControlCancelReel", "Lock harpoon: {0}");
+            LanguageHandler.SetLanguageLine("TankHarpoonControlReel", "Reel in harpoon: Release {0}");
+            LanguageHandler.SetLanguageLine("TankHarpoonCutCable", "Detach cable: {0}");
+            LanguageHandler.SetLanguageLine("TankControlGeneric", "Use weapon: {0}");
+            LanguageHandler.SetLanguageLine("TankControlDisplay2", "Activate boost: {0}");
+            LanguageHandler.SetLanguageLine("TankControlDisplay3", "Switch weapon: {0}");
+            LanguageHandler.SetLanguageLine("TankControlDisplay4", "Switch view: {0}");
         }
 
         private static void AddAcidImmune(TechType techType)

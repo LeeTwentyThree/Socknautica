@@ -153,7 +153,7 @@ namespace Socksfor1Subs.Mono
             UpdateSounds();
             if (GetPilotingMode())
             {
-                string buttonFormat = GetPrimaryControlText() + " " + LanguageCache.GetButtonFormat("TankControlDisplay2", GameInput.Button.Sprint) + " " + LanguageCache.GetButtonFormat("TankControlDisplay3", GameInput.Button.Reload) + " " + LanguageCache.GetButtonFormat("TankControlDisplay4", GameInput.Button.AltTool) + "\n" + LanguageCache.GetButtonFormat("PressToExit", GameInput.Button.Exit);
+                string buttonFormat = GetPrimaryControlText() + "\n" + LanguageCache.GetButtonFormat("TankControlDisplay2", GameInput.Button.Sprint) + " | " + LanguageCache.GetButtonFormat("TankControlDisplay3", GameInput.Button.Reload) + " | " + LanguageCache.GetButtonFormat("TankControlDisplay4", GameInput.Button.AltTool) + "\n" + LanguageCache.GetButtonFormat("PressToExit", GameInput.Button.Exit);
                 HandReticle.main.SetUseTextRaw(buttonFormat, string.Empty);
                 Vector3 vector = AvatarInputHandler.main.IsEnabled() ? GameInput.GetMoveDirection() : Vector3.zero;
                 if (vector.magnitude > 0.1f)
@@ -171,18 +171,25 @@ namespace Socksfor1Subs.Mono
             }
             if (weapons.CurrentMode == TankWeapons.Mode.Harpoon)
             {
+                string deployedHarpoonControls = "";
                 if (!weapons.HarpoonDeployed)
                 {
-                    return LanguageCache.GetButtonFormat("TankHarpoonControlFire", GameInput.Button.LeftHand);
+                    deployedHarpoonControls += LanguageCache.GetButtonFormat("TankHarpoonControlFire", GameInput.Button.LeftHand);
                 }
                 else if (weapons.ReelingInHarpoon)
                 {
-                    return LanguageCache.GetButtonFormat("TankHarpoonControlCancelReel", GameInput.Button.LeftHand);
+                    deployedHarpoonControls += LanguageCache.GetButtonFormat("TankHarpoonControlCancelReel", GameInput.Button.LeftHand);
                 }
                 else
                 {
-                    return LanguageCache.GetButtonFormat("TankHarpoonControlReel", GameInput.Button.LeftHand);
+                    deployedHarpoonControls += LanguageCache.GetButtonFormat("TankHarpoonControlReel", GameInput.Button.LeftHand);
                 }
+                if (weapons.HarpoonDeployed)
+                {
+                    deployedHarpoonControls += " | " + LanguageCache.GetButtonFormat("TankHarpoonCutCable", GameInput.Button.Deconstruct);
+                }
+                deployedHarpoonControls += " | " + LanguageCache.GetButtonFormat("TankTorpedoAltFire", GameInput.Button.RightHand);
+                return deployedHarpoonControls;
             }
             return LanguageCache.GetButtonFormat("TankControlGeneric", GameInput.Button.LeftHand);
         }
