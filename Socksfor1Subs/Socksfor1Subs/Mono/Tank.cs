@@ -28,7 +28,8 @@ namespace Socksfor1Subs.Mono
         public TankView mainView;
         public TankView bottomView;
 
-        private float _steeringSpeed = 0.08f;
+        private float _steeringSpeedNormal = 0.08f;
+        private float _steeringSpeedGrappled = 0.22f;
 
         private float _timeLastTurned;
 
@@ -279,7 +280,7 @@ namespace Socksfor1Subs.Mono
                     useRigidbody.AddForce(driveForce, ForceMode.VelocityChange);
 
                     Vector3 rotationDirection = new Vector3(0f, moveInput.x, 0f);
-                    Vector3 torque = rotationDirection * _steeringSpeed;
+                    Vector3 torque = rotationDirection * SteeringSpeed;
                     useRigidbody.AddTorque(torque, ForceMode.VelocityChange);
 
                     bool goingForward = Mathf.Abs(moveInput.z) > 0.5f;
@@ -295,6 +296,18 @@ namespace Socksfor1Subs.Mono
                         _vehicleInMotion = true;
                     }
                 }
+            }
+        }
+
+        public float SteeringSpeed
+        {
+            get
+            {
+                if (weapons.HarpoonDeployed && weapons.CurrentHarpoon.AttachedToAnything)
+                {
+                    return _steeringSpeedGrappled;
+                }
+                return _steeringSpeedNormal;
             }
         }
 
