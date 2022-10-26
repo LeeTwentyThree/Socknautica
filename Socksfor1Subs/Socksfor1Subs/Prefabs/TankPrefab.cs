@@ -15,8 +15,14 @@ namespace Socksfor1Subs.Prefabs
     {
         private GameObject prefab;
 
+        private static PhysicMaterial physicMaterial;
+
         public TankPrefab() : base("SockTank", "S.O.C.K. Tank", "Subaquatic Operations and Combat Kit Tank. Small, heavily armored vehicle designed to conquer dangerous underwater environments. Equipped with various utilities for both offensive and defensive capabilities.")
         {
+            physicMaterial = new PhysicMaterial("Tank");
+            physicMaterial.dynamicFriction = 0f;
+            physicMaterial.staticFriction = 0f;
+            physicMaterial.frictionCombine = PhysicMaterialCombine.Multiply;
         }
 
         public override GameObject GetGameObject()
@@ -86,6 +92,7 @@ namespace Socksfor1Subs.Prefabs
             {
                 var vfxSurface = col.gameObject.AddComponent<VFXSurface>();
                 vfxSurface.surfaceType = VFXSurfaceTypes.electronic;
+                col.material = physicMaterial; // remove friction!
             }
 
             // I <3 BehaviourLODs
