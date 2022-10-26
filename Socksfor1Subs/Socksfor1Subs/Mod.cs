@@ -66,7 +66,7 @@ namespace Socksfor1Subs
             LanguageHandler.SetLanguageLine("TankHarpoonCutCable", "Detach cable: {0}");
             LanguageHandler.SetLanguageLine("TankControlGeneric", "Use weapon: {0}");
             LanguageHandler.SetLanguageLine("TankControlDisplay2", "Activate boost: {0}");
-            LanguageHandler.SetLanguageLine("TankControlDisplay3", "Switch weapon: {0}");
+            LanguageHandler.SetLanguageLine("TankControlDisplay3", "Switch primary: {0}");
             LanguageHandler.SetLanguageLine("TankControlDisplay4", "Switch view: {0}");
         }
 
