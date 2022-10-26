@@ -22,7 +22,7 @@
         public static float TankTorpedoPowerUsage = 3.5f;
         public static float TankHarpoonPowerUsage = 0f; //3f;
         public static float TankHarpoonPowerUsagePerSecond = 1f;
-        public static float TankBoostPowerUsage = 14f;
+        public static float TankBoostPowerUsage = 8f;
         public static float TankTorpedoDamage = 750f;
     }
 }

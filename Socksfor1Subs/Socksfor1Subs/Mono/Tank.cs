@@ -29,7 +29,7 @@ namespace Socksfor1Subs.Mono
         public TankView bottomView;
 
         private float _steeringSpeedNormal = 0.08f;
-        private float _steeringSpeedGrappled = 0.22f;
+        private float _steeringSpeedGrappled = 0.15f;
 
         private float _timeLastTurned;
 
@@ -303,7 +303,7 @@ namespace Socksfor1Subs.Mono
         {
             get
             {
-                if (weapons.HarpoonDeployed && weapons.CurrentHarpoon.AttachedToAnything)
+                if (weapons.HarpoonDeployed)
                 {
                     return _steeringSpeedGrappled;
                 }
