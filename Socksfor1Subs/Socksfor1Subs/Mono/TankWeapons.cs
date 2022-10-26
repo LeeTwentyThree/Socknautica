@@ -41,6 +41,7 @@ namespace Socksfor1Subs.Mono
         private bool _harpoonWasDeployed;
         private float _harpoonDragTankVelocity = 3f;
         private float _harpoonMirrorVelocityMultiplier = 0.9f;
+        private float _harpoonMaxFollowDot = 0f;
         private float _timeFiredHarpoon;
         private float _harpoonMinRetractTime = 0.3f;
 
@@ -258,17 +259,26 @@ namespace Socksfor1Subs.Mono
         {
             if (_currentHarpoon.AttachedToAnything)
             {
-                bool attachedToMovingObject = _currentHarpoon.AttachedToSomethingMoving;
-                bool draggingInObject = _currentHarpoon.DraggingObjectIn;
-                bool reeledIn = _currentHarpoon.BeingReeledIn;
-                if (!reeledIn && attachedToMovingObject)
+                bool attachedToMovingObject = _currentHarpoon.AttachedToSomethingMoving; // attached to rigidbody
+                bool draggingInObject = _currentHarpoon.DraggingObjectIn; // holding something and reeling it in?
+                bool reeledIn = _currentHarpoon.BeingReeledIn; // released M1?
+                bool outweighs = _currentHarpoon.OutweighsAttachedObject; // leviathan?
+                if (outweighs) return;
+                Vector3 force = default;
+                if (!reeledIn && attachedToMovingObject) // attached to creature/prop
                 {
-                    tank.useRigidbody.AddForce(_currentHarpoon.PulledInRigidbody.velocity * _harpoonMirrorVelocityMultiplier * Time.deltaTime, ForceMode.VelocityChange);
+                    force = _currentHarpoon.PulledInRigidbody.velocity * _harpoonMirrorVelocityMultiplier * Time.deltaTime;
+                    var dot = Vector3.Dot(force, (tank.transform.position - _currentHarpoon.PulledInRigidbody.transform.position).normalized); // dot between barrel direction & direction of creature
+                    if (dot > _harpoonMaxFollowDot) // don't pull the tank if the creature is moving towards you
+                    {
+                        force = default;
+                    }
                 }
-                else if (reeledIn && !draggingInObject)
+                else if (reeledIn && !draggingInObject) // going to terrain
                 {
-                    tank.useRigidbody.AddForce((_currentHarpoon.transform.position - barrelEnd.position) * _harpoonDragTankVelocity * Time.deltaTime, ForceMode.VelocityChange);
+                    force = (_currentHarpoon.transform.position - barrelEnd.position) * _harpoonDragTankVelocity * Time.deltaTime;
                 }
+                tank.useRigidbody.AddForce(force, ForceMode.VelocityChange);
             }
         }
 
@@ -402,6 +412,7 @@ namespace Socksfor1Subs.Mono
         {
             if (HarpoonDeployed)
             {
+                CurrentHarpoon.Cut();
                 Utils.PlayFMODAsset(_cutCableSound, transform.position);
             }
         }
