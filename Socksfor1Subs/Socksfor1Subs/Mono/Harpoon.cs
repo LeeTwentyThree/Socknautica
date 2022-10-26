@@ -42,6 +42,7 @@ namespace Socksfor1Subs.Mono
             {
                 if (_reelingIn)
                 {
+                    if (tank == null) return default;
                     return tank.weapons.barrelEnd.transform.position;
                 }
                 if (targetTransform != null)
@@ -116,6 +117,14 @@ namespace Socksfor1Subs.Mono
             }
         }
 
+        public bool OutweighsAttachedObject
+        {
+            get
+            {
+                return AttachedToObject && !_currentAttachment.tooHeavyToPull;
+            }
+        }
+
         public Rigidbody PulledInRigidbody
         {
             get
@@ -159,11 +168,13 @@ namespace Socksfor1Subs.Mono
 
         private void UpdateLineRenderer()
         {
+            if (tank == null) return;
             _lineRenderer.SetPositions(new Vector3[] { tank.weapons.barrelEnd.position, chainAttach.position });
         }
 
         private void CheckDistances()
         {
+            if (tank == null) return;
             if (!BeingReeledIn && Vector3.Distance(tank.weapons.barrelEnd.position, chainAttach.position) > ChainLimit)
             {
                 CallBack();
@@ -317,6 +328,12 @@ namespace Socksfor1Subs.Mono
             collider.enabled = true;
         }
 
+        public void Cut()
+        {
+            _currentAttachment = null;
+            tank = null;
+        }
+
         public void ReelIn()
         {
             _reelingIn = true;
@@ -367,7 +384,7 @@ namespace Socksfor1Subs.Mono
                 {
                     localPointOnObject = Vector3.zero;
                 }
-                if (attachedRigidbody == null || attachedRigidbody.isKinematic || attachedRigidbody.mass >= 2000f)
+                if (attachedRigidbody == null || attachedRigidbody.isKinematic || attachedRigidbody.mass >= 1500f)
                 {
                     tooHeavyToPull = true;
                 }
