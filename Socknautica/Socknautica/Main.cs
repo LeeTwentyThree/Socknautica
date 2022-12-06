@@ -23,6 +23,7 @@ namespace Socknautica
         {
             MaterialUtils.LoadMaterials();
             PatchPrefabs();
+            PatchFMODAudio();
         }
     }
 }

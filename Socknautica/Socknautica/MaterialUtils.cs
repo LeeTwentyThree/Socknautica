@@ -11,12 +11,12 @@ public static class MaterialUtils
 {
     internal static void LoadMaterials()
     {
-        CoroutineHost.StartCoroutine(LoadIonCubeMaterial());
         CoroutineHost.StartCoroutine(LoadPrecursorGlassAndFogMaterial());
         CoroutineHost.StartCoroutine(LoadStasisFieldMaterial());
         CoroutineHost.StartCoroutine(LoadAirWaterBarrierMaterial());
         CoroutineHost.StartCoroutine(LoadForcefieldMaterial());
         CoroutineHost.StartCoroutine(LoadPrecursorElevatorMaterial());
+        CoroutineHost.StartCoroutine(LoadAuroraRockMaterial());
     }
 
     /// <summary>
@@ -48,6 +48,11 @@ public static class MaterialUtils
     /// Gets the Material used in Alien Bases for the transition between water and air.
     /// </summary>
     public static Material AirWaterBarrierMaterial { get; private set; }
+
+    /// <summary>
+    /// Gets the triplanar Material used in rocks around the Aurora.
+    /// </summary>
+    public static Material AuroraRockMaterial { get; private set; }
 
     /// <summary>
     /// Gets the generic black Material to be used for stacked fading fog planes. Used in RotA's Voidbase.
@@ -293,18 +298,6 @@ public static class MaterialUtils
     private static Color precursorSpecularGreen = new Color(0.25f, 0.54f, 0.41f);
     private static Color precursorSpecularBlue = new Color(0.40f, 0.69f, 0.67f);
 
-    private static IEnumerator LoadIonCubeMaterial()
-    {
-        if (IonCubeMaterial)
-            yield break;
-        
-        var task = CraftData.GetPrefabForTechTypeAsync(TechType.PrecursorIonCrystal);
-        yield return task;
-
-        var ionCube = task.GetResult();
-        IonCubeMaterial = ionCube.GetComponentInChildren<MeshRenderer>().material;
-    }
-
     private static IEnumerator LoadAirWaterBarrierMaterial()
     {
         if (AirWaterBarrierMaterial)
@@ -356,6 +349,20 @@ public static class MaterialUtils
         if (task.TryGetPrefab(out var prefab))
         {
             PrecursorElevatorMaterial = prefab.transform.Find("FX/x_Gun_Elevator_Tube").gameObject.GetComponentInChildren<Renderer>().material;
+        }
+    }
+
+    private static IEnumerator LoadAuroraRockMaterial()
+    {
+        if (AuroraRockMaterial)
+            yield break;
+
+        var task = PrefabDatabase.GetPrefabAsync("8d13d081-431e-4ed5-bc99-2b8b9fabe9c2");
+        yield return task;
+
+        if (task.TryGetPrefab(out var prefab))
+        {
+            AuroraRockMaterial = prefab.GetComponentInChildren<Renderer>().material;
         }
     }
 
