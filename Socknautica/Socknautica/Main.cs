@@ -1,26 +1,28 @@
-﻿using HarmonyLib;
-using QModManager.API.ModLoading;
-using System.Reflection;
+﻿using ECCLibrary;
 
 namespace Socknautica
 {
     [QModCore]
-    public static class Main
+    public partial class Main
     {
-        internal static Assembly assembly;
+        internal static AssetBundle assetBundle;
+        internal static Assembly assembly = Assembly.GetExecutingAssembly();
         internal static Harmony harmony;
 
         [QModPrePatch]
         public static void Prepatch()
         {
-            assembly = Assembly.GetExecutingAssembly();
+            assetBundle = ECCHelpers.LoadAssetBundleFromAssetsFolder(assembly, "socknautica");
             harmony = new Harmony("Socksfor1.Socknautica");
+            harmony.PatchAll(assembly);
+            PatchPrefabsEarly();
         }
 
         [QModPatch]
         public static void Patch()
         {
-
+            MaterialUtils.LoadMaterials();
+            PatchPrefabs();
         }
     }
 }
