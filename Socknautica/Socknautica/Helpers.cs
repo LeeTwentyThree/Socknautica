@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ECCLibrary;
 
 namespace Socknautica;
 
@@ -14,5 +12,16 @@ internal class Helpers
         asset.path = path;
         asset.id = path;
         return asset;
+    }
+
+    public static List<Transform> SearchAllTransforms(GameObject root, string search, ECCStringComparison searchMode)
+    {
+        var transforms = new List<Transform>();
+        foreach (Transform t in root.GetComponentsInChildren<Transform>())
+        {
+            if (root.transform == t) continue;
+            if (ECCHelpers.CompareStrings(t.gameObject.name, search, searchMode)) transforms.Add(t);
+        }
+        return transforms;
     }
 }

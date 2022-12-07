@@ -8,14 +8,14 @@ internal class IslandGenerator : MonoBehaviour
 {
     private float spawnRangeMin = 120;
     private float spawnRangeMax = 180;
-    private float minDistanceBetween = 60f;
+    private float minDistanceBetween = 30f;
 
     private float generateInterval = 0.5f;
     private float timeGenerateAgain;
 
     private static IslandsSaveData saveData { get; } = SaveDataHandler.Main.RegisterSaveDataCache<IslandsSaveData>();
 
-    private static ForbiddenZone[] forbiddenZones = new ForbiddenZone[] { new ForbiddenZone(new (1450, -1098, -1448), 200) };
+    private static ForbiddenZone[] forbiddenZones = new ForbiddenZone[] { new ForbiddenZone(new (1450, -1098, -1448), 200), new ForbiddenZone(new(1450, -998, -1448), 200) };
     private record ForbiddenZone(Vector3 pos, float dist);
 
     private void Start()
@@ -35,7 +35,7 @@ internal class IslandGenerator : MonoBehaviour
     private void TryGenerate()
     {
         var randomPoint = MainCamera.camera.transform.position + Random.onUnitSphere * Random.Range(spawnRangeMin, spawnRangeMax);
-        if (VoidIslandBiome.bounds.Contains(randomPoint) && LargeWorld.main.GetBiome(randomPoint).Equals("void"))
+        if (VoidIslandBiome.bounds.Contains(randomPoint) && LargeWorld.main.GetBiome(randomPoint).Equals("void") && IsWithinNoOtherIslands(randomPoint))
         {
             SpawnIsland(Main.GetRandomGenericIsland().ClassID, randomPoint);
         }

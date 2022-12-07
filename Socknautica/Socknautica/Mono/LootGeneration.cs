@@ -9,6 +9,7 @@ internal class LootGeneration : MonoBehaviour
 {
     public float leviathanProbability = 0.05f;
     public Vector3 leviathanOffset = new(0, 17, 0);
+    public List<LootGroup> groups = new List<LootGroup>();
 
     private PrefabIdentifier identifier;
 
@@ -49,7 +50,13 @@ internal class LootGeneration : MonoBehaviour
     {
         saveData.completedUniqueIdentifiers.Add(identifier.Id);
         SpawnLeviathanIfPossible();
+        foreach (var lootGroup in groups) GenerateLootGroup(lootGroup);
         Destroy(this);
+    }
+
+    private void GenerateLootGroup(LootGroup group)
+    {
+        var slots = Helpers.SearchAllTransforms(gameObject, group.namePrefix, ECCLibrary.ECCStringComparison.StartsWith);
     }
 
     private void SpawnLeviathanIfPossible()
@@ -78,4 +85,19 @@ internal class LootGeneration : MonoBehaviour
 internal class LootGenerationData : SaveDataCache
 {
     public List<string> completedUniqueIdentifiers;
+}
+internal struct LootGroup
+{
+    public string namePrefix;
+    public string[] spawnClassIDs;
+    public float probability, scaleMin, scaleMax;
+    
+    public LootGroup(string namePrefix, float probability, float scaleMin, float scaleMax, params string[] spawnClassIDs)
+    {
+        this.namePrefix = namePrefix;
+        this.spawnClassIDs = spawnClassIDs;
+        this.probability = probability;
+        this.scaleMin = scaleMin;
+        this.scaleMax = scaleMax;
+    }
 }

@@ -10,7 +10,7 @@ public static class GotoCommand_Patches
     [HarmonyPostfix]
     public static void Awake_Patch(GotoConsoleCommand __instance)
     {
-        AddTeleportPosition(ref __instance, "sockaquarium", new Vector3(1520, -1100, -1480));
+        AddTeleportPosition(ref __instance, "aquariumbase", new Vector3(1520, -1000, -1480));
     }
 
     private static void AddTeleportPosition(ref GotoConsoleCommand gotoCmd, string name, Vector3 pos, bool forceWalk = false)

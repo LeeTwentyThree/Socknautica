@@ -25,5 +25,10 @@ namespace Socknautica
             PatchPrefabs();
             PatchFMODAudio();
         }
+
+        public static Atlas.Sprite LoadSprite(string assetName)
+        {
+            return new Atlas.Sprite(assetBundle.LoadAsset<Sprite>(assetName));
+        }
     }
 }
