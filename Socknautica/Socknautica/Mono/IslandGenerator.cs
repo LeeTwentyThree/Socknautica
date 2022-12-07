@@ -8,7 +8,7 @@ internal class IslandGenerator : MonoBehaviour
 {
     private float spawnRangeMin = 120;
     private float spawnRangeMax = 180;
-    private float minDistanceBetween = 37;
+    private float minDistanceBetween = 50;
 
     private float generateInterval = 0.5f;
     private float timeGenerateAgain;

@@ -54,7 +54,7 @@ public class LootGeneration : MonoBehaviour
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
             groups.Add(new LootGroup("RandomPlantSpawn", 0.9f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
-            groups.Add(new LootGroup("SpawnPointFish", 0.3f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.blighter, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            groups.Add(new LootGroup("SpawnPointFish", 0.1f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.blighter, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
             groups.Add(new LootGroup("ResourceSpawnPoint", 1f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite));
             groups.Add(new LootGroup("ReefbackCoral01", 0.5f, 1f, 1f, ClassIds.reefbackCoral1));
             groups.Add(new LootGroup("ReefbackCoral02", 0.5f, 1f, 1f, ClassIds.reefbackCoral2));
@@ -65,8 +65,8 @@ public class LootGeneration : MonoBehaviour
         if (preset == Preset.GenericIsland)
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
-            groups.Add(new LootGroup("RandomPlantSpawn", 0.5f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
-            groups.Add(new LootGroup("SpawnPointFish", 0.3f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.blighter, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            groups.Add(new LootGroup("RandomPlantSpawn", 0.2f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
+            groups.Add(new LootGroup("SpawnPointFish", 0.12f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.blighter, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
             groups.Add(new LootGroup("ResourceSpawnPoint", 1f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite));
         }
     }
