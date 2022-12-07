@@ -5,11 +5,12 @@ using UWE;
 
 namespace Socknautica.Mono;
 
-internal class LootGeneration : MonoBehaviour
+public class LootGeneration : MonoBehaviour
 {
     public float leviathanProbability = 0.05f;
     public Vector3 leviathanOffset = new(0, 17, 0);
-    public List<LootGroup> groups = new List<LootGroup>();
+    public Preset preset;
+    private List<LootGroup> groups;
 
     private PrefabIdentifier identifier;
 
@@ -46,17 +47,49 @@ internal class LootGeneration : MonoBehaviour
         }
     }
 
+    private void DetermineGroups()
+    {
+        groups = new List<LootGroup>();
+        if (preset == Preset.AquariumIsland)
+        {
+            groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
+            groups.Add(new LootGroup("RandomPlantSpawn", 0.9f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
+            groups.Add(new LootGroup("SpawnPointFish", 0.3f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.blighter, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            groups.Add(new LootGroup("ResourceSpawnPoint", 1f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite));
+            groups.Add(new LootGroup("ReefbackCoral01", 0.5f, 1f, 1f, ClassIds.reefbackCoral1));
+            groups.Add(new LootGroup("ReefbackCoral02", 0.5f, 1f, 1f, ClassIds.reefbackCoral2));
+            groups.Add(new LootGroup("ReefbackCoral03", 0.5f, 1f, 1f, ClassIds.reefbackCoral3));
+            groups.Add(new LootGroup("BloodKelpSmallPlant", 1f, 1f, 1f, ClassIds.bloodVine1, ClassIds.bloodVine2));
+            groups.Add(new LootGroup("Gabe'sFeather", 1f, 1f, 1f, ClassIds.gabesFeather));
+        }
+        if (preset == Preset.GenericIsland)
+        {
+            groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
+            groups.Add(new LootGroup("RandomPlantSpawn", 0.5f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
+            groups.Add(new LootGroup("SpawnPointFish", 0.3f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.blighter, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            groups.Add(new LootGroup("ResourceSpawnPoint", 1f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite));
+        }
+    }
+
     public void Generate()
     {
         saveData.completedUniqueIdentifiers.Add(identifier.Id);
         SpawnLeviathanIfPossible();
+        DetermineGroups();
         foreach (var lootGroup in groups) GenerateLootGroup(lootGroup);
-        Destroy(this);
+        //Destroy(this);
     }
 
     private void GenerateLootGroup(LootGroup group)
     {
         var slots = Helpers.SearchAllTransforms(gameObject, group.namePrefix, ECCLibrary.ECCStringComparison.StartsWith);
+        foreach (var slot in slots)
+        {
+            if (Random.value <= group.probability)
+            {
+                SpawnPrefab(group.spawnClassIDs[Random.Range(0, group.spawnClassIDs.Length)], slot.position, slot.up, Vector3.one * Random.Range(group.scaleMin, group.scaleMax));
+            }
+        }
     }
 
     private void SpawnLeviathanIfPossible()
@@ -80,13 +113,34 @@ internal class LootGeneration : MonoBehaviour
         }
         return null;
     }
+
+    private GameObject SpawnPrefab(string classId, Vector3 loc, Vector3 forward, Vector3 scale = default)
+    {
+        if (scale == default) scale = Vector3.one;
+        if (PrefabDatabase.TryGetPrefab(classId, out var prefab))
+        {
+            var s = Instantiate(prefab, loc, Quaternion.identity);
+            s.transform.localScale = scale;
+            s.transform.forward = forward;
+            s.SetActive(true);
+            return s;
+        }
+        return null;
+    }
+
+    public enum Preset
+    {
+        GenericIsland,
+        AquariumIsland
+    }
 }
 [FileName("lootgenerationdata")]
 internal class LootGenerationData : SaveDataCache
 {
     public List<string> completedUniqueIdentifiers;
 }
-internal struct LootGroup
+[System.Serializable]
+public class LootGroup
 {
     public string namePrefix;
     public string[] spawnClassIDs;

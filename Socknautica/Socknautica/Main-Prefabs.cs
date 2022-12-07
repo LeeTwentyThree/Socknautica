@@ -49,6 +49,9 @@ public partial class Main
 
         energyPylon = new EnergyPylon();
         energyPylon.Patch();
+
+        var ancientFloaterFix = new AncientFloaterFix();
+        ancientFloaterFix.Patch();
     }
 
     private static void PatchAquariumIslandSegment(string classId, string prefabName, Vector3 offset)
