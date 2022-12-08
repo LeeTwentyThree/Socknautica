@@ -45,6 +45,8 @@ internal static class ClassIds
     public readonly static string boneshark = "66072588-f5aa-4a41-a8d4-bb7e8dffee51";
     public readonly static string ampeel = "e69be2e8-a2e3-4c4c-a979-281fbf221729";
     public readonly static string crabsquid = "4c2808fe-e051-44d2-8e64-120ddcdc8abb";
+    public readonly static string ghostray = "1826f338-40d2-4b85-8d15-08ea3fa669ad";
+    public readonly static string warperSpawner = "510a71f0-ab6d-4c6a-aa54-a19b3f1c436c";
 
     public readonly static string sandstoneChunk = "5b702ef7-7403-49ee-99c5-1f67ab04954a";
     public readonly static string limestoneChunk = "7e07fce9-0ad6-4c54-9da7-e43eb1e38cea";

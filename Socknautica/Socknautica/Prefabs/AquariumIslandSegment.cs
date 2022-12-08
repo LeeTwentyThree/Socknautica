@@ -6,7 +6,7 @@ namespace Socknautica.Prefabs;
 
 internal class AquariumIslandSegment : GenericWorldPrefab
 {
-    public AquariumIslandSegment(string classId, GameObject model) : base(classId, "", "", model, new UBERMaterialProperties(8f), LargeWorldEntity.CellLevel.VeryFar, false)
+    public AquariumIslandSegment(string classId, GameObject model) : base(classId, "", "", model, new UBERMaterialProperties(6f), LargeWorldEntity.CellLevel.VeryFar, false)
     {
     }
 

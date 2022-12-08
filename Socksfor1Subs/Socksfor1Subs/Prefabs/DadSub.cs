@@ -671,7 +671,8 @@ namespace Socksfor1Subs.Prefabs
         public override string[] StepsToFabricatorTab => new[] { "Vehicles" };
         public override CraftTree.Type FabricatorType => CraftTree.Type.Constructor;
         public override float CraftingTime => 25f;
-        public override TechType RequiredForUnlock => TechType.Constructor;
+        //public override TechType RequiredForUnlock => TechType.Constructor;
+        public override bool UnlockedAtStart => false;
 
         protected override Atlas.Sprite GetItemSprite()
         {

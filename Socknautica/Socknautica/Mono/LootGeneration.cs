@@ -7,7 +7,7 @@ namespace Socknautica.Mono;
 
 public class LootGeneration : MonoBehaviour
 {
-    public float leviathanProbability = 0.05f;
+    public float leviathanProbability = 0.15f;
     public Vector3 leviathanOffset = new(0, 17, 0);
     public Preset preset;
     private List<LootGroup> groups;
@@ -37,13 +37,12 @@ public class LootGeneration : MonoBehaviour
     private static void DetermineLeviathanClassIDs()
     {
         leviathanClassIDs = new List<string>();
-        leviathanClassIDs.Add("f78942c3-87e7-4015-865a-5ae4d8bd9dcb"); // reaper
         leviathanClassIDs.Add("5ea36b37-300f-4f01-96fa-003ae47c61e5"); // ghost
         leviathanClassIDs.Add("8d3d3c8b-9290-444a-9fea-8e5493ecd6fe"); // reefback
         if (OtherMods.BloopAndBlazaModExists)
         {
-            leviathanClassIDs.Add("blazaleviathan");
-            leviathanClassIDs.Add("bloop");
+            leviathanClassIDs.Add("BlazaLeviathan");
+            leviathanClassIDs.Add("Bloop");
         }
     }
 
@@ -54,7 +53,7 @@ public class LootGeneration : MonoBehaviour
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
             groups.Add(new LootGroup("RandomPlantSpawn", 0.9f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
-            groups.Add(new LootGroup("SpawnPointFish", 0.1f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.blighter, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            groups.Add(new LootGroup("SpawnPointFish", 0.1f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
             groups.Add(new LootGroup("ResourceSpawnPoint", 1f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite));
             groups.Add(new LootGroup("ReefbackCoral01", 0.5f, 1f, 1f, ClassIds.reefbackCoral1));
             groups.Add(new LootGroup("ReefbackCoral02", 0.5f, 1f, 1f, ClassIds.reefbackCoral2));
@@ -66,8 +65,27 @@ public class LootGeneration : MonoBehaviour
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
             groups.Add(new LootGroup("RandomPlantSpawn", 0.2f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
-            groups.Add(new LootGroup("SpawnPointFish", 0.12f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.blighter, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            groups.Add(new LootGroup("SpawnPointFish", 0.12f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
             groups.Add(new LootGroup("ResourceSpawnPoint", 1f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite));
+        }
+        if (preset == Preset.CoordBaseIsland)
+        {
+            groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
+            groups.Add(new LootGroup("SpawnPointFish", 0.12f, 1f, 1f, ClassIds.warperSpawner, ClassIds.oculus));
+            groups.Add(new LootGroup("LightFlower", 0.7f, 1f, 1f, ClassIds.circleGrass));
+            groups.Add(new LootGroup("ReefbackCoral01", 0.5f, 1f, 1f, ClassIds.reefbackCoral1));
+            groups.Add(new LootGroup("ReefbackCoral02", 0.5f, 1f, 1f, ClassIds.reefbackCoral2));
+            groups.Add(new LootGroup("ReefbackCoral03", 0.5f, 1f, 1f, ClassIds.reefbackCoral3));
+            groups.Add(new LootGroup("ResourceSpawnPoint", 1f, 1f, 1f, ClassIds.barnacle, ClassIds.magnetite));
+            groups.Add(new LootGroup("SmallFan1", 1f, 1f, 1f, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3, ClassIds.fans4, ClassIds.fans5));
+            groups.Add(new LootGroup("SmallFan2", 1f, 1f, 1f, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3, ClassIds.fans4, ClassIds.fans5));
+            groups.Add(new LootGroup("SmallFan3", 1f, 1f, 1f, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3, ClassIds.fans4, ClassIds.fans5));
+            groups.Add(new LootGroup("SmallFan4", 1f, 1f, 1f, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3, ClassIds.fans4, ClassIds.fans5));
+            groups.Add(new LootGroup("SmallFan5", 1f, 1f, 1f, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3, ClassIds.fans4, ClassIds.fans5));
+            groups.Add(new LootGroup("SmallFanCluster", 1f, 1f, 1f, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3, ClassIds.fans4, ClassIds.fans5));
+            groups.Add(new LootGroup("SmallPlantBloodKelp", 1f, 1f, 1f, "2ab96dc4-5201-4a41-aa5c-908f0a9a0da8", "2bfcbaf4-1ae6-4628-9816-28a6a26ff340"));
+            groups.Add(new LootGroup("RougeCradle", 1f, 1f, 1f, ClassIds.rogueCradle));
+
         }
     }
 
@@ -87,7 +105,8 @@ public class LootGeneration : MonoBehaviour
         {
             if (Random.value <= group.probability)
             {
-                SpawnPrefab(group.spawnClassIDs[Random.Range(0, group.spawnClassIDs.Length)], slot.position, slot.up, Vector3.one * Random.Range(group.scaleMin, group.scaleMax));
+                var spawned = SpawnPrefab(group.spawnClassIDs[Random.Range(0, group.spawnClassIDs.Length)], slot.position, Vector3.forward, Vector3.one * Random.Range(group.scaleMin, group.scaleMax));
+                Helpers.SwapZAndYComponents(spawned.transform, slot);
             }
         }
     }
@@ -131,7 +150,8 @@ public class LootGeneration : MonoBehaviour
     public enum Preset
     {
         GenericIsland,
-        AquariumIsland
+        AquariumIsland,
+        CoordBaseIsland
     }
 }
 [FileName("lootgenerationdata")]

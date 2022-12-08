@@ -24,4 +24,10 @@ internal class Helpers
         }
         return transforms;
     }
+
+    public static void SwapZAndYComponents(Transform original, Transform reference)
+    {
+        original.forward = reference.forward;
+        original.localEulerAngles += Vector3.right * 90;
+    }
 }

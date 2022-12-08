@@ -10,10 +10,10 @@ namespace Socksfor1Subs.Mono
         public Transform chainAttach;
         public Collider collider;
 
-        public float velocity = 38f;
+        public float velocity = 49.4f;
         public float reelInVelocity = 50f;
         public float reelInCreatureVelocity = 30f;
-        public float rotateToTargetAnglesPerSecond = 400f;
+        public float rotateToTargetAnglesPerSecond = 520f;
         public float fallDownAnglesPerSecond = 50f;
         public float reelInAnglesPerSecond = 200f;
         public float homeDelay = 0.3f;

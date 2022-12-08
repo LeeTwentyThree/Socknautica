@@ -6,6 +6,7 @@ namespace Socknautica
     {
         private static bool? _submarineModExists;
         private static bool? _bloopAndBlazaModExists;
+        private static bool? _rotaExists; // rota is a spanish word for 'broken'! but here it means return of the ancients :)
 
         public static bool SubmarineModExists
         {
@@ -28,6 +29,18 @@ namespace Socknautica
                     _bloopAndBlazaModExists = QModServices.Main.ModPresent("Socksfor1Monsters");
                 }
                 return _bloopAndBlazaModExists.Value;
+            }
+        }
+
+        public static bool RotAExists
+        {
+            get
+            {
+                if (!_rotaExists.HasValue)
+                {
+                    _rotaExists = QModServices.Main.ModPresent("ProjectAncients");
+                }
+                return _rotaExists.Value;
             }
         }
     }

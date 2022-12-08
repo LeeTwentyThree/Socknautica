@@ -89,7 +89,7 @@ public partial class Main
     private static void PatchPDALines()
     {
         //RegisterPDALogVO(assetBundle.LoadAsset<AudioClip>("DataTerminalOutpost"), "DetectingAlienBroadcastSubtitles");
-        //AddPDAVoiceLine(assetBundle.LoadAsset<AudioClip>("DataTerminalEncy"), "DownloadingAlienDataSubtitles");
+        AddPDAVoiceLine(assetBundle.LoadAsset<AudioClip>("SignalAudio"), "SocksSignalSubtitles");
     }
 
     private static void RegisterPDALogVO(AudioClip clip, string key, Sprite icon = null) // the `key` is used for the subtitles language key, FMOD key, AND log entry key

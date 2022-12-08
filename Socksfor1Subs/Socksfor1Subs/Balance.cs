@@ -2,8 +2,8 @@
 {
     public static class Balance
     {
-        public static float DadMaxHealth = 1400f;
-        public static float DadHealthPerRegen = 28f;
+        public static float DadMaxHealth = 2800f;
+        public static float DadHealthPerRegen = 56f;
         public static float DadRegenInterval = 5f;
         public const float DadMaxPower = 1000f;
         public static float DadSolarChargerIdealRate = 1.5f;
@@ -15,7 +15,7 @@
         public static float DadRechargeUsePowerRate = 1f;
         public static float DadRechargeVehiclesRate = 1f;
 
-        public static float TankMaxHealth = 600f;
+        public static float TankMaxHealth = 1200f;
 
         public const float TankMaxPower = 400f;
         public static float TankEnginePowerConsumption = 0.1f;

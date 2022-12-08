@@ -14,7 +14,7 @@ internal class AncientFloaterFix : Spawnable
         {
             UWE.PrefabDatabase.TryGetPrefab(ClassIds.ancientFloaterUpsideDown, out var pref);
             prefab = Object.Instantiate(pref);
-            prefab.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 0);
+            //prefab.transform.GetChild(0).localEulerAngles = new Vector3(0, 0, 0);
             pref.SetActive(false);
         }
         return prefab;
