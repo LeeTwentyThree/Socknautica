@@ -10,7 +10,7 @@ namespace Socksfor1Subs.Mono
         public Transform chainAttach;
         public Collider collider;
 
-        public float velocity = 49.4f;
+        public float velocity = 70f;
         public float reelInVelocity = 50f;
         public float reelInCreatureVelocity = 30f;
         public float rotateToTargetAnglesPerSecond = 520f;
@@ -29,7 +29,7 @@ namespace Socksfor1Subs.Mono
         private bool _reelingIn;
         private float _timeReelInStart;
 
-        private float _chainLimit = 150f;
+        private float _chainLimit = 300f;
         private float _chainLimitWhileAttached = 500f;
 
         private LineRenderer _lineRenderer;

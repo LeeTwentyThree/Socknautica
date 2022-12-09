@@ -21,10 +21,9 @@ namespace Socknautica
         [QModPatch]
         public static void Patch()
         {
-            MaterialUtils.LoadMaterials();
-            PatchPrefabs();
             PatchFMODAudio();
             PatchLanguageLines();
+            MaterialUtils.LoadMaterials();
             if (!OtherMods.RotAExists)
             {
                 Patches.BiomesPatches.Patch();
@@ -34,6 +33,7 @@ namespace Socknautica
         [QModPostPatch]
         public static void PostPatch()
         {
+            PatchPrefabs();
             if (OtherMods.SubmarineModExists)
             {
                 PatchSubRecipes();
@@ -43,6 +43,8 @@ namespace Socknautica
         private static void PatchLanguageLines()
         {
             LanguageHandler.SetLanguageLine("SocksSignalSubtitles", "Detecting an Alien broadcast. Uploading coordinates to PDA.");
+            LanguageHandler.SetLanguageLine("RocketSelfDestruct1", "You have chosen not to come home to Alterra.");
+            LanguageHandler.SetLanguageLine("RocketSelfDestruct2", "Detecting multiple energy signatures originating from the ecological dead zone. Uploading coordinates to your PDA. Exploration is conducted at your own risk.");
         }
 
         private static void PatchSubRecipes()

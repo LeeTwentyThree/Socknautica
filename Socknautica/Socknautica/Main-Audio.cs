@@ -82,14 +82,16 @@ public partial class Main
 
     private static void PatchMusic()
     {
-        /*var reuniteMusic = AudioUtils.CreateSound(assetBundle.LoadAsset<AudioClip>("ReuniteMusic"), kStreamSoundModes);
-        CustomSoundHandler.RegisterCustomSound("GargReuniteMusic", reuniteMusic, kMusicSFXBus);*/
+        var reuniteMusic = AudioUtils.CreateSound(assetBundle.LoadAsset<AudioClip>("BossMusicQuiet"), kStreamSoundModes);
+        CustomSoundHandler.RegisterCustomSound("BossMusic", reuniteMusic, kMusicSFXBus);
     }
 
     private static void PatchPDALines()
     {
         //RegisterPDALogVO(assetBundle.LoadAsset<AudioClip>("DataTerminalOutpost"), "DetectingAlienBroadcastSubtitles");
         AddPDAVoiceLine(assetBundle.LoadAsset<AudioClip>("SignalAudio"), "SocksSignalSubtitles");
+        AddPDAVoiceLine(assetBundle.LoadAsset<AudioClip>("SelfDestruct1"), "RocketSelfDestruct1");
+        AddPDAVoiceLine(assetBundle.LoadAsset<AudioClip>("SelfDestruct2"), "RocketSelfDestruct2");
     }
 
     private static void RegisterPDALogVO(AudioClip clip, string key, Sprite icon = null) // the `key` is used for the subtitles language key, FMOD key, AND log entry key

@@ -272,7 +272,7 @@ namespace Socksfor1Subs.Prefabs
             var crushDamage = prefab.AddComponent<CrushDamage>();
             crushDamage.liveMixin = liveMixin;
             crushDamage.vehicle = tank;
-            crushDamage.kBaseCrushDepth = 1500f;
+            crushDamage.kBaseCrushDepth = Balance.TankDepthLimit;
             tank.crushDamage = crushDamage;
 
             var engineRpmSfx = Helpers.FindChild(prefab, "EngineRpmSFX").AddComponent<EngineRpmSFXManager>();

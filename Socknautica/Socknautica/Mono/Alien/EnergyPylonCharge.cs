@@ -82,7 +82,30 @@ internal class EnergyPylonCharge : MonoBehaviour
         else
         {
             CancelCharge();
+            if (ArenaSpawner.main != null)
+            {
+                ConnectToReactor();
+            }
+
         }
+    }
+
+    private void ConnectToReactor()
+    {
+        Transform closest = null;
+        float minDist = float.MaxValue;
+        var center = ArenaSpawner.main.center;
+        foreach (var point in chargingPoints)
+        {
+            var dist = Vector3.Distance(point.position, center.position);
+            if (dist < minDist)
+            {
+                closest = point;
+                minDist = dist;
+            }
+        }
+        lineRenderer.enabled = true;
+        lineRenderer.SetPositions(new Vector3[] { closest.position, center.position });
     }
 
     private void CancelCharge()

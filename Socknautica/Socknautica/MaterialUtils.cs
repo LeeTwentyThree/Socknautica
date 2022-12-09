@@ -11,6 +11,7 @@ public static class MaterialUtils
 {
     internal static void LoadMaterials()
     {
+        CoroutineHost.StartCoroutine(LoadIonCubeMaterial());
         CoroutineHost.StartCoroutine(LoadPrecursorGlassAndFogMaterial());
         CoroutineHost.StartCoroutine(LoadStasisFieldMaterial());
         CoroutineHost.StartCoroutine(LoadAirWaterBarrierMaterial());
@@ -297,6 +298,16 @@ public static class MaterialUtils
 
     private static Color precursorSpecularGreen = new Color(0.25f, 0.54f, 0.41f);
     private static Color precursorSpecularBlue = new Color(0.40f, 0.69f, 0.67f);
+
+    private static IEnumerator LoadIonCubeMaterial()
+    {
+        if (IonCubeMaterial)
+            yield break;
+
+        PrefabDatabase.TryGetPrefab("41406e76-4b4c-4072-86f8-f5b8e6523b73", out var prefab);
+
+        IonCubeMaterial = prefab.GetComponentInChildren<MeshRenderer>().material;
+    }
 
     private static IEnumerator LoadAirWaterBarrierMaterial()
     {

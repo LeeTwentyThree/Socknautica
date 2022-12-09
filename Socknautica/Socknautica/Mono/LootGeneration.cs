@@ -7,7 +7,7 @@ namespace Socknautica.Mono;
 
 public class LootGeneration : MonoBehaviour
 {
-    public float leviathanProbability = 0.15f;
+    public float leviathanProbability = 0.25f;
     public Vector3 leviathanOffset = new(0, 17, 0);
     public Preset preset;
     private List<LootGroup> groups;

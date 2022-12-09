@@ -75,7 +75,7 @@ internal class BiomesPatches
     [HarmonyPatch(typeof(WaterBiomeManager), nameof(WaterBiomeManager.GetBiomeIndex))]
     public static void WaterBiomeManager_GetBiomeIndex_Postfix(ref int __result)
     {
-        if (__result == -1)
+        if (__result == -1 || Mono.ArenaSpawner.main != null)
         {
             __result = voidBiomeIndex;
         }

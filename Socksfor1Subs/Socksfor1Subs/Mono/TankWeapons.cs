@@ -46,8 +46,8 @@ namespace Socksfor1Subs.Mono
         private float _harpoonMinRetractTime = 0.3f;
 
         private float _timeLastBoosted;
-        private float _boostCooldown = 5f;
-        private float _boostForce = 40f;
+        private float _boostCooldown = 1.8f;
+        private float _boostForce = 60f;
 
         private FMODAsset _torpedoFireSound = Helpers.GetFmodAsset("event:/sub/seamoth/torpedo_fire");
         private FMODAsset _harpoonFireSound = Helpers.GetFmodAsset("TankShootHarpoon");

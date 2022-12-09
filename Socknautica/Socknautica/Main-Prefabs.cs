@@ -5,6 +5,7 @@ using Prefabs.DataTerminal;
 using Mono.Alien;
 using ECCLibrary;
 using System.Collections.Generic;
+using Prefabs.Teleporter;
 
 public partial class Main
 {
@@ -22,6 +23,8 @@ public partial class Main
     internal static DataTerminalPrefab dadSubTerminal;
     internal static DataTerminalPrefab coordBaseCoordsTerminal;
     internal static DataTerminalPrefab arenaBaseCoordsTerminal;
+
+    internal static MirageFish mirageFish;
 
     private static void PatchPrefabsEarly()
     {
@@ -70,6 +73,12 @@ public partial class Main
 
         var ancientFloaterFix = new AncientFloaterFix();
         ancientFloaterFix.Patch();
+
+        mirageFish = new MirageFish();
+        mirageFish.Patch();
+
+        TeleporterNetwork network = new TeleporterNetwork("ArenaTeleporter", new Vector3(0, 0, 0), 0, new Vector3(0, -1999.77f, 295f), 180);
+        network.Patch();
     }
 
     private static void PatchAquariumIslandSegment(string classId, string prefabName, Vector3 offset)
