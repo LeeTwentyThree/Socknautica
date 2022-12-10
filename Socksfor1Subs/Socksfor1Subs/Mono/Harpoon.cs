@@ -10,8 +10,8 @@ namespace Socksfor1Subs.Mono
         public Transform chainAttach;
         public Collider collider;
 
-        public float velocity = 70f;
-        public float reelInVelocity = 50f;
+        public float baseVelocity = 70f;
+        public float reelInVelocity = 150f;
         public float reelInCreatureVelocity = 30f;
         public float rotateToTargetAnglesPerSecond = 520f;
         public float fallDownAnglesPerSecond = 50f;
@@ -33,6 +33,17 @@ namespace Socksfor1Subs.Mono
         private float _chainLimitWhileAttached = 500f;
 
         private LineRenderer _lineRenderer;
+
+        private float _addedVelocity = 0f;
+        private float _velocityScale = 1f;
+
+        private float TravelVelocity
+        {
+            get
+            {
+                return baseVelocity + _addedVelocity;
+            }
+        }
 
         private FMODAsset _attachSound = Helpers.GetFmodAsset("TankTorpedoExplosionClose");
 
@@ -148,7 +159,11 @@ namespace Socksfor1Subs.Mono
         private void Start()
         {
             _timeCreated = Time.time;
-            rb.velocity = transform.forward * velocity;
+            if (tank != null)
+            {
+                AccountForTankVelocity();
+            }
+            rb.velocity = transform.forward * TravelVelocity;
 
             _lineRenderer = gameObject.AddComponent<LineRenderer>();
             _lineRenderer.useWorldSpace = true;
@@ -157,6 +172,13 @@ namespace Socksfor1Subs.Mono
             _lineRenderer.positionCount = 2;
             _lineRenderer.widthMultiplier = 0.1f;
             UpdateLineRenderer();
+        }
+
+        private void AccountForTankVelocity()
+        {
+            var realisticVelocity = Mathf.Max(baseVelocity, tank.useRigidbody.velocity.magnitude);
+            _addedVelocity = realisticVelocity - baseVelocity;
+            _velocityScale = realisticVelocity / baseVelocity;
         }
 
         private void Update()
@@ -241,7 +263,7 @@ namespace Socksfor1Subs.Mono
             {
                 if (Time.time > _timeCreated + homeDelay)
                 {
-                    rb.velocity = transform.forward * velocity;
+                    rb.velocity = transform.forward * TravelVelocity;
                     HomeOnTarget();
                 }
             }
@@ -270,7 +292,7 @@ namespace Socksfor1Subs.Mono
 
         private void HomeOnTarget()
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation((TargetPosition - transform.position).normalized), Time.deltaTime * rotateToTargetAnglesPerSecond);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation((TargetPosition - transform.position).normalized), Time.deltaTime * rotateToTargetAnglesPerSecond * _velocityScale);
         }
 
         private void UpdateReelIn()

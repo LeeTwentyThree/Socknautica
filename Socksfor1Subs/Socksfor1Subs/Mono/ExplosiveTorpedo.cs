@@ -29,6 +29,9 @@ namespace Socksfor1Subs.Mono
         private FMODAsset _explodeSoundClose = Helpers.GetFmodAsset("TankTorpedoExplosionClose");
         private FMODAsset _explodeSoundFar = Helpers.GetFmodAsset("TankTorpedoExplosionFar");
 
+        private float _addedVelocity = 0f;
+        private float _velocityScale = 1f;
+
         private Vector3 TargetPosition
         {
             get
@@ -44,11 +47,30 @@ namespace Socksfor1Subs.Mono
             }
         }
 
+        private float TravelVelocity
+        {
+            get
+            {
+                return velocity + _addedVelocity;
+            }
+        }
+
         private void Start()
         {
             emitter.Play();
             _timeCreated = Time.time;
+            if (tank != null)
+            {
+                AccountForTankVelocity();
+            }
             rb.velocity = transform.forward * velocity;
+        }
+
+        private void AccountForTankVelocity()
+        {
+            var realisticVelocity = Mathf.Max(velocity, tank.useRigidbody.velocity.magnitude);
+            _addedVelocity = realisticVelocity - velocity;
+            _velocityScale = realisticVelocity / velocity;
         }
 
         private void Update()
@@ -68,7 +90,7 @@ namespace Socksfor1Subs.Mono
             {
                 return;
             }
-            rb.velocity = transform.forward * velocity;
+            rb.velocity = transform.forward * TravelVelocity;
             if (Time.time > _timeCreated + homeDelay)
             {
                 HomeOnTarget();
@@ -85,7 +107,7 @@ namespace Socksfor1Subs.Mono
 
         private void HomeOnTarget()
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation((TargetPosition - transform.position).normalized), Time.deltaTime * rotateToTargetAnglesPerSecond);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation((TargetPosition - transform.position).normalized), Time.deltaTime * rotateToTargetAnglesPerSecond * _velocityScale);
         }
 
         private void FallToDownRotation()
