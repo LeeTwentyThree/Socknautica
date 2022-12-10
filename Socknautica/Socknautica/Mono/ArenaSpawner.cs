@@ -15,7 +15,10 @@ public class ArenaSpawner : MonoBehaviour
     private static FMODAsset bossMusicEvent = Helpers.GetFmodAsset("BossMusic");
 
     private Vector3 arenaPos = new Vector3(0, -2000, 0);
-    private Vector3 arenaTeleportPos = new Vector3(0, -1900, 100);
+
+    private Vector3 teleportTankRadiusCenter = new Vector3(647, -2207, -1610);
+    private float teleportTankRadius = 100f;
+    private Vector3 teleportTankDropIntoArenaPosition = new Vector3(0, -1996, 405);
 
     public float arenaHeight = 180 * kScaleFactor;
 
@@ -54,6 +57,18 @@ public class ArenaSpawner : MonoBehaviour
         center = arena.transform.Find("Center");
         LoopingMusic.Play(bossMusicEvent, 288);
         LargeWorld.main.transform.parent.Find("Chunks").gameObject.SetActive(false);
+        foreach (var ping in PingManager.pings.Values)
+        {
+            if (ping != null && ping.origin != null)
+            {
+                if (Vector3.SqrMagnitude(ping.origin.position - teleportTankRadiusCenter) < teleportTankRadius * teleportTankRadius)
+                {
+                    var root = UWE.Utils.GetEntityRoot(ping.origin.gameObject);
+                    if (root != null) root.transform.localPosition = teleportTankDropIntoArenaPosition;
+                    break;
+                }
+            }
+        }
         yield return new WaitForSeconds(4f);
     }
 
