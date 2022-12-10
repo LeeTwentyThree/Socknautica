@@ -74,6 +74,7 @@ public class ArenaSpawner : MonoBehaviour
         SpawnCreature(TechType.GhostLeviathan, new Vector3(-90, -1881, -146));
         SpawnCreature(TechType.Reefback, new Vector3(52, -1873, -86));
         SpawnCreature(TechType.Reefback, new Vector3(-32, -1896, 140));
+        SpawnCreature(Main.multigarg.TechType, new Vector3(0, -1900, 0), Vector3.one * 0.3f);
     }
 
     private void FixSpawnedObject(GameObject spawned)
@@ -83,11 +84,12 @@ public class ArenaSpawner : MonoBehaviour
         spawned.SetActive(true);
     }
 
-    private void SpawnCreature(TechType techType, Vector3 globalPos)
+    private void SpawnCreature(TechType techType, Vector3 globalPos, Vector3 scale = default)
     {
         var spawned = CraftData.InstantiateFromPrefab(techType);
         FixSpawnedObject(spawned);
         spawned.transform.localPosition = globalPos;
+        if (scale != default) spawned.transform.localScale = scale;
     }
 
     private void SpawnEnergyPylon(Vector3 loc, Vector3 eulers = default)
