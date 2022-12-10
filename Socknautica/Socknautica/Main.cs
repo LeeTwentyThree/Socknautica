@@ -9,6 +9,8 @@ namespace Socknautica
         internal static Assembly assembly = Assembly.GetExecutingAssembly();
         internal static Harmony harmony;
 
+        internal static Config config = OptionsPanelHandler.Main.RegisterModOptions<Config>();
+
         [QModPrePatch]
         public static void Prepatch()
         {

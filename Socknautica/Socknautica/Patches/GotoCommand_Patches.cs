@@ -12,6 +12,7 @@ public static class GotoCommand_Patches
     {
         AddTeleportPosition(ref __instance, "aquariumbase", new Vector3(1520, -1000, -1480));
         AddTeleportPosition(ref __instance, "coordbase", new Vector3(1700, -1891, -173));
+        AddTeleportPosition(ref __instance, "arenateleporter", new Vector3(648, -2201, -1540));
     }
 
     private static void AddTeleportPosition(ref GotoConsoleCommand gotoCmd, string name, Vector3 pos, bool forceWalk = false)

@@ -5,17 +5,19 @@ namespace Socknautica.Mono.Alien;
 internal class EnergyPylonCharge : MonoBehaviour
 {
     public Transform[] chargingPoints;
-    public float chargeRange = 100f;
-    public float energyPerSecond = 3f;
+    public float chargeRange = 70f;
+    public float energyPerSecond = 11.5f;
 
     private Vehicle currentTarget;
     private bool wasCharging;
     private float vfxDuration = 0.15f;
-    private float vfxIntervalDuration = 3f;
     private FMODAsset chargeSound = Helpers.GetFmodAsset("event:/sub/base/chargers/charge_loop");
     private FMOD_CustomLoopingEmitter chargeEmitter;
     private LineRenderer lineRenderer;
     private TeleportScreenFXController teleportFx;
+
+    private static int totalSpawned;
+    private int uniqueId;
 
     private void Start()
     {
@@ -29,13 +31,15 @@ internal class EnergyPylonCharge : MonoBehaviour
         lineRenderer = laserBeam.GetComponent<LineRenderer>();
         lineRenderer.startWidth = 0.15f;
         lineRenderer.endWidth = 0.15f;
-        lineRenderer.widthMultiplier = 4f;
+        lineRenderer.widthMultiplier = 12f;
         lineRenderer.positionCount = 2;
         lineRenderer.material.color = new Color(.34f, .62f, .36f, 1f);
 
         DestroyImmediate(powerTransmitter);
 
         teleportFx = MainCamera.camera.GetComponent<TeleportScreenFXController>();
+
+        uniqueId = totalSpawned++;
     }
 
     private void Update()
@@ -105,7 +109,12 @@ internal class EnergyPylonCharge : MonoBehaviour
             }
         }
         lineRenderer.enabled = true;
-        lineRenderer.SetPositions(new Vector3[] { closest.position, center.position });
+        lineRenderer.SetPositions(new Vector3[] { closest.position, GetReactorConnectPosition(center.position) });
+    }
+
+    private Vector3 GetReactorConnectPosition(Vector3 centerPos)
+    {
+        return centerPos + Vector3.up * (Mathf.PerlinNoise(uniqueId * 100f, Time.time / 6f) * ArenaSpawner.main.arenaHeight - ArenaSpawner.main.arenaHeight / 2f);
     }
 
     private void CancelCharge()
@@ -124,12 +133,8 @@ internal class EnergyPylonCharge : MonoBehaviour
 
     private IEnumerator StartChargingCoroutine()
     {
-        while (wasCharging)
-        {
-            teleportFx.StartTeleport();
-            yield return new WaitForSeconds(vfxDuration);
-            teleportFx.StopTeleport();
-            yield return new WaitForSeconds(vfxIntervalDuration);
-        }
+        teleportFx.StartTeleport();
+        yield return new WaitForSeconds(vfxDuration);
+        teleportFx.StopTeleport();
     }
 }

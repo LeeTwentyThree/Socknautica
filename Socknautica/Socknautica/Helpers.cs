@@ -30,4 +30,12 @@ internal class Helpers
         original.forward = reference.forward;
         original.localEulerAngles += Vector3.right * 90;
     }
+
+    public static bool MusicIsPaused
+    {
+        get
+        {
+            return UWE.FreezeTime.freezers.Count != 0;
+        }
+    }
 }

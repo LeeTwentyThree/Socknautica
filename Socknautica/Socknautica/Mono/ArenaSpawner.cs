@@ -15,7 +15,12 @@ public class ArenaSpawner : MonoBehaviour
     private static FMODAsset bossMusicEvent = Helpers.GetFmodAsset("BossMusic");
 
     private Vector3 arenaPos = new Vector3(0, -2000, 0);
-    private Vector3 arenaTeleportPos = new Vector3(0, -2000, 0);
+    private Vector3 arenaTeleportPos = new Vector3(0, -1900, 100);
+
+    public float arenaHeight = 180 * kScaleFactor;
+
+    private const float kScaleFactor = 1.5f;
+
     private void Awake()
     {
         main = this;
@@ -27,12 +32,9 @@ public class ArenaSpawner : MonoBehaviour
 
     private IEnumerator Start()
     {
-        var teleportFx = MainCamera.camera.GetComponent<TeleportScreenFXController>();
-        teleportFx.StartTeleport();
-        yield return new WaitForSeconds(2f);
-
         var arena = Instantiate(Main.assetBundle.LoadAsset<GameObject>("ArenaBasePrefab"));
         arena.transform.position = arenaPos;
+        arena.transform.localScale = Vector3.one * kScaleFactor;
         MaterialUtils.ApplySNShaders(arena);
         MaterialUtils.ApplyPrecursorMaterials(arena, 2f);
         arena.EnsureComponent<SkyApplier>().renderers = arena.gameObject.GetComponentsInChildren<Renderer>(true);
@@ -48,37 +50,52 @@ public class ArenaSpawner : MonoBehaviour
                 ringNum++;
             }
         }
-        LargeWorld.main.transform.parent.Find("Chunks").gameObject.SetActive(false);
-        Player.main.transform.position = arenaTeleportPos;
         SpawnObjects();
         center = arena.transform.Find("Center");
-
-        yield return new WaitForSeconds(2f);
-        teleportFx.StopTeleport();
-
-        var emitter = gameObject.AddComponent<FMOD_CustomLoopingEmitter>();
-        emitter.SetAsset(bossMusicEvent);
-        emitter.Play();
+        LoopingMusic.Play(bossMusicEvent, 288);
+        LargeWorld.main.transform.parent.Find("Chunks").gameObject.SetActive(false);
+        yield return new WaitForSeconds(4f);
     }
 
     private void SpawnObjects()
     {
-        float radius = 200;
-        int num = 12;
+        float radius = 200 * kScaleFactor;
+        int num = 8;
         float max = Mathf.PI * 2f;
         for (int i = 0; i < num; i++)
         {
-            var percent = i * num / max;
+            var percent = (float)i / num * max;
             SpawnEnergyPylon(new Vector3(Mathf.Cos(percent) * radius, 0f, Mathf.Sin(percent) * radius));
+            SpawnEnergyPylon(new Vector3(Mathf.Cos(percent) * radius, arenaHeight, Mathf.Sin(percent) * radius), Vector3.right * 180);
         }
+        SpawnCreature(TechType.GhostLeviathan, new Vector3(-182, -1900, 136));
+        SpawnCreature(TechType.GhostLeviathan, new Vector3(175, -1918, 104));
+        SpawnCreature(TechType.GhostLeviathan, new Vector3(116, -1930, -205));
+        SpawnCreature(TechType.GhostLeviathan, new Vector3(-90, -1881, -146));
+        SpawnCreature(TechType.Reefback, new Vector3(52, -1873, -86));
+        SpawnCreature(TechType.Reefback, new Vector3(-32, -1896, 140));
     }
 
-    private void SpawnEnergyPylon(Vector3 loc)
+    private void FixSpawnedObject(GameObject spawned)
+    {
+        DestroyImmediate(spawned.GetComponent<LargeWorldEntity>());
+        spawned.transform.parent = null;
+        spawned.SetActive(true);
+    }
+
+    private void SpawnCreature(TechType techType, Vector3 globalPos)
+    {
+        var spawned = CraftData.InstantiateFromPrefab(techType);
+        FixSpawnedObject(spawned);
+        spawned.transform.localPosition = globalPos;
+    }
+
+    private void SpawnEnergyPylon(Vector3 loc, Vector3 eulers = default)
     {
         var spawned = CraftData.InstantiateFromPrefab(Main.energyPylon.TechType);
-        DestroyImmediate(spawned.GetComponent<LargeWorldEntity>());
-        spawned.SetActive(true);
-        spawned.transform.localScale = Vector3.one * 6f;
+        FixSpawnedObject(spawned);
+        spawned.transform.localScale = Vector3.one * 10;
         spawned.transform.position = arenaPos + loc;
+        spawned.transform.eulerAngles = eulers;
     }
 }

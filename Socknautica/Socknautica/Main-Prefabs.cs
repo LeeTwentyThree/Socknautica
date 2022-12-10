@@ -11,12 +11,14 @@ public partial class Main
 {
     internal static AquariumBaseModel aquariumBaseModel;
     internal static CoordBaseModel coordBaseModel;
+    internal static ArenaTeleporterBaseModel arenaTeleporterBaseModel;
     internal static List<GenericIsland> genericIslands;
     internal static GenericIsland GetRandomGenericIsland() => genericIslands[Random.Range(0, genericIslands.Count)];
     internal static PressuriumCrystal pressuriumCrystal;
     internal static EnergyPylon energyPylon;
     private static Vector3 aquariumPos = new Vector3(1450, -1000, -1450);
     private static Vector3 coordBasePos = new Vector3(1700, -1900, -200);
+    private static Vector3 arenaTeleporterPos = new Vector3(650, -2200, -1587);
 
     internal static DataTerminalPrefab sockTankTerminal;
     internal static DataTerminalPrefab aquariumBaseCoordsTerminal;
@@ -25,6 +27,7 @@ public partial class Main
     internal static DataTerminalPrefab arenaBaseCoordsTerminal;
 
     internal static MirageFish mirageFish;
+    internal static Multigarg multigarg;
 
     private static void PatchPrefabsEarly()
     {
@@ -41,6 +44,9 @@ public partial class Main
         coordBaseModel = new CoordBaseModel();
         coordBaseModel.Patch();
 
+        arenaTeleporterBaseModel = new ArenaTeleporterBaseModel();
+        arenaTeleporterBaseModel.Patch();
+
         var aquariumBaseExteriorSpawner = new AlienBaseInitializer<AquariumBaseExteriorSpawner>("AquariumBaseExteriorSpawner", aquariumPos, LargeWorldEntity.CellLevel.VeryFar);
         aquariumBaseExteriorSpawner.Patch();
 
@@ -52,6 +58,9 @@ public partial class Main
 
         var coordBaseSpawner = new AlienBaseInitializer<CoordBaseSpawner>("CoordBaseSpawner", coordBasePos, LargeWorldEntity.CellLevel.Medium);
         coordBaseSpawner.Patch();
+
+        var arenaTeleporterBaseSpawner = new AlienBaseInitializer<ArenaTeleporterBaseSpawner>("ArenaTeleporterBaseSpawner", arenaTeleporterPos, LargeWorldEntity.CellLevel.Medium);
+        arenaTeleporterBaseSpawner.Patch();
 
         PatchAquariumIslandSegment("AquariumIslandBottom", "AquariumIslandBottom", Vector3.down * 170);
         PatchAquariumIslandSegment("AquariumIslandMiddle", "AquariumIslandMiddle", Vector3.zero);
@@ -77,7 +86,10 @@ public partial class Main
         mirageFish = new MirageFish();
         mirageFish.Patch();
 
-        TeleporterNetwork network = new TeleporterNetwork("ArenaTeleporter", new Vector3(0, 0, 0), 0, new Vector3(0, -1999.77f, 295f), 180);
+        multigarg = new Multigarg();
+        multigarg.Patch();
+
+        TeleporterNetwork network = new TeleporterNetwork("ArenaTeleporter", new Vector3(647, -2210, -1612), 0, new Vector3(0, -1999.77f, 430), 180);
         network.Patch();
     }
 
@@ -98,7 +110,7 @@ public partial class Main
         var coordsBaseSignal = new GenericSignalPrefab("CoordBaseSignal", "PingIcon", "Outpost Cache", "Outpost Cache", new Vector3(1700, -1891, -173));
         coordsBaseSignal.Patch();
 
-        var arenaTeleporterSignal = new GenericSignalPrefab("ArenaTeleporterSignal", "PingIcon", "[REDACTED]", "[REDACTED]", new Vector3(999, -9999, -999));
+        var arenaTeleporterSignal = new GenericSignalPrefab("ArenaTeleporterSignal", "PingIcon", "Reactor Access [ONE-WAY]", "Reactor Access [ONE-WAY]", new Vector3(647, -2204, -1607));
         arenaTeleporterSignal.Patch();
 
         var terminalBuilder = new DataTerminalBuilder();

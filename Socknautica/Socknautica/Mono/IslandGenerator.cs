@@ -15,7 +15,12 @@ internal class IslandGenerator : MonoBehaviour
 
     private static IslandsSaveData saveData { get; } = SaveDataHandler.Main.RegisterSaveDataCache<IslandsSaveData>();
 
-    private static ForbiddenZone[] forbiddenZones = new ForbiddenZone[] { new ForbiddenZone(new (1450, -1098, -1448), 200), new ForbiddenZone(new(1450, -998, -1448), 200) };
+    private static ForbiddenZone[] forbiddenZones = new ForbiddenZone[] {
+        new ForbiddenZone(new (1450, -1098, -1448), 200), // aquarium
+        new ForbiddenZone(new (1450, -998, -1448), 200), // aquarium island
+        new ForbiddenZone(new (650, -2200, -1587), 70), // arena teleporter
+        new ForbiddenZone(new (1700, -1900, -200), 70) // coords base
+};
     private record ForbiddenZone(Vector3 pos, float dist);
 
     private void Start()
@@ -35,9 +40,12 @@ internal class IslandGenerator : MonoBehaviour
     private void TryGenerate()
     {
         var randomPoint = MainCamera.camera.transform.position + Random.onUnitSphere * Random.Range(spawnRangeMin, spawnRangeMax);
-        if (VoidIslandBiome.bounds.Contains(randomPoint) && LargeWorld.main.GetBiome(randomPoint).Equals("void") && IsWithinNoOtherIslands(randomPoint))
+        if (VoidIslandBiome.bounds.Contains(randomPoint))
         {
-            SpawnIsland(Main.GetRandomGenericIsland().ClassID, randomPoint);
+            if ((LargeWorld.main.GetBiome(randomPoint).Equals("void") || randomPoint.y < -1400) && IsWithinNoOtherIslands(randomPoint))
+            {
+                SpawnIsland(Main.GetRandomGenericIsland().ClassID, randomPoint);
+            }
         }
     }
 

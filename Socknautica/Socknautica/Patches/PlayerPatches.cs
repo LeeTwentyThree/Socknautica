@@ -10,5 +10,6 @@ internal class PlayerPatches
     public static void PlayerStartPostfix(Player __instance)
     {
         __instance.gameObject.AddComponent<IslandGenerator>();
+        __instance.gameObject.AddComponent<InitiateArenaSpawnInRange>();
     }
 }
