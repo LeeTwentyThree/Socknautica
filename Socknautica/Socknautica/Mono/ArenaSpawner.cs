@@ -64,7 +64,11 @@ public class ArenaSpawner : MonoBehaviour
                 if (Vector3.SqrMagnitude(ping.origin.position - teleportTankRadiusCenter) < teleportTankRadius * teleportTankRadius)
                 {
                     var root = UWE.Utils.GetEntityRoot(ping.origin.gameObject);
-                    if (root != null) root.transform.localPosition = teleportTankDropIntoArenaPosition;
+                    if (root != null)
+                    {
+                        root.transform.localPosition = teleportTankDropIntoArenaPosition;
+                        root.transform.localEulerAngles = Vector3.up * 90;
+                    }
                     break;
                 }
             }
@@ -87,9 +91,9 @@ public class ArenaSpawner : MonoBehaviour
         SpawnCreature(TechType.GhostLeviathan, new Vector3(175, -1918, 104));
         SpawnCreature(TechType.GhostLeviathan, new Vector3(116, -1930, -205));
         SpawnCreature(TechType.GhostLeviathan, new Vector3(-90, -1881, -146));
-        SpawnCreature(TechType.Reefback, new Vector3(52, -1873, -86));
-        SpawnCreature(TechType.Reefback, new Vector3(-32, -1896, 140));
-        SpawnCreature(Main.multigarg.TechType, new Vector3(0, -1900, 0), Vector3.one * 0.3f);
+        SpawnCreature(TechType.SeaDragon, new Vector3(52, -1873, -86));
+        SpawnCreature(TechType.SeaDragon, new Vector3(-32, -1896, 140));
+        SpawnCreature(Main.multigarg.TechType, new Vector3(0, -1900, 0));
     }
 
     private void FixSpawnedObject(GameObject spawned)
@@ -97,6 +101,13 @@ public class ArenaSpawner : MonoBehaviour
         DestroyImmediate(spawned.GetComponent<LargeWorldEntity>());
         spawned.transform.parent = null;
         spawned.SetActive(true);
+    }
+
+    private void SpawnLightPillar(Vector3 locPos)
+    {
+        var spawned = CraftData.InstantiateFromPrefab(Main.arenaLightPillar.TechType);
+        FixSpawnedObject(spawned);
+        spawned.transform.localPosition = arenaPos + locPos;
     }
 
     private void SpawnCreature(TechType techType, Vector3 globalPos, Vector3 scale = default)

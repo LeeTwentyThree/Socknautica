@@ -58,7 +58,7 @@ namespace Socknautica
             }
             if (TechTypeHandler.TryGetModdedTechType("SockTank", out var sockTank))
             {
-                var newSockTankRecipe = new TechData(new Ingredient(TechType.PlasteelIngot, 2),  new Ingredient(TechType.AdvancedWiringKit, 1), new Ingredient(TechType.SeamothTorpedoModule, 1), new Ingredient(pressuriumCrystal.TechType, 10));
+                var newSockTankRecipe = new TechData(new Ingredient(TechType.PlasteelIngot, 2), new Ingredient(TechType.EnameledGlass, 2), new Ingredient(TechType.AdvancedWiringKit, 1), new Ingredient(TechType.SeamothTorpedoModule, 1), new Ingredient(pressuriumCrystal.TechType, 10), new Ingredient(atmospheriumCrystal.TechType, 5));
                 CraftDataHandler.SetTechData(sockTank, newSockTankRecipe);
             }
         }

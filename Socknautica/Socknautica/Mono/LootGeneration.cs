@@ -12,9 +12,14 @@ public class LootGeneration : MonoBehaviour
     public Preset preset;
     private List<LootGroup> groups;
 
+    public float precursorTechProbability;
+
     private PrefabIdentifier identifier;
 
     private static List<string> leviathanClassIDs;
+    private static List<string> precursorTechClassIDs;
+
+    private static BoundingSphere[] precursorZones = new BoundingSphere[] {new()}
 
     private void Start()
     {
@@ -34,7 +39,7 @@ public class LootGeneration : MonoBehaviour
 
     private static LootGenerationData saveData { get; } = SaveDataHandler.Main.RegisterSaveDataCache<LootGenerationData>();
 
-    private static void DetermineLeviathanClassIDs()
+    private static void DetermineClassIDs()
     {
         leviathanClassIDs = new List<string>();
         leviathanClassIDs.Add("5ea36b37-300f-4f01-96fa-003ae47c61e5"); // ghost
@@ -44,6 +49,19 @@ public class LootGeneration : MonoBehaviour
             leviathanClassIDs.Add("BlazaLeviathan");
             leviathanClassIDs.Add("Bloop");
         }
+
+        precursorTechClassIDs = new List<string>();
+        precursorTechClassIDs.Add(Main.arenaLightPillar.ClassID);
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.damageprop_box);
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.damageprop_box_double);
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.damageprop_box_quadruple);
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.damageprop_destroyedTile);
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.damageprop_largeChunk);
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.damageprop_smallPanel);
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.structure_outpost_1); // sonic deterrent
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.structure_outpost_2);
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.structure_column);
+        precursorTechClassIDs.Add(Alien.AlienBaseSpawner.structure_skeletonScanner1);
     }
 
     private void DetermineGroups()
@@ -65,8 +83,10 @@ public class LootGeneration : MonoBehaviour
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
             groups.Add(new LootGroup("RandomPlantSpawn", 0.2f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
-            groups.Add(new LootGroup("SpawnPointFish", 0.12f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
-            groups.Add(new LootGroup("ResourceSpawnPoint", 1f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite));
+            groups.Add(new LootGroup("SpawnPointFish", 0.05f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            var genericIslandResources = new LootGroup("ResourceSpawnPoint", 0.2f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite, ClassIds.lithium);
+            genericIslandResources.canSpawnAtmospherium = true;
+            groups.Add(genericIslandResources);
         }
         if (preset == Preset.CoordBaseIsland)
         {
@@ -92,7 +112,7 @@ public class LootGeneration : MonoBehaviour
     public void Generate()
     {
         saveData.completedUniqueIdentifiers.Add(identifier.Id);
-        SpawnLeviathanIfPossible();
+        SpawnSpecialObjects();
         DetermineGroups();
         foreach (var lootGroup in groups) GenerateLootGroup(lootGroup);
         //Destroy(this);
@@ -103,17 +123,17 @@ public class LootGeneration : MonoBehaviour
         var slots = Helpers.SearchAllTransforms(gameObject, group.namePrefix, ECCLibrary.ECCStringComparison.StartsWith);
         foreach (var slot in slots)
         {
-            if (Random.value <= group.probability)
+            if (group.Evaluate(slot))
             {
-                var spawned = SpawnPrefab(group.spawnClassIDs[Random.Range(0, group.spawnClassIDs.Length)], slot.position, Vector3.forward, Vector3.one * Random.Range(group.scaleMin, group.scaleMax));
+                var spawned = SpawnPrefab(group.GetRandomClassID(slot), slot.position, Vector3.forward, Vector3.one * Random.Range(group.scaleMin, group.scaleMax));
                 Helpers.SwapZAndYComponents(spawned.transform, slot);
             }
         }
     }
 
-    private void SpawnLeviathanIfPossible()
+    private void SpawnSpecialObjects()
     {
-        if (leviathanClassIDs == null) DetermineLeviathanClassIDs();
+        if (leviathanClassIDs == null || precursorTechClassIDs == null) DetermineClassIDs();
         if (Random.value < leviathanProbability)
         {
             SpawnPrefab(leviathanClassIDs[Random.Range(0, leviathanClassIDs.Count)], transform.position + leviathanOffset, Quaternion.identity);
@@ -165,7 +185,17 @@ public class LootGroup
     public string namePrefix;
     public string[] spawnClassIDs;
     public float probability, scaleMin, scaleMax;
-    
+    public bool canSpawnAtmospherium;
+
+    public virtual bool Evaluate(Transform slot)
+    {
+        if (Random.value > probability)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public LootGroup(string namePrefix, float probability, float scaleMin, float scaleMax, params string[] spawnClassIDs)
     {
         this.namePrefix = namePrefix;
@@ -173,5 +203,21 @@ public class LootGroup
         this.probability = probability;
         this.scaleMin = scaleMin;
         this.scaleMax = scaleMax;
+    }
+
+    public string GetRandomClassID(Transform atSlot)
+    {
+        bool atmoshperiumSpawner = canSpawnAtmospherium && atSlot.position.y < -2000;
+
+        int maxIndex = spawnClassIDs.Length;
+        if (atmoshperiumSpawner) maxIndex++;
+        int randomIndex = Random.Range(0, maxIndex);
+
+        string chosenClassId;
+        if (atmoshperiumSpawner && randomIndex >= maxIndex - 1)
+            chosenClassId = Main.atmospheriumCrystal.ClassID;
+        else
+            chosenClassId = spawnClassIDs[randomIndex];
+        return chosenClassId;
     }
 }

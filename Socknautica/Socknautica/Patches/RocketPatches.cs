@@ -16,6 +16,6 @@ internal class RocketPatches
         button.transform.parent = stage3;
         button.transform.localPosition = new Vector3(0, 35.7f, -1.33f);
         button.transform.localEulerAngles = Vector3.right * -90;
-        button.transform.localScale = Vector3.one * .5f;
+        button.transform.localScale = Vector3.one * .25f;
     }
 }

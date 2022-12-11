@@ -35,6 +35,7 @@ internal class LoopingMusic : MonoBehaviour
             return;
         if (runtimeLeft <= 0f)
         {
+            emitter.Stop();
             emitter.Play();
             runtimeLeft = duration;
         }

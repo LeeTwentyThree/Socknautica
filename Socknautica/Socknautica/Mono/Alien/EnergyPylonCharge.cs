@@ -120,10 +120,8 @@ internal class EnergyPylonCharge : MonoBehaviour
     private void CancelCharge()
     {
         wasCharging = false;
-        StopAllCoroutines();
         Destroy(chargeEmitter);
         lineRenderer.enabled = false;
-        teleportFx.StopTeleport();
     }
 
     private void Destroy()

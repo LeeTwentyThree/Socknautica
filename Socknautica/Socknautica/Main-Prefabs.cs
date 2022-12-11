@@ -15,7 +15,9 @@ public partial class Main
     internal static List<GenericIsland> genericIslands;
     internal static GenericIsland GetRandomGenericIsland() => genericIslands[Random.Range(0, genericIslands.Count)];
     internal static PressuriumCrystal pressuriumCrystal;
+    internal static AtmospheriumCrystal atmospheriumCrystal;
     internal static EnergyPylon energyPylon;
+    internal static ArenaLightPillar arenaLightPillar;
     private static Vector3 aquariumPos = new Vector3(1450, -1000, -1450);
     private static Vector3 coordBasePos = new Vector3(1700, -1900, -200);
     private static Vector3 arenaTeleporterPos = new Vector3(650, -2200, -1587);
@@ -77,8 +79,14 @@ public partial class Main
         pressuriumCrystal = new PressuriumCrystal();
         pressuriumCrystal.Patch();
 
+        atmospheriumCrystal = new AtmospheriumCrystal();
+        atmospheriumCrystal.Patch();
+
         energyPylon = new EnergyPylon();
         energyPylon.Patch();
+
+        arenaLightPillar = new ArenaLightPillar();
+        arenaLightPillar.Patch();
 
         var ancientFloaterFix = new AncientFloaterFix();
         ancientFloaterFix.Patch();
@@ -110,7 +118,7 @@ public partial class Main
         var coordsBaseSignal = new GenericSignalPrefab("CoordBaseSignal", "PingIcon", "Outpost Cache", "Outpost Cache", new Vector3(1700, -1891, -173));
         coordsBaseSignal.Patch();
 
-        var arenaTeleporterSignal = new GenericSignalPrefab("ArenaTeleporterSignal", "PingIcon", "Reactor Access [ONE-WAY]", "Reactor Access [ONE-WAY]", new Vector3(647, -2204, -1607));
+        var arenaTeleporterSignal = new GenericSignalPrefab("ArenaTeleporterSignal", "PingIcon", "Reactor Access [NO EXIT]", "Reactor Access [NO EXIT]", new Vector3(647, -2204, -1607));
         arenaTeleporterSignal.Patch();
 
         var terminalBuilder = new DataTerminalBuilder();
