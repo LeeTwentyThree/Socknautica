@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Socknautica.Mono.Alien;
 
 namespace Socknautica.Mono;
 
@@ -23,6 +25,10 @@ public class ArenaSpawner : MonoBehaviour
     public float arenaHeight = 180 * kScaleFactor;
 
     private const float kScaleFactor = 1.5f;
+
+    private List<EnergyPylonCharge> energyPylons = new List<EnergyPylonCharge>();
+
+    private bool exploded;
 
     private void Awake()
     {
@@ -93,7 +99,7 @@ public class ArenaSpawner : MonoBehaviour
         SpawnCreature(TechType.GhostLeviathan, new Vector3(-90, -1881, -146));
         SpawnCreature(TechType.SeaDragon, new Vector3(52, -1873, -86));
         SpawnCreature(TechType.SeaDragon, new Vector3(-32, -1896, 140));
-        SpawnCreature(Main.multigarg.TechType, new Vector3(0, -1900, 0));
+        SpawnCreature(Main.multigarg.TechType, new Vector3(300, -1900, 0));
     }
 
     private void FixSpawnedObject(GameObject spawned)
@@ -125,5 +131,22 @@ public class ArenaSpawner : MonoBehaviour
         spawned.transform.localScale = Vector3.one * 10;
         spawned.transform.position = arenaPos + loc;
         spawned.transform.eulerAngles = eulers;
+        energyPylons.Add(spawned.GetComponent<EnergyPylonCharge>());
+    }
+
+    private void Update()
+    {
+        if (exploded) return;
+        if (energyPylons == null || energyPylons.Count == 0) return;
+        int alive = 0;
+        foreach (var pylon in energyPylons)
+        {
+            if (pylon != null) alive++;
+        }
+        if (alive == 0)
+        {
+            exploded = true;
+            ArenaExplosion.Explode();
+        }
     }
 }

@@ -8,41 +8,78 @@ namespace Socknautica.Mono.Creatures;
 
 public class SwimRandomArena : CreatureAction
 {
+	private float swimRadius = 150;
+	private float swimVelocity = BossBalance.swimVelocity;
+	private bool performing;
+	private float currentAngle;
+
 	public override void Perform(Creature creature, float deltaTime)
 	{
-		if (Time.time > timeNextSwim)
-		{
-			timeNextSwim = Time.time + swimInterval;
-			Vector3 vector;
-			if (onSphere)
-			{
-				vector = UnityEngine.Random.onUnitSphere;
-			}
-			else
-			{
-				vector = UnityEngine.Random.insideUnitSphere;
-			}
-			vector += transform.forward * swimForward;
-			vector = Vector3.Scale(vector, swimRadius);
-			float velocity = Mathf.Lerp(swimVelocity, 0f, creature.Tired.Value);
-			Vector3 vector2 = transform.position + vector;
-			LastScarePosition component = gameObject.GetComponent<LastScarePosition>();
-			if (component != null && Time.time < component.lastScareTime + 3f)
-			{
-				Vector3 normalized = (component.lastScarePosition - transform.position).normalized;
-				Debug.DrawLine(transform.position, component.lastScarePosition, Color.red);
-				Debug.DrawLine(vector2, vector2 - normalized, Color.green);
-				vector2 -= normalized;
-			}
-			swimBehaviour.SwimTo(vector2, velocity);
-		}
+		
 	}
 
-	private Vector3 swimRadius = new Vector3(400f, 135, 400);
-	private float swimForward = 0.5f;
-	private float swimVelocity = BossBalance.swimVelocity;
-	private float swimInterval = 6f;
-	private bool onSphere = true;
+	private void Update()
+    {
+		if (performing)
+        {
+			Vector3 target = GetBossSwimTargetPosition();
+			swimBehaviour.SwimTo(target, swimVelocity);
+		}
+		currentAngle = GetBossCurrentAngle();
+    }
 
-	private float timeNextSwim;
+    public override void StartPerform(Creature creature)
+    {
+		performing = true;
+    }
+
+    public override void StopPerform(Creature creature)
+    {
+		performing = false;
+    }
+
+    public override float Evaluate(Creature creature)
+    {
+		if (ArenaSpawner.main != null) return BossBalance.swimPriority;
+		return 0f;
+    }
+
+    private Vector3 GetBossSwimTargetPosition()
+    {
+		var angleRads = (GetBossCurrentAngle() + 10f) * Mathf.Deg2Rad;
+		return new Vector3(Mathf.Cos(angleRads) * swimRadius, ArenaSpawner.main.center.position.y, Mathf.Sin(angleRads) * swimRadius);
+    }
+
+	private Vector2 GetBossSwimTargetPositionUnscaled()
+	{
+		var angleRads = (GetBossCurrentAngle() + 15f) * Mathf.Deg2Rad;
+		return new Vector2(Mathf.Cos(angleRads), Mathf.Sin(angleRads));
+	}
+
+	private float GetBossCurrentAngle()
+    {
+		var center = GetArenaCenterPosition();
+		Vector2 direction = (new Vector2(transform.position.x, transform.position.z) - new Vector2(center.x, center.z)).normalized;
+		var angle = Helpers.Angle(direction);
+		//if (direction.y < 0) angle += 180;
+		return angle;
+    }
+
+	private Vector3 GetArenaCenterPosition()
+    {
+		if (ArenaSpawner.main != null)
+        {
+			return ArenaSpawner.main.center.position;
+        }
+		return default;
+    }
+
+	private static float GetTangentToPoint(Vector2 unitCirclePoint)
+    {
+		if (Mathf.Approximately(unitCirclePoint.y, 0f))
+        {
+			return float.MaxValue;
+        }
+		return -unitCirclePoint.x / unitCirclePoint.y;
+    }
 }

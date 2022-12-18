@@ -18,6 +18,11 @@ internal class SelfDestructProcess : MonoBehaviour
 
     private IEnumerator Start()
     {
+        foreach (var light in rocket.GetComponentsInChildren<Light>())
+        {
+            light.intensity *= 3f;
+            light.color = Color.red;
+        }
         CustomPDALinesManager.PlayVoiceLine("RocketSelfDestruct1");
         ErrorMessage.AddMessage("Self destruct sequence activated!");
         yield return new WaitForSeconds(18);

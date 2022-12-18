@@ -10,7 +10,7 @@ internal class MainMenuPatches
     public static void uGUI_MainMenu_Awake_Postfix()
     {
         var billboard = GameObject.Instantiate(Main.assetBundle.LoadAsset<GameObject>("MainMenuBillboardPrefab"));
-        billboard.transform.position = new Vector3(-12.50f, -10.5f, 26);
+        billboard.transform.position = new Vector3(-13.50f, -12.2f, 30);
         billboard.transform.localScale = Vector3.one * 3.4f;
     }
 }

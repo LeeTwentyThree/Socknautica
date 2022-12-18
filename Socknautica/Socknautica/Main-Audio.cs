@@ -37,20 +37,19 @@ public partial class Main
         PatchPDALines();
         PatchTechAudio();
         PatchMusic();
-        PatchCinematicAudio();
     }
     
     private static void PatchCreatureAudio()
     {
-        /*
-        var gargJuvenileCloseSounds = AudioUtils.CreateSounds(ECCAudio.CreateClipPool("garg_roar").clips, k3DSoundModes).ToArray();
-        for (int i = 0; i < gargJuvenileCloseSounds.Length; i++)
+        var roarSounds = AudioUtils.CreateSounds(ECCAudio.CreateClipPool("BossRoar").clips, k3DSoundModes).ToArray();
+        for (int i = 0; i < roarSounds.Length; i++)
         {
-            gargJuvenileCloseSounds[i].set3DMinMaxDistance(5f, 500f);
+            roarSounds[i].set3DMinMaxDistance(5f, 700f);
         }
-        var gargJuvenileCloseEvent = new FModMultiSounds(gargJuvenileCloseSounds, kCreatureSFXBus, true);
-        CustomSoundHandler.RegisterCustomSound("GargJuvenileRoarClose", gargJuvenileCloseEvent);
+        var roarEvent = new FModMultiSounds(roarSounds, kCreatureSFXBus, true);
+        CustomSoundHandler.RegisterCustomSound("BossRoar", roarEvent);
 
+        /*
         var gargJuvenileFarSounds = AudioUtils.CreateSounds(ECCAudio.CreateClipPool("garg_for_anth_distant").clips, k3DSoundModes).ToArray();
         for (int i = 0; i < gargJuvenileFarSounds.Length; i++)
         {
@@ -69,15 +68,9 @@ public partial class Main
         */
     }
 
-    private static void PatchCinematicAudio()
-    {
-        //var singularitySuccess = AudioUtils.CreateSound(assetBundle.LoadAsset<AudioClip>("SingularitySuccess"), k2DSoundModes);
-        //CustomSoundHandler.RegisterCustomSound("SingularitySuccess", singularitySuccess, kSFXBus);
-    }
-
     private static void PatchTechAudio()
     {
-        //CustomSoundHandler.RegisterCustomSound("IonDashUnderwater", assetBundle.LoadAsset<AudioClip>("IonDashUnderWater"), kSFXBus);
+        AddWorldSoundEffect(assetBundle.LoadAsset<AudioClip>("EnergyPylonExplosion"), "EnergyPylonExplosion", 1f, 450);
     }
 
     private static void PatchMusic()
@@ -88,28 +81,24 @@ public partial class Main
 
     private static void PatchPDALines()
     {
-        //RegisterPDALogVO(assetBundle.LoadAsset<AudioClip>("DataTerminalOutpost"), "DetectingAlienBroadcastSubtitles");
         AddPDAVoiceLine(assetBundle.LoadAsset<AudioClip>("SignalAudio"), "SocksSignalSubtitles");
         AddPDAVoiceLine(assetBundle.LoadAsset<AudioClip>("SelfDestruct1"), "RocketSelfDestruct1");
         AddPDAVoiceLine(assetBundle.LoadAsset<AudioClip>("SelfDestruct2"), "RocketSelfDestruct2");
     }
 
-    private static void RegisterPDALogVO(AudioClip clip, string key, Sprite icon = null) // the `key` is used for the subtitles language key, FMOD key, AND log entry key
-    {
-        AddPDAVoiceLine(clip, key);
-        AddPDALogEntry(key, key, key, icon);
-    }
-    
     private static void AddPDAVoiceLine(AudioClip clip, string soundPath) // has no attached Goal
     {
         var sound = AudioUtils.CreateSound(clip, kStreamSoundModes);
         CustomSoundHandler.RegisterCustomSound(soundPath, sound, kPDABus);
     }
 
-    private static void AddPDALogEntry(string key, string languageKey, string soundPath, Sprite icon = null)
+    private static void AddWorldSoundEffect(AudioClip clip, string soundPath, float minDistance = 1f, float maxDistance = 100f, string overrideBus = null)
     {
-        var asset = Helpers.GetFmodAsset(soundPath);
-        asset.id = soundPath;
-        PDALogHandler.AddCustomEntry(key, languageKey, icon, asset);
+        var sound = AudioUtils.CreateSound(clip, k3DSoundModes);
+        if (maxDistance > 0f)
+        {
+            sound.set3DMinMaxDistance(minDistance, maxDistance);
+        }
+        CustomSoundHandler.RegisterCustomSound(soundPath, sound, string.IsNullOrEmpty(overrideBus) ? kSFXBus : overrideBus);
     }
 }

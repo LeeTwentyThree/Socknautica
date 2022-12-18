@@ -18,9 +18,10 @@ public partial class Main
     internal static AtmospheriumCrystal atmospheriumCrystal;
     internal static EnergyPylon energyPylon;
     internal static ArenaLightPillar arenaLightPillar;
-    private static Vector3 aquariumPos = new Vector3(1450, -1000, -1450);
-    private static Vector3 coordBasePos = new Vector3(1700, -1900, -200);
-    private static Vector3 arenaTeleporterPos = new Vector3(650, -2200, -1587);
+
+    internal static Vector3 aquariumPos = new Vector3(1450, -1000, -1450);
+    internal static Vector3 coordBasePos = new Vector3(1700, -1900, -200);
+    internal static Vector3 arenaTeleporterPos = new Vector3(650, -2200, -1587);
 
     internal static DataTerminalPrefab sockTankTerminal;
     internal static DataTerminalPrefab aquariumBaseCoordsTerminal;
@@ -115,7 +116,7 @@ public partial class Main
         var aquariumBaseSignal = new GenericSignalPrefab("AquariumBaseSignal", "PingIcon", "Breached Aquarium", "Breached Aquarium", new Vector3(1520, -1000, -1480));
         aquariumBaseSignal.Patch();
 
-        var coordsBaseSignal = new GenericSignalPrefab("CoordBaseSignal", "PingIcon", "Outpost Cache", "Outpost Cache", new Vector3(1700, -1891, -173));
+        var coordsBaseSignal = new GenericSignalPrefab("CoordBaseSignal", "PingIcon", "Outpost Cache [Approximate Location]", "Outpost Cache [Approximate Location]", new Vector3(1700, -1891, -173) + new Vector3(76, 150, -100));
         coordsBaseSignal.Patch();
 
         var arenaTeleporterSignal = new GenericSignalPrefab("ArenaTeleporterSignal", "PingIcon", "Reactor Access [NO EXIT]", "Reactor Access [NO EXIT]", new Vector3(647, -2204, -1607));

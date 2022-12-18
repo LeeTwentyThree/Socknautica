@@ -6,7 +6,7 @@ internal class AtmospheriumCrystal : Spawnable
 {
     private GameObject prefab;
 
-    public AtmospheriumCrystal() : base("AtmospheriumCrystal", "Atmospherium Crystal", "Low-density crystal that maintains its form under high pressures. Outside of the deep sea, the lack of intermolecular forces will cause it to vaporize.")
+    public AtmospheriumCrystal() : base("AtmospheriumCrystal", "Abyssal Crystal", "Low-density crystal that maintains its form under high pressures. Outside of the deep sea, the lack of intermolecular forces will cause it to vaporize.")
     {
     }
 
@@ -35,6 +35,6 @@ internal class AtmospheriumCrystal : Spawnable
 
     protected override Atlas.Sprite GetItemSprite()
     {
-        return Main.LoadSprite("PressuriumIcon");
+        return Main.LoadSprite("AtmospheriumIcon");
     }
 }

@@ -16,6 +16,6 @@ internal class GenericIsland : GenericWorldPrefab
         islandMesh.GetComponent<Renderer>().material = MaterialUtils.AuroraRockMaterial;
         var lootGen = prefab.AddComponent<LootGeneration>();
         lootGen.preset = LootGeneration.Preset.GenericIsland;
-        lootGen.precursorProbability = 0.34f;
+        lootGen.maxPrecursorTechProbability = 0.83f;
     }
 }

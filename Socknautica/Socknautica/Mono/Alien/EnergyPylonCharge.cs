@@ -11,13 +11,15 @@ internal class EnergyPylonCharge : MonoBehaviour
     private Vehicle currentTarget;
     private bool wasCharging;
     private float vfxDuration = 0.15f;
-    private FMODAsset chargeSound = Helpers.GetFmodAsset("event:/sub/base/chargers/charge_loop");
     private FMOD_CustomLoopingEmitter chargeEmitter;
     private LineRenderer lineRenderer;
     private TeleportScreenFXController teleportFx;
 
     private static int totalSpawned;
     private int uniqueId;
+
+    private static FMODAsset chargeSound = Helpers.GetFmodAsset("event:/sub/base/chargers/charge_loop");
+    private static FMODAsset explodeSound = Helpers.GetFmodAsset("EnergyPylonExplosion");
 
     private void Start()
     {
@@ -86,7 +88,7 @@ internal class EnergyPylonCharge : MonoBehaviour
         else
         {
             CancelCharge();
-            if (ArenaSpawner.main != null)
+            if (ArenaSpawner.main != null && Vector3.Distance(transform.position, ArenaSpawner.main.center.position) < 700)
             {
                 ConnectToReactor();
             }
@@ -134,5 +136,11 @@ internal class EnergyPylonCharge : MonoBehaviour
         teleportFx.StartTeleport();
         yield return new WaitForSeconds(vfxDuration);
         teleportFx.StopTeleport();
+    }
+
+    public void Explode()
+    {
+        Utils.PlayFMODAsset(explodeSound, transform.position);
+        Destroy(gameObject);
     }
 }

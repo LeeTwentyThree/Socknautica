@@ -12,14 +12,12 @@ public class LootGeneration : MonoBehaviour
     public Preset preset;
     private List<LootGroup> groups;
 
-    public float precursorTechProbability;
+    public float maxPrecursorTechProbability;
 
     private PrefabIdentifier identifier;
 
     private static List<string> leviathanClassIDs;
     private static List<string> precursorTechClassIDs;
-
-    private static BoundingSphere[] precursorZones = new BoundingSphere[] {new()}
 
     private void Start()
     {
@@ -52,6 +50,7 @@ public class LootGeneration : MonoBehaviour
 
         precursorTechClassIDs = new List<string>();
         precursorTechClassIDs.Add(Main.arenaLightPillar.ClassID);
+        precursorTechClassIDs.Add(Main.energyPylon.ClassID);
         precursorTechClassIDs.Add(Alien.AlienBaseSpawner.damageprop_box);
         precursorTechClassIDs.Add(Alien.AlienBaseSpawner.damageprop_box_double);
         precursorTechClassIDs.Add(Alien.AlienBaseSpawner.damageprop_box_quadruple);
@@ -82,7 +81,7 @@ public class LootGeneration : MonoBehaviour
         if (preset == Preset.GenericIsland)
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
-            groups.Add(new LootGroup("RandomPlantSpawn", 0.2f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
+            groups.Add(new PlantLootGroup("RandomPlantSpawn", 0.2f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
             groups.Add(new LootGroup("SpawnPointFish", 0.05f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
             var genericIslandResources = new LootGroup("ResourceSpawnPoint", 0.2f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite, ClassIds.lithium);
             genericIslandResources.canSpawnAtmospherium = true;
@@ -137,6 +136,16 @@ public class LootGeneration : MonoBehaviour
         if (Random.value < leviathanProbability)
         {
             SpawnPrefab(leviathanClassIDs[Random.Range(0, leviathanClassIDs.Count)], transform.position + leviathanOffset, Quaternion.identity);
+        }
+        var precursorSlots = Helpers.SearchAllTransforms(gameObject, "PrecursorTechSpawnPoint", ECCLibrary.ECCStringComparison.StartsWith);
+        foreach (var precursorSlot in precursorSlots)
+        {
+            if (Random.value < PrecursorZone.GetGlobalClosenessPercent(precursorSlot.position) * maxPrecursorTechProbability)
+            {
+                var classId = precursorTechClassIDs[Random.Range(0, precursorTechClassIDs.Count)];
+                var spawned = SpawnPrefab(classId, precursorSlot.position, precursorSlot.rotation);
+                if (classId.Equals(Main.energyPylon.ClassID)) spawned.transform.localScale = Vector3.one * 6;
+            }
         }
     }
 
@@ -219,5 +228,18 @@ public class LootGroup
         else
             chosenClassId = spawnClassIDs[randomIndex];
         return chosenClassId;
+    }
+}
+[System.Serializable]
+public class PlantLootGroup : LootGroup
+{
+    public PlantLootGroup(string namePrefix, float probability, float scaleMin, float scaleMax, params string[] spawnClassIDs) : base(namePrefix, probability, scaleMin, scaleMax, spawnClassIDs)
+    {
+    }
+
+    public override bool Evaluate(Transform slot)
+    {
+        if (!base.Evaluate(slot)) return false;
+        return slot.position.y > -2000;
     }
 }

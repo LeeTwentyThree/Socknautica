@@ -2,6 +2,7 @@
 
 internal class BossRoar : MonoBehaviour
 {
+    public Creature creature;
     public float timeLastRoar { get; private set; }
 
     private float timeRoarAgain;
@@ -20,6 +21,6 @@ internal class BossRoar : MonoBehaviour
     {
         timeLastRoar = Time.time;
         timeRoarAgain = Time.time + Random.Range(minInterval, maxInterval);
-        ErrorMessage.AddMessage("rawr");
+        creature.GetAnimator().SetTrigger("roar");
     }
 }
