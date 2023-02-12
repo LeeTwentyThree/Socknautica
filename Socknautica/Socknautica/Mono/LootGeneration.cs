@@ -22,7 +22,7 @@ public class LootGeneration : MonoBehaviour
     private void Start()
     {
         identifier = gameObject.GetComponent<PrefabIdentifier>();
-        if (saveData == null) saveData.Load();
+        if (saveData == null || saveData.completedUniqueIdentifiers == null) saveData.Load();
         if (saveData.completedUniqueIdentifiers == null) saveData.completedUniqueIdentifiers = new List<string>();
 
         if (saveData.completedUniqueIdentifiers.Contains(identifier.Id))
@@ -42,11 +42,13 @@ public class LootGeneration : MonoBehaviour
         leviathanClassIDs = new List<string>();
         leviathanClassIDs.Add("5ea36b37-300f-4f01-96fa-003ae47c61e5"); // ghost
         leviathanClassIDs.Add("8d3d3c8b-9290-444a-9fea-8e5493ecd6fe"); // reefback
-        if (OtherMods.BloopAndBlazaModExists)
+        /* if (OtherMods.BloopAndBlazaModExists)
         {
             leviathanClassIDs.Add("BlazaLeviathan");
             leviathanClassIDs.Add("Bloop");
-        }
+        } */
+        leviathanClassIDs.Add(Main.ancientBloop.ClassID);
+        leviathanClassIDs.Add(Main.abyssalBlaza.ClassID);
 
         precursorTechClassIDs = new List<string>();
         precursorTechClassIDs.Add(Main.arenaLightPillar.ClassID);
@@ -70,7 +72,7 @@ public class LootGeneration : MonoBehaviour
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
             groups.Add(new LootGroup("RandomPlantSpawn", 0.9f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
-            groups.Add(new LootGroup("SpawnPointFish", 0.1f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            groups.Add(new LootGroup("SpawnPointFish", 0.1f, 1f, 1f, Main.abyssalOculus.ClassID, ClassIds.peeper, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
             groups.Add(new LootGroup("ResourceSpawnPoint", 1f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite));
             groups.Add(new LootGroup("ReefbackCoral01", 0.5f, 1f, 1f, ClassIds.reefbackCoral1));
             groups.Add(new LootGroup("ReefbackCoral02", 0.5f, 1f, 1f, ClassIds.reefbackCoral2));
@@ -82,7 +84,7 @@ public class LootGeneration : MonoBehaviour
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
             groups.Add(new PlantLootGroup("RandomPlantSpawn", 0.2f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
-            groups.Add(new LootGroup("SpawnPointFish", 0.05f, 1f, 1f, ClassIds.bladderfish, ClassIds.oculus, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.peeper, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            groups.Add(new LootGroup("SpawnPointFish", 0.05f, 1f, 1f, Main.abyssalOculus.ClassID, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
             var genericIslandResources = new LootGroup("ResourceSpawnPoint", 0.2f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite, ClassIds.lithium);
             genericIslandResources.canSpawnAtmospherium = true;
             groups.Add(genericIslandResources);
@@ -90,7 +92,7 @@ public class LootGeneration : MonoBehaviour
         if (preset == Preset.CoordBaseIsland)
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
-            groups.Add(new LootGroup("SpawnPointFish", 0.12f, 1f, 1f, ClassIds.warperSpawner, ClassIds.oculus));
+            groups.Add(new LootGroup("SpawnPointFish", 0.12f, 1f, 1f, ClassIds.warperSpawner, Main.abyssalOculus.ClassID));
             groups.Add(new LootGroup("LightFlower", 0.7f, 1f, 1f, ClassIds.circleGrass));
             groups.Add(new LootGroup("ReefbackCoral01", 0.5f, 1f, 1f, ClassIds.reefbackCoral1));
             groups.Add(new LootGroup("ReefbackCoral02", 0.5f, 1f, 1f, ClassIds.reefbackCoral2));

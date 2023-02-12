@@ -7,7 +7,7 @@ namespace Socksfor1Subs.Mono
         public DadSubBehaviour sub;
         public Light[] lights;
 
-        public float onIntensity = 3f;
+        public float onIntensity = 1.2f;
         public float idleIntensity = 1f;
         public float offIntensity = 0f;
 

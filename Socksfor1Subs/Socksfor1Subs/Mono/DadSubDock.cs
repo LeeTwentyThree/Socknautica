@@ -45,7 +45,7 @@ namespace Socksfor1Subs.Mono
             dockedVehicle.transform.position = dockTransform.position;
             dockedVehicle.transform.rotation = dockTransform.rotation;
             SkyEnvironmentChanged.Broadcast(dockedVehicle.gameObject, sub);
-            sub.PlayWelcomeVoiceLine();
+            if (Player.main.GetVehicle() == vehicle) sub.PlayWelcomeVoiceLine();
             Utils.PlayFMODAsset(_dockSound, dockTransform.transform.position);
             dockedVehicle.SetPlayerInside(false);
             Player.main.ExitLockedMode();

@@ -6,6 +6,7 @@ namespace Socknautica
     public partial class Main
     {
         internal static AssetBundle assetBundle;
+        internal static AssetBundle loadingScreensBundle;
         internal static Assembly assembly = Assembly.GetExecutingAssembly();
         internal static Harmony harmony;
 
@@ -15,6 +16,7 @@ namespace Socknautica
         public static void Prepatch()
         {
             assetBundle = ECCHelpers.LoadAssetBundleFromAssetsFolder(assembly, "socknautica");
+            loadingScreensBundle = ECCHelpers.LoadAssetBundleFromAssetsFolder(assembly, "socknauticaloadingscreen");
             harmony = new Harmony("Socksfor1.Socknautica");
             harmony.PatchAll(assembly);
             PatchPrefabsEarly();

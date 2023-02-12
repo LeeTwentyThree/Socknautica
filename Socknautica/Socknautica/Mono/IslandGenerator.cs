@@ -8,7 +8,7 @@ internal class IslandGenerator : MonoBehaviour
 {
     private float spawnRangeMin = 120;
     private float spawnRangeMax = 180;
-    private float minDistanceBetween = 65;
+    private float minDistanceBetween = 100;
 
     private float generateInterval = 0.2f;
     private float timeGenerateAgain;
@@ -25,6 +25,7 @@ internal class IslandGenerator : MonoBehaviour
 
     private void Start()
     {
+        saveData.Load();
         if (saveData.spawnedIslands == null) saveData.spawnedIslands = new List<Vector3>();
     }
 

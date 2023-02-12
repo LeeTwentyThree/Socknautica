@@ -41,13 +41,12 @@ public partial class Main
     
     private static void PatchCreatureAudio()
     {
-        var roarSounds = AudioUtils.CreateSounds(ECCAudio.CreateClipPool("BossRoar").clips, k3DSoundModes).ToArray();
-        for (int i = 0; i < roarSounds.Length; i++)
-        {
-            roarSounds[i].set3DMinMaxDistance(5f, 700f);
-        }
-        var roarEvent = new FModMultiSounds(roarSounds, kCreatureSFXBus, true);
-        CustomSoundHandler.RegisterCustomSound("BossRoar", roarEvent);
+        PatchBossSounds("BossAmbience", "BossAmbience");
+        PatchBossSounds("BossRoar", "BossRoar");
+        PatchBossSounds("BossAttack", "BossAttack");
+        PatchBossSounds("BossBite", "BossBite");
+        PatchBossSounds("BossDeath", "BossDeath");
+        PatchBossSounds("BossGrowl", "BossGrowl");
 
         /*
         var gargJuvenileFarSounds = AudioUtils.CreateSounds(ECCAudio.CreateClipPool("garg_for_anth_distant").clips, k3DSoundModes).ToArray();
@@ -66,6 +65,17 @@ public partial class Main
         var biteEvent = new FModMultiSounds(biteSounds, kGargSFXBus, true);
         CustomSoundHandler.RegisterCustomSound("GargBite", biteEvent);
         */
+    }
+
+    private static void PatchBossSounds(string clipPrefix, string eventName)
+    {
+        var roarSounds = AudioUtils.CreateSounds(ECCAudio.CreateClipPool(clipPrefix).clips, k3DSoundModes).ToArray();
+        for (int i = 0; i < roarSounds.Length; i++)
+        {
+            roarSounds[i].set3DMinMaxDistance(5f, 700f);
+        }
+        var roarEvent = new FModMultiSounds(roarSounds, kCreatureSFXBus, true);
+        CustomSoundHandler.RegisterCustomSound(eventName, roarEvent);
     }
 
     private static void PatchTechAudio()

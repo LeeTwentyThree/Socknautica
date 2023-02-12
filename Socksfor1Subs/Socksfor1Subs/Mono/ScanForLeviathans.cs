@@ -58,6 +58,7 @@ namespace Socksfor1Subs.Mono
 
         public bool EnvironmentIsDangerous()
         {
+            if (!Mod.config.WarningSiren) return false;
             return Time.time < _timeDangerTimeout;
         }
     }

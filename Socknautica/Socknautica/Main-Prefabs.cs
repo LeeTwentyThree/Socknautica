@@ -2,6 +2,7 @@
 
 using Prefabs;
 using Prefabs.DataTerminal;
+using Prefabs.Creatures;
 using Mono.Alien;
 using ECCLibrary;
 using System.Collections.Generic;
@@ -31,6 +32,9 @@ public partial class Main
 
     internal static MirageFish mirageFish;
     internal static Multigarg multigarg;
+    internal static AbyssalBlaza abyssalBlaza;
+    internal static AncientBloop ancientBloop;
+    internal static AbyssalOculus abyssalOculus;
 
     private static void PatchPrefabsEarly()
     {
@@ -100,6 +104,15 @@ public partial class Main
 
         TeleporterNetwork network = new TeleporterNetwork("ArenaTeleporter", new Vector3(647, -2210, -1612), 0, new Vector3(0, -1999.77f, 430), 180);
         network.Patch();
+
+        ancientBloop = new AncientBloop();
+        ancientBloop.Patch();
+
+        abyssalBlaza = new AbyssalBlaza();
+        abyssalBlaza.Patch();
+
+        abyssalOculus = new AbyssalOculus();
+        abyssalOculus.Patch();
     }
 
     private static void PatchAquariumIslandSegment(string classId, string prefabName, Vector3 offset)
