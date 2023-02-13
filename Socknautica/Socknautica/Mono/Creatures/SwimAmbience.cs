@@ -3,7 +3,7 @@ using ECCLibrary.Internal;
 using System.Collections;
 using UnityEngine;
 
-namespace Socksfor1Monsters.Mono
+namespace Socknautica.Mono.Creatures
 {
     public class SwimAmbience : MonoBehaviour
     {

@@ -26,6 +26,8 @@ internal class AncientBloop : CreatureAsset
 
     public override void AddCustomBehaviour(CreatureComponents components)
     {
+        prefab.AddComponent<GenericRoar>().SetEssentials(20f, 200f, 30f, 40f, "AncientBloopRoar", "roar");
+
         var spine1 = Search(prefab.transform, "Spine1");
         List<Transform> trailSpines = new List<Transform>();
         int spineIndex = 2;
@@ -41,10 +43,13 @@ internal class AncientBloop : CreatureAsset
 
         components.locomotion.maxVelocity = 20;
         components.locomotion.maxAcceleration = 9;
-        components.locomotion.driftFactor = 0.85f;
 
         MakeAggressiveTo(140, 3, EcoTargetType.Shark, 0.1f, 2);
         MakeAggressiveTo(60, 3, EcoTargetType.Leviathan, 0f, 0.5f);
+
+        components.creature.Hunger = new CreatureTrait(0f, -0.05f);
+        components.locomotion.driftFactor = 0.9f;
+        prefab.AddComponent<Mono.Creatures.SwimAmbience>();
 
         ValidateVortexVFX();
 
@@ -75,7 +80,6 @@ internal class AncientBloop : CreatureAsset
         actionAtkCyclops.priorityMultiplier = ECCHelpers.Curve_Flat();
         actionAtkCyclops.maxDistToLeash = 70f;
         actionAtkCyclops.attackAggressionThreshold = 0.4f;
-
     }
 
     private void ValidateVortexVFX()
@@ -100,8 +104,11 @@ internal class AncientBloop : CreatureAsset
 
     public override AnimateByVelocityData AnimateByVelocitySettings => new AnimateByVelocityData(false);
 
+    public override bool CanBeInfected => false;
+
     // actions
     public override SwimRandomData SwimRandomSettings => new SwimRandomData(true, new Vector3(60, 10, 60), 10, 3f, 0.1f);
+    public override SmallVehicleAggressivenessSettings AggressivenessToSmallVehicles => new SmallVehicleAggressivenessSettings(0.4f, 17f);
     public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.6f, 20, 8f, 15f, 24f, 5);
     public override AvoidObstaclesData AvoidObstaclesSettings => new AvoidObstaclesData(0.9f, true, 30f);
 

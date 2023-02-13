@@ -18,6 +18,7 @@ namespace Socknautica.Mono.Creatures
         Vector3 startPos;
         Quaternion startRot;
         float time;
+        bool waitingForPlayerToExit;
 
         IEnumerator Start()
         {
@@ -47,6 +48,7 @@ namespace Socknautica.Mono.Creatures
             {
                 Player.main.liveMixin.Kill(DamageType.Normal);
             }
+            waitingForPlayerToExit = true;
         }
 
         void Update()
@@ -56,6 +58,13 @@ namespace Socknautica.Mono.Creatures
                 transform.position = Vector3.Lerp(startPos, throat.transform.position, time);
                 transform.rotation = Quaternion.RotateTowards(startRot, throat.transform.rotation, Time.deltaTime * 360f);
                 time += Time.deltaTime / 2f;
+            }
+            if (waitingForPlayerToExit)
+            {
+                if (Player.main.currentMountedVehicle == null && !Player.main.transform.IsChildOf(gameObject.transform))
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }

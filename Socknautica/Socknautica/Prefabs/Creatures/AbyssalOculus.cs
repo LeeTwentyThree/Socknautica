@@ -39,5 +39,7 @@ internal class AbyssalOculus : ReskinSpawnable
         blod.closeThreshold = 150;
         blod.farThreshold = 500;
         prefab.GetComponent<Creature>().Tired = new CreatureTrait(0, 1);
+        prefab.GetComponent<SphereCollider>().radius = 2.8f;
+        prefab.GetComponent<Rigidbody>().mass = 50;
     }
 }

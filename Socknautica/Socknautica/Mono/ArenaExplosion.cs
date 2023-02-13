@@ -34,6 +34,7 @@ internal class ArenaExplosion : MonoBehaviour
         light.color = Color.green;
         light.transform.position = ArenaSpawner.main.center.position;
 
+        WarningUI.Show("IMMINENT EXPLOSION - AVOID REACTOR AT ALL COSTS", Main.assetBundle.LoadAsset<Sprite>("genericwarning"), 15f);
         for (int i = 0; i < 15; i++)
         {
             MainCameraControl.main.ShakeCamera(3f, 2f);

@@ -20,13 +20,19 @@ internal class AbyssalBlaza : CreatureAsset
 
     public override BehaviourLODLevelsStruct BehaviourLODSettings => new BehaviourLODLevelsStruct(300, 600, 4000);
 
+    public override SmallVehicleAggressivenessSettings AggressivenessToSmallVehicles => new SmallVehicleAggressivenessSettings(0.4f, 40f);
+
     public override float Mass => 2300;
     public override float TurnSpeedHorizontal => 0.3f;
-    public override float MaxVelocityForSpeedParameter => 10;
+    public override float MaxVelocityForSpeedParameter => 20f;
 
+    public override bool CanBeInfected => false;
+    public override bool AcidImmune => true;
 
     public override void AddCustomBehaviour(CreatureComponents components)
     {
+        prefab.AddComponent<GenericRoar>().SetEssentials(5f, 150f, 15f, 25f, "AbyssalBlazaIdle", "roar");
+
         var spine1 = Search(prefab.transform, "Spine_1");
         List<Transform> trailSpines = new List<Transform>();
         int spineIndex = 2;
@@ -40,7 +46,7 @@ internal class AbyssalBlaza : CreatureAsset
         while (current != null);
         CreateTrail(spine1.gameObject, trailSpines.ToArray(), components, 2f);
 
-        components.locomotion.maxVelocity = 10;
+        components.locomotion.maxVelocity = 30;
         components.locomotion.maxAcceleration = 7;
         components.locomotion.driftFactor = 0.5f;
 
@@ -50,7 +56,7 @@ internal class AbyssalBlaza : CreatureAsset
         BlazaBehaviour gulperBehaviour = prefab.AddComponent<BlazaBehaviour>();
         gulperBehaviour.creature = components.creature;
 
-        GameObject mouth = prefab.SearchChild("Mouth");
+        GameObject mouth = prefab.SearchChild("MouthTrigger");
         BlazaMeleeAttack meleeAttack = prefab.AddComponent<BlazaMeleeAttack>();
         meleeAttack.mouth = mouth;
         meleeAttack.canBeFed = false;
@@ -73,7 +79,7 @@ internal class AbyssalBlaza : CreatureAsset
         return inside.gameObject.SearchChild(lookingFor, ECCStringComparison.StartsWith).transform;
     }
 
-    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.6f, 10f, 8f, 15f, 24f, 5);
+    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.6f, 30f, 8f, 15f, 24f, 5);
 
     public override void SetLiveMixinData(ref LiveMixinData liveMixinData)
     {

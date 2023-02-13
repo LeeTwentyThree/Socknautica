@@ -30,7 +30,7 @@ public partial class Main
     internal static DataTerminalPrefab coordBaseCoordsTerminal;
     internal static DataTerminalPrefab arenaBaseCoordsTerminal;
 
-    internal static MirageFish mirageFish;
+    internal static AnglerFish anglerFish;
     internal static Multigarg multigarg;
     internal static AbyssalBlaza abyssalBlaza;
     internal static AncientBloop ancientBloop;
@@ -96,8 +96,8 @@ public partial class Main
         var ancientFloaterFix = new AncientFloaterFix();
         ancientFloaterFix.Patch();
 
-        mirageFish = new MirageFish();
-        mirageFish.Patch();
+        anglerFish = new AnglerFish();
+        anglerFish.Patch();
 
         multigarg = new Multigarg();
         multigarg.Patch();

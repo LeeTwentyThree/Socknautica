@@ -15,7 +15,7 @@ namespace Socknautica.Mono.Creatures
         private AudioSource vehicleGrabSound;
         private Transform vehicleHoldPoint;
         private BlazaMeleeAttack mouthAttack;
-        private RoarAbility roar;
+        private GenericRoar roar;
         float damagePerSecond = 23f;
         private ECCAudio.AudioClipPool seamothSounds;
         private ECCAudio.AudioClipPool exosuitSounds;
@@ -26,11 +26,11 @@ namespace Socknautica.Mono.Creatures
         {
             creature = GetComponent<Creature>();
             vehicleGrabSound = AddVehicleGrabSound();
-            vehicleHoldPoint = gameObject.SearchChild("AttackBone_NoPhys").transform;
+            vehicleHoldPoint = gameObject.SearchChild("SeamothAttach").transform;
             seamothSounds = ECCAudio.CreateClipPool("AbyssalBlazaSeamoth");
             exosuitSounds = ECCAudio.CreateClipPool("AbyssalBlazaExosuit");
             mouthAttack = GetComponent<BlazaMeleeAttack>();
-            roar = GetComponent<RoarAbility>();
+            roar = GetComponent<GenericRoar>();
         }
 
         Transform GetHoldPoint()
@@ -149,7 +149,7 @@ namespace Socknautica.Mono.Creatures
             CancelInvoke("DamageVehicle");
             mouthAttack.OnVehicleReleased();
             MainCameraControl.main.ShakeCamera(0f, 0f);
-            roar.PlayRoar();
+            roar.RoarOnce();
         }
         public void Update()
         {
@@ -157,8 +157,8 @@ namespace Socknautica.Mono.Creatures
             {
                 ReleaseVehicle();
             }
-            SafeAnimator.SetBool(creature.GetAnimator(), "sub_attack", IsHoldingGenericSub());
-            SafeAnimator.SetBool(creature.GetAnimator(), "exo_attack", IsHoldingExosuit());
+            SafeAnimator.SetBool(creature.GetAnimator(), "vehicle_attack", IsHoldingGenericSub());
+            SafeAnimator.SetBool(creature.GetAnimator(), "vehicle_attack", IsHoldingExosuit());
             if (heldVehicle != null)
             {
                 Transform holdPoint = GetHoldPoint();

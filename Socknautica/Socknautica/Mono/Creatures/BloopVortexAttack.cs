@@ -27,7 +27,7 @@ namespace Socknautica.Mono.Creatures
         {
             base.Awake();
             lastTarget = gameObject.GetComponent<LastTarget>();
-            mouth = gameObject.SearchChild("Mouth");
+            mouth = gameObject.SearchChild("MouthTrigger");
             vortexAttackSource = gameObject.AddComponent<AudioSource>();
             vortexAttackSource.clip = ECCAudio.LoadAudioClip("AncientBloopVortexAttack");
             vortexAttackSource.spatialBlend = 1f;
@@ -35,8 +35,13 @@ namespace Socknautica.Mono.Creatures
             vortexAttackSource.maxDistance = 30f;
             vortexAttackSource.volume = ECCHelpers.GetECCVolume();
             myVfx = GameObject.Instantiate(Prefabs.Creatures.AncientBloop.vortexVfx, transform, false);
-            myVfx.transform.localScale *= 2f;
-            myVfx.transform.localPosition = new Vector3(0f, 0f, 10f);
+            myVfx.transform.localScale *= 3f;
+            foreach (ParticleSystem system in myVfx.GetComponentsInChildren<ParticleSystem>())
+            {
+                var main = system.main;
+                main.scalingMode = ParticleSystemScalingMode.Hierarchy;
+            }
+            myVfx.transform.localPosition = new Vector3(0f, 0f, 15f);
             myVfx.SetActive(false);
         }
 

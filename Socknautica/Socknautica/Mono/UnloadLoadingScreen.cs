@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Socknautica.Patches;
 
 namespace Socknautica.Mono;
 
@@ -25,8 +21,14 @@ internal class UnloadLoadingScreen : MonoBehaviour
         }
         if (!uGUI.isLoading)
         {
-            Destroy(gameObject, 5);
+            Destroy(gameObject, 1.5f);
             destroyed = true;
         }
+    }
+
+    private void OnDestroy()
+    {
+        var bundle = LoadingPatches.loadingScreensBundle;
+        if (bundle != null) bundle.Unload(true);
     }
 }

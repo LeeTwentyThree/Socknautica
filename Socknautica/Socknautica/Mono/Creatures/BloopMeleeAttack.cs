@@ -19,9 +19,9 @@ namespace Socknautica.Mono.Creatures
             vehicleSwallowSource.spatialBlend = 1f;
             vehicleSwallowSource.volume = ECCHelpers.GetECCVolume();
             //biteClipPool = ECCAudio.CreateClipPool("BlazaBite");
-            gameObject.SearchChild("Mouth").GetComponent<OnTouch>().onTouch = new OnTouch.OnTouchEvent();
-            gameObject.SearchChild("Mouth").GetComponent<OnTouch>().onTouch.AddListener(OnTouch);
-            throat = gameObject.SearchChild("Throat");
+            gameObject.SearchChild("MouthTrigger").GetComponent<OnTouch>().onTouch = new OnTouch.OnTouchEvent();
+            gameObject.SearchChild("MouthTrigger").GetComponent<OnTouch>().onTouch.AddListener(OnTouch);
+            throat = gameObject.SearchChild("Vortex0");
         }
         public override void OnTouch(Collider collider)
         {
@@ -73,7 +73,7 @@ namespace Socknautica.Mono.Creatures
                     {
                         liveMixin.Kill(DamageType.Normal);
                         var suck = liveMixin.gameObject.AddComponent<BeingSuckedInWhole>();
-                        suck.animationLength = 2f;
+                        suck.animationLength = 4f;
                         suck.target = throat.transform;
                         Destroy(liveMixin.gameObject, 2f);
                         if(liveMixin.maxHealth >= 400f)

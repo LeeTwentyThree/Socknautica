@@ -16,4 +16,5 @@ global using Random = UnityEngine.Random;
 // Patching
 global using HarmonyLib;
 global using System.Reflection;
-global using System.Reflection.Emit;
+
+global using Socknautica.Mono;

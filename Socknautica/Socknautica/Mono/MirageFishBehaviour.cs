@@ -8,33 +8,27 @@ namespace Socknautica.Mono;
 
 internal class MirageFishBehaviour : MonoBehaviour
 {
-    public GameObject fishModel;
-    public GameObject baseModel;
-
     private Animator animator; 
 
-    private bool shown;
+    private bool luring;
     private float showDistance = 60;
 
     private void Start()
     {
-        fishModel = transform.GetChild(0).gameObject;
-        baseModel = transform.GetChild(1).gameObject;
-        animator = fishModel.gameObject.GetComponent<Animator>();
+        animator = gameObject.GetComponentInChildren<Animator>();
     }
 
     private void Update()
     {
-        transform.LookAt(Player.main.transform.position);
-        fishModel.SetActive(shown);
-        baseModel.SetActive(!shown);
+        if (luring) transform.LookAt(Player.main.transform.position);
 
-        if (!shown && Vector3.Distance(transform.position, Player.main.transform.position) < showDistance)
+        /*if (!luring && Vector3.Distance(transform.position, Player.main.transform.position) < showDistance)
         {
-            shown = true;
+            luring = true;
             animator.SetTrigger("bite");
             Invoke(nameof(KillPlayer), 2f);
         }
+        */
     }
 
     private void KillPlayer()

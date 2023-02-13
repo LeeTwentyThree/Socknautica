@@ -13,6 +13,10 @@ internal class SelfDestructProcess : MonoBehaviour
 
     private GameObject cyclopsObj;
 
+    private float timeExplode = -1f;
+
+    private WarningUI warning;
+
     public static void Begin(Rocket rocket)
     {
         new GameObject().AddComponent<SelfDestructProcess>().rocket = rocket;
@@ -38,18 +42,22 @@ internal class SelfDestructProcess : MonoBehaviour
             // light.color = Color.red;
         }
         CustomPDALinesManager.PlayVoiceLine("RocketSelfDestruct1");
-        var warning = WarningUI.Show("SELF DESTRUCTION IMMINENT", Main.assetBundle.LoadAsset<Sprite>("genericwarning"), 30f);
+        warning = WarningUI.Show("SELF DESTRUCTION IMMINENT", Main.assetBundle.LoadAsset<Sprite>("genericwarning"), 30f);
 
         var explosionCenter = rocket.gameObject.transform.position + Vector3.up * 21 + Vector3.left * 15f;
 
-        yield return new WaitForSeconds(9.3f);
+        timeExplode = Time.time + 15f;
+
+        yield return new WaitForSeconds(13.5f);
 
         for (int i = 0; i < 5; i++)
         {
             SpawnExplosion(explosionCenter + Vector3.down * 20 + Vector3.up * 10 * i);
         }
 
-        yield return new WaitForSeconds(3f);
+        MainCameraControl.main.ShakeCamera(1.1f, 3.7f, MainCameraControl.ShakeMode.Sqrt, 0.8f);
+
+        yield return new WaitForSeconds(1f);
 
         FMODAsset sound = Helpers.GetFmodAsset("EnergyPylonExplosion");
         Utils.PlayFMODAsset(sound, Player.main.transform.position);
@@ -71,8 +79,8 @@ internal class SelfDestructProcess : MonoBehaviour
             Player.main.liveMixin.Kill(DamageType.Explosive);
         }
         Destroy(rocket.gameObject);
-        warning.Hide();
-        yield return new WaitForSeconds(4f);
+        MainCameraControl.main.ShakeCamera(5f, 1.5f, MainCameraControl.ShakeMode.Quadratic);
+        if (warning) warning.Hide();
         CustomPDALinesManager.PlayVoiceLine("RocketSelfDestruct2");
         if (PrefabDatabase.TryGetPrefab("AquariumBaseSignal", out GameObject prefab))
         {
@@ -94,5 +102,13 @@ internal class SelfDestructProcess : MonoBehaviour
         spawned.transform.localScale *= 9;
         spawned.transform.position = pos;
         spawned.GetComponent<VFXController>().Play(1);
+    }
+
+    private void Update()
+    {
+        if (warning != null && timeExplode > 0)
+        {
+            warning.SetText("SELF DESTRUCTION IMMINENT: T-" + Mathf.RoundToInt(timeExplode - Time.time));
+        }
     }
 }

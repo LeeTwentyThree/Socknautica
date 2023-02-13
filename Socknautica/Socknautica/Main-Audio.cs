@@ -74,7 +74,7 @@ public partial class Main
         {
             roarSounds[i].set3DMinMaxDistance(5f, 700f);
         }
-        var roarEvent = new FModMultiSounds(roarSounds, kCreatureSFXBus, true);
+        var roarEvent = new FModMultiSounds(roarSounds, kSFXBus, true);
         CustomSoundHandler.RegisterCustomSound(eventName, roarEvent);
     }
 

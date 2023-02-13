@@ -16,8 +16,8 @@ namespace Socknautica.Mono.Creatures
 			attackSource.spatialBlend = 1f;
 			attackSource.volume = ECCHelpers.GetECCVolume();
 			biteClipPool = ECCAudio.CreateClipPool("AbyssalBlazaBite");
-			gameObject.SearchChild("Mouth").GetComponent<OnTouch>().onTouch = new OnTouch.OnTouchEvent();
-			gameObject.SearchChild("Mouth").GetComponent<OnTouch>().onTouch.AddListener(OnTouch);
+			gameObject.SearchChild("MouthTrigger").GetComponent<OnTouch>().onTouch = new OnTouch.OnTouchEvent();
+			gameObject.SearchChild("MouthTrigger").GetComponent<OnTouch>().onTouch.AddListener(OnTouch);
 		}
 		public override void OnTouch(Collider collider)
 		{
@@ -44,17 +44,17 @@ namespace Socknautica.Mono.Creatures
 						}
 						else if (blazaBehaviour.GetCanGrabVehicle())
 						{
-							SeaMoth component4 = target.GetComponent<SeaMoth>();
-							if (component4 && !component4.docked)
-							{
-								blazaBehaviour.GrabGenericSub(component4);
-								component.Aggression.Value -= 0.25f;
-								return;
-							}
 							Exosuit component5 = target.GetComponent<Exosuit>();
 							if (component5 && !component5.docked)
 							{
 								blazaBehaviour.GrabExosuit(component5);
+								component.Aggression.Value -= 0.25f;
+								return;
+							}
+							Vehicle component4 = target.GetComponent<Vehicle>();
+							if (component4 && !component4.docked)
+							{
+								blazaBehaviour.GrabGenericSub(component4);
 								component.Aggression.Value -= 0.25f;
 								return;
 							}
