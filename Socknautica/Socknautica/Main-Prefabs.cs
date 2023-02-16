@@ -19,6 +19,7 @@ public partial class Main
     internal static AtmospheriumCrystal atmospheriumCrystal;
     internal static EnergyPylon energyPylon;
     internal static ArenaLightPillar arenaLightPillar;
+    internal static GiantTooth giantTooth;
 
     internal static Vector3 aquariumPos = new Vector3(1450, -1000, -1450);
     internal static Vector3 coordBasePos = new Vector3(1700, -1900, -200);
@@ -113,6 +114,9 @@ public partial class Main
 
         abyssalOculus = new AbyssalOculus();
         abyssalOculus.Patch();
+
+        giantTooth = new GiantTooth();
+        giantTooth.Patch();
     }
 
     private static void PatchAquariumIslandSegment(string classId, string prefabName, Vector3 offset)

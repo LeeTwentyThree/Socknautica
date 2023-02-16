@@ -20,10 +20,10 @@ internal class AbyssalBlaza : CreatureAsset
 
     public override BehaviourLODLevelsStruct BehaviourLODSettings => new BehaviourLODLevelsStruct(300, 600, 4000);
 
-    public override SmallVehicleAggressivenessSettings AggressivenessToSmallVehicles => new SmallVehicleAggressivenessSettings(0.4f, 40f);
+    public override SmallVehicleAggressivenessSettings AggressivenessToSmallVehicles => new SmallVehicleAggressivenessSettings(0.4f, 100f);
 
     public override float Mass => 2300;
-    public override float TurnSpeedHorizontal => 0.3f;
+    public override float TurnSpeedHorizontal => 0.6f;
     public override float MaxVelocityForSpeedParameter => 20f;
 
     public override bool CanBeInfected => false;
@@ -31,7 +31,7 @@ internal class AbyssalBlaza : CreatureAsset
 
     public override void AddCustomBehaviour(CreatureComponents components)
     {
-        prefab.AddComponent<GenericRoar>().SetEssentials(5f, 150f, 15f, 25f, "AbyssalBlazaIdle", "roar");
+        prefab.AddComponent<GenericRoar>().SetEssentials(15f, 150f, 8.5f, 16f, "AbyssalBlazaIdle", null);
 
         var spine1 = Search(prefab.transform, "Spine_1");
         List<Transform> trailSpines = new List<Transform>();
@@ -46,11 +46,10 @@ internal class AbyssalBlaza : CreatureAsset
         while (current != null);
         CreateTrail(spine1.gameObject, trailSpines.ToArray(), components, 2f);
 
-        components.locomotion.maxVelocity = 30;
         components.locomotion.maxAcceleration = 7;
         components.locomotion.driftFactor = 0.5f;
 
-        MakeAggressiveTo(140, 3, EcoTargetType.Shark, 0.1f, 2);
+        MakeAggressiveTo(150, 4, EcoTargetType.Shark, 0, 2);
         MakeAggressiveTo(60, 3, EcoTargetType.Leviathan, 0f, 0.5f);
 
         BlazaBehaviour gulperBehaviour = prefab.AddComponent<BlazaBehaviour>();
@@ -79,7 +78,9 @@ internal class AbyssalBlaza : CreatureAsset
         return inside.gameObject.SearchChild(lookingFor, ECCStringComparison.StartsWith).transform;
     }
 
-    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.6f, 30f, 8f, 15f, 24f, 5);
+    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.6f, 45f, 8f, 15f, 24f, 8);
+
+    public override StayAtLeashData StayAtLeashSettings => new StayAtLeashData(0.5f, 100f);
 
     public override void SetLiveMixinData(ref LiveMixinData liveMixinData)
     {

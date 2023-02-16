@@ -20,13 +20,15 @@ internal class AncientBloop : CreatureAsset
 
     public override BehaviourLODLevelsStruct BehaviourLODSettings => new BehaviourLODLevelsStruct(100, 300, 500);
 
-    public override float Mass => 2050;
-    public override float TurnSpeedHorizontal => 0.1f;
+    public override float Mass => 3000;
+    public override float TurnSpeedHorizontal => 0.4f;
     public override float MaxVelocityForSpeedParameter => 16;
+
+    public override UBERMaterialProperties MaterialSettings => new UBERMaterialProperties(8, 8, 1);
 
     public override void AddCustomBehaviour(CreatureComponents components)
     {
-        prefab.AddComponent<GenericRoar>().SetEssentials(20f, 200f, 30f, 40f, "AncientBloopRoar", "roar");
+        prefab.AddComponent<GenericRoar>().SetEssentials(20f, 200f, 30f, 40f, "AncientBloopRoar", null);
 
         var spine1 = Search(prefab.transform, "Spine1");
         List<Transform> trailSpines = new List<Transform>();
@@ -109,7 +111,8 @@ internal class AncientBloop : CreatureAsset
     // actions
     public override SwimRandomData SwimRandomSettings => new SwimRandomData(true, new Vector3(60, 10, 60), 10, 3f, 0.1f);
     public override SmallVehicleAggressivenessSettings AggressivenessToSmallVehicles => new SmallVehicleAggressivenessSettings(0.4f, 17f);
-    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.6f, 20, 8f, 15f, 24f, 5);
+    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.6f, 20, 8f, 15f, 24f, 10);
     public override AvoidObstaclesData AvoidObstaclesSettings => new AvoidObstaclesData(0.9f, true, 30f);
+    public override StayAtLeashData StayAtLeashSettings => new StayAtLeashData(0.9f, 200);
 
 }

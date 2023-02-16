@@ -29,6 +29,9 @@
 		<Reference Include="SMLHelper">
 			<HintPath>C:\Program Files (x86)\Steam\steamapps\common\Subnautica.legacy\QMods\Modding Helper\SMLHelper.dll</HintPath>
 		</Reference>
+		<Reference Include="Socksfor1Subs">
+		  <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Subnautica.legacy\QMods\DADTankSubPack\Socksfor1Subs.dll</HintPath>
+		</Reference>
 		<Reference Include="UnityEngine">
 			<HintPath>C:\Program Files (x86)\Steam\steamapps\common\Subnautica.legacy\Subnautica_Data\Managed\UnityEngine.dll</HintPath>
 		</Reference>

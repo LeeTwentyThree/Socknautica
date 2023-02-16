@@ -42,6 +42,7 @@ namespace Socksfor1Subs.Mono.UI
             }
             if (hovering)
             {
+                if (displayText == null) displayText = "";
                 if (clickable)
                 {
                     HandReticle.main.SetInteractText(displayText, false, HandReticle.Hand.Left);

@@ -43,6 +43,19 @@ public class AquariumBaseSpawner : AlienBaseSpawner
         yield return SpawnPrefabGlobally("e42243eb-4f38-42cd-acec-1d38d9b1b120", new Vector3(1457.7f, -1048.3f, -1410.3f), new Vector3(5.7f, 360.0f, 359.2f), Vector3.one);
         yield return SpawnPrefabGlobally("e42243eb-4f38-42cd-acec-1d38d9b1b120", new Vector3(1417.1f, -1043.4f, -1407.2f), new Vector3(0.0f, 0.0f, 0.0f), Vector3.one);
 
+        // aquarium plants
+        new SpawnInfo("d69d04e9-bef6-4229-9bea-a76378cb0018", new Vector3(1460.3f, -1041.4f, -1489.1f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("7444baa0-1416-4cb6-aa9a-162ccd4b98c7", new Vector3(1440.9f, -1047.1f, -1482.9f), new Vector3(356.9f, 360.0f, 1.7f));
+        new SpawnInfo("d69d04e9-bef6-4229-9bea-a76378cb0018", new Vector3(1433.3f, -1047.1f, -1493.1f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("7444baa0-1416-4cb6-aa9a-162ccd4b98c7", new Vector3(1411.3f, -1047.7f, -1466.0f), new Vector3(5.1f, 0.1f, 2.5f));
+        new SpawnInfo("7444baa0-1416-4cb6-aa9a-162ccd4b98c7", new Vector3(1440.2f, -1047.7f, -1439.8f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("d69d04e9-bef6-4229-9bea-a76378cb0018", new Vector3(1406.6f, -1048.0f, -1430.9f), new Vector3(359.4f, 360.0f, 7.6f));
+        new SpawnInfo("7444baa0-1416-4cb6-aa9a-162ccd4b98c7", new Vector3(1440.5f, -1046.6f, -1406.6f), new Vector3(348.0f, 359.0f, 9.3f));
+        new SpawnInfo("d69d04e9-bef6-4229-9bea-a76378cb0018", new Vector3(1406.6f, -1048.0f, -1430.9f), new Vector3(359.4f, 360.0f, 7.6f));
+        new SpawnInfo("8c4ba581-e392-41ab-80a9-a4a2745dcfdb", new Vector3(1459.6f, -1045.0f, -1428.6f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("d0811984-35bb-435f-acad-3abcf4fb5d32", new Vector3(1484.8f, -1048.2f, -1416.7f), new Vector3(8.0f, 0.1f, 2.0f));
+        new SpawnInfo("7444baa0-1416-4cb6-aa9a-162ccd4b98c7", new Vector3(1500.2f, -1047.3f, -1441.8f), new Vector3(0.0f, 0.0f, 0.0f));
+
         // elevator
         yield return SpawnPrefabGlobally(warper, new Vector3(1492.71f, -996.57f, -1469.66f));
         yield return SpawnPrefabGlobally(warper, new Vector3(1458.55f, -999.36f, -1455.56f));
@@ -51,6 +64,7 @@ public class AquariumBaseSpawner : AlienBaseSpawner
 
         // lower area
         for (int i = 0; i < 3; i++) yield return SpawnPrefabGlobally(riverProwler, new Vector3(1448.45f, -1055.85f, -1482.27f));
+        for (int i = 0; i < 3; i++) yield return SpawnPrefabGlobally(riverProwler, new Vector3(1475.19f, -1056.59f, -1426.84f));
         for (int i = 0; i < 3; i++) yield return SpawnPrefabGlobally(riverProwler, new Vector3(1475.19f, -1056.59f, -1426.84f));
 
         yield return SpawnPrefabGlobally("ae06567b-4afd-4aff-9904-e518c1e8e30a", new Vector3(1385.3f, -1052.0f, -1479.9f), new Vector3(0.0f, 180.0f, 180.0f), Vector3.one);
@@ -65,11 +79,44 @@ public class AquariumBaseSpawner : AlienBaseSpawner
         yield return SpawnPrefabGlobally("PressuriumCrystal", new Vector3(1399.7f, -1060.0f, -1486.0f), new Vector3(0.0f, 0.0f, 0.0f), Vector3.one);
         yield return SpawnPrefabGlobally("PressuriumCrystal", new Vector3(1401.7f, -1060.0f, -1479.7f), new Vector3(0.0f, 0.0f, 0.0f), Vector3.one);
 
+        new SpawnInfo("4fae8fa4-0280-43bd-bcf1-f3cba97eed77", new Vector3(1451.9f, -1059.6f, -1478.7f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("4fae8fa4-0280-43bd-bcf1-f3cba97eed77", new Vector3(1433.5f, -1059.6f, -1494.6f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("da8f10dd-e181-4f28-bf98-9b6de4a9976a", new Vector3(1408.3f, -1060.0f, -1494.5f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("da8f10dd-e181-4f28-bf98-9b6de4a9976a", new Vector3(1409.6f, -1060.0f, -1487.7f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("da8f10dd-e181-4f28-bf98-9b6de4a9976a", new Vector3(1413.3f, -1060.0f, -1491.9f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("da8f10dd-e181-4f28-bf98-9b6de4a9976a", new Vector3(1418.0f, -1060.0f, -1486.9f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("da8f10dd-e181-4f28-bf98-9b6de4a9976a", new Vector3(1418.8f, -1060.0f, -1496.1f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("da8f10dd-e181-4f28-bf98-9b6de4a9976a", new Vector3(1422.0f, -1060.0f, -1492.0f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("da8f10dd-e181-4f28-bf98-9b6de4a9976a", new Vector3(1424.6f, -1060.0f, -1500.6f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("da8f10dd-e181-4f28-bf98-9b6de4a9976a", new Vector3(1430.9f, -1060.0f, -1500.7f), new Vector3(0.0f, 15, 0.0f));
+        new SpawnInfo("da8f10dd-e181-4f28-bf98-9b6de4a9976a", new Vector3(1428.9f, -1060.0f, -1492.9f), new Vector3(0.0f, 15, 0.0f));
+
+        new SpawnInfo("ae06567b-4afd-4aff-9904-e518c1e8e30a", new Vector3(1466.0f, -1060.0f, -1404.5f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("ae06567b-4afd-4aff-9904-e518c1e8e30a", new Vector3(1471.5f, -1052.8f, -1394.9f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("ae06567b-4afd-4aff-9904-e518c1e8e30a", new Vector3(1462.1f, -1058.5f, -1397.6f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("ae06567b-4afd-4aff-9904-e518c1e8e30a", new Vector3(1463.8f, -1054.0f, -1407.0f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("5e0c5331-7eeb-4139-9598-96e5ef38afb3", new Vector3(1467.1f, -1060.0f, -1446.2f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("12c95e66-fb54-47b3-87f1-8e318394b839", new Vector3(1469.7f, -1056.6f, -1442.2f), new Vector3(15.2f, 298.7f, 355.9f));
+
+        new SpawnInfo("5e0c5331-7eeb-4139-9598-96e5ef38afb3", new Vector3(1467.1f, -1060.0f, -1446.2f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("583f8885-20fd-4c69-aa5a-5fcd7c58804b", new Vector3(1467.1f, -1058.0f, -1433.1f), new Vector3(355.7f, 201.4f, 0.0f));
+        new SpawnInfo("5e0c5331-7eeb-4139-9598-96e5ef38afb3", new Vector3(1461.7f, -1060.0f, -1439.8f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("5e0c5331-7eeb-4139-9598-96e5ef38afb3", new Vector3(1475.1f, -1060.0f, -1433.3f), new Vector3(0.0f, 0.0f, 0.0f));
+
+        new SpawnInfo("5e0c5331-7eeb-4139-9598-96e5ef38afb3", new Vector3(1470.2f, -1060.0f, -1424.1f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("5e0c5331-7eeb-4139-9598-96e5ef38afb3", new Vector3(1479.3f, -1060.0f, -1421.3f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("ae06567b-4afd-4aff-9904-e518c1e8e30a", new Vector3(1475.8f, -1044.5f, -1433.8f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("5e0c5331-7eeb-4139-9598-96e5ef38afb3", new Vector3(1482.4f, -1060.0f, -1409.1f), new Vector3(0.0f, 0.0f, 0.0f));
+        new SpawnInfo("583f8885-20fd-4c69-aa5a-5fcd7c58804b", new Vector3(1479.2f, -1060.0f, -1408.6f), new Vector3(0.0f, 0.0f, 0.0f));
+
         // upper area
         for (int i = 0; i < 1; i++) yield return SpawnPrefabGlobally(riverProwler, new Vector3(1480.02f, -954.65f, -1409.85f));
         for (int i = 0; i < 1; i++) yield return SpawnPrefabGlobally(riverProwler, new Vector3(1444.75f, -955.65f, -1488.90f));
         for (int i = 0; i < 1; i++) yield return SpawnPrefabGlobally(riverProwler, new Vector3(1400.60f, -954.15f, -1483.27f));
         for (int i = 0; i < 1; i++) yield return SpawnPrefabGlobally(riverProwler, new Vector3(1446.25f, -952.07f, -1393.37f));
+
+        new SpawnInfo("bfe993b9-8d6d-441c-922e-7dc074d81d3f", new Vector3(1411.0f, -958.0f, -1485.0f), new Vector3(0.0f, 112.0f, 0.0f));
+        new SpawnInfo("0552b196-d09a-45dd-b064-878966476179", new Vector3(1466.0f, -957.6f, -1400.0f), new Vector3(3.0f, 137.2f, 20.0f));
 
         yield return SpawnPrefabGlobally(crabsquid, new Vector3(1401.40f, -952.89f, -1431.32f));
     }

@@ -49,6 +49,7 @@ public class LootGeneration : MonoBehaviour
         } */
         leviathanClassIDs.Add(Main.ancientBloop.ClassID);
         leviathanClassIDs.Add(Main.abyssalBlaza.ClassID);
+        leviathanClassIDs.Add(Main.anglerFish.ClassID);
 
         precursorTechClassIDs = new List<string>();
         precursorTechClassIDs.Add(Main.arenaLightPillar.ClassID);

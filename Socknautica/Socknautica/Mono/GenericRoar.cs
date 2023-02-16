@@ -41,7 +41,7 @@ internal class GenericRoar : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time > timeNextRoar)
+        if (Time.time > timeNextRoar && creature != null && creature.liveMixin != null && creature.liveMixin.IsAlive())
         {
             RoarOnce();
         }

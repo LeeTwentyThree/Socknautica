@@ -41,7 +41,7 @@ namespace Socknautica.Mono.Creatures
                 var main = system.main;
                 main.scalingMode = ParticleSystemScalingMode.Hierarchy;
             }
-            myVfx.transform.localPosition = new Vector3(0f, 0f, 15f);
+            myVfx.transform.localPosition = new Vector3(0f, 1.5f, 8f);
             myVfx.SetActive(false);
         }
 

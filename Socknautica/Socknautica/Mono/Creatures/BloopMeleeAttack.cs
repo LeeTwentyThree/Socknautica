@@ -11,6 +11,7 @@ namespace Socknautica.Mono.Creatures
         private ECCAudio.AudioClipPool biteClipPool;
         private GameObject throat;
 
+
         void Start()
         {
             vehicleSwallowSource = gameObject.AddComponent<AudioSource>();
@@ -22,6 +23,7 @@ namespace Socknautica.Mono.Creatures
             gameObject.SearchChild("MouthTrigger").GetComponent<OnTouch>().onTouch = new OnTouch.OnTouchEvent();
             gameObject.SearchChild("MouthTrigger").GetComponent<OnTouch>().onTouch.AddListener(OnTouch);
             throat = gameObject.SearchChild("Vortex0");
+            biteClipPool = ECCAudio.CreateClipPool("AbyssalBlazaBite");
         }
         public override void OnTouch(Collider collider)
         {
@@ -60,13 +62,25 @@ namespace Socknautica.Mono.Creatures
                     }
                     if (target.GetComponent<Vehicle>())
                     {
-                        BloopVehicleCinematic cinematic = target.GetComponent<BloopVehicleCinematic>();
-                        if(!cinematic)
+                        if (liveMixin.health <= 400)
                         {
-                            target.AddComponent<BloopVehicleCinematic>().throat = throat;
+                            BloopVehicleCinematic cinematic = target.GetComponent<BloopVehicleCinematic>();
+                            if (!cinematic)
+                            {
+                                target.AddComponent<BloopVehicleCinematic>().throat = throat;
+                                creature.GetAnimator().SetTrigger("bite");
+                                component.Aggression.Value = 0f;
+                                timeLastBite = Time.time;
+                            }
+                        }
+                        else
+                        {
+                            liveMixin.TakeDamage(299);
                             creature.GetAnimator().SetTrigger("bite");
                             component.Aggression.Value = 0f;
                             timeLastBite = Time.time;
+                            vehicleSwallowSource.clip = biteClipPool.GetRandomClip();
+                            vehicleSwallowSource.Play();
                         }
                     }
                     else if (CanSwallow(liveMixin))

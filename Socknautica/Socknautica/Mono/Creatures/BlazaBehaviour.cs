@@ -18,7 +18,7 @@ namespace Socknautica.Mono.Creatures
         private GenericRoar roar;
         float damagePerSecond = 23f;
         private ECCAudio.AudioClipPool seamothSounds;
-        private ECCAudio.AudioClipPool exosuitSounds;
+        private ECCAudio.AudioClipPool heavyVehicleSounds;
 
         public Creature creature;
 
@@ -26,9 +26,9 @@ namespace Socknautica.Mono.Creatures
         {
             creature = GetComponent<Creature>();
             vehicleGrabSound = AddVehicleGrabSound();
-            vehicleHoldPoint = gameObject.SearchChild("SeamothAttach").transform;
+            vehicleHoldPoint = gameObject.SearchChild("SeamothAttach_end").transform;
             seamothSounds = ECCAudio.CreateClipPool("AbyssalBlazaSeamoth");
-            exosuitSounds = ECCAudio.CreateClipPool("AbyssalBlazaExosuit");
+            heavyVehicleSounds = ECCAudio.CreateClipPool("AbyssalBlazaExosuit");
             mouthAttack = GetComponent<BlazaMeleeAttack>();
             roar = GetComponent<GenericRoar>();
         }
@@ -57,7 +57,7 @@ namespace Socknautica.Mono.Creatures
         /// <returns></returns>
         public bool IsHoldingGenericSub()
         {
-            return heldVehicleType == VehicleType.GenericSub;
+            return heldVehicleType == VehicleType.GenericSub || heldVehicleType == VehicleType.Tank;
         }
         public bool IsHoldingExosuit()
         {
@@ -67,11 +67,20 @@ namespace Socknautica.Mono.Creatures
         {
             None = 0,
             Exosuit = 1,
-            GenericSub = 2
+            GenericSub = 2,
+            Tank
         }
         public void GrabGenericSub(Vehicle vehicle)
         {
-            GrabVehicle(vehicle, VehicleType.GenericSub);
+            var type = VehicleType.GenericSub;
+            if (OtherMods.SubmarineModExists)
+            {
+                if (vehicle is Socksfor1Subs.Mono.Tank)
+                {
+                    type = VehicleType.Tank;
+                }
+            }
+            GrabVehicle(vehicle, type);
         }
         public void GrabExosuit(Vehicle exosuit)
         {
@@ -103,13 +112,9 @@ namespace Socknautica.Mono.Creatures
             {
                 vehicleGrabSound.clip = seamothSounds.GetRandomClip();
             }
-            else if (heldVehicleType == VehicleType.Exosuit)
-            {
-                vehicleGrabSound.clip = exosuitSounds.GetRandomClip();
-            }
             else
             {
-                ECCLog.AddMessage("Unknown Vehicle Type detected");
+                vehicleGrabSound.clip = heavyVehicleSounds.GetRandomClip();
             }
             vehicleGrabSound.Play();
             InvokeRepeating("DamageVehicle", 1f, 1f);

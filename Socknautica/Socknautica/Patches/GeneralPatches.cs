@@ -27,34 +27,34 @@ public static class Creature_Patches
             }
         }
     }
+}
 
-    [HarmonyPatch(typeof(FleeOnDamage))]
-    public static class FleeOnDamage_Patches
+[HarmonyPatch(typeof(FleeOnDamage))]
+public static class FleeOnDamage_Patches
+{
+    [HarmonyPatch(nameof(FleeOnDamage.StartPerform))]
+    [HarmonyPrefix()]
+    public static bool StartPerform_Prefix(FleeOnDamage __instance, Creature creature)
     {
-        [HarmonyPatch(nameof(FleeOnDamage.StartPerform))]
-        [HarmonyPrefix()]
-        public static bool StartPerform_Prefix(FleeOnDamage __instance, Creature creature)
+        if (Main.config.DisableLeviathanFear == false)
         {
-            if (Main.config.DisableLeviathanFear == false)
-            {
-                return true;
-            }
-            if (IsCreatureLeviathan(creature))
-            {
-                __instance.timeNextSwim = float.MaxValue;
-                return false;
-            }
             return true;
         }
-
-        private static bool IsCreatureLeviathan(Creature creature)
+        if (IsCreatureLeviathan(creature))
         {
-            if (creature.liveMixin != null && creature.liveMixin.maxHealth >= 3000)
-            {
-                return true;
-            }
+            __instance.timeNextSwim = float.MaxValue;
             return false;
         }
+        return true;
+    }
+
+    private static bool IsCreatureLeviathan(Creature creature)
+    {
+        if (creature.liveMixin != null && creature.liveMixin.maxHealth >= 3000)
+        {
+            return true;
+        }
+        return false;
     }
 }
 
