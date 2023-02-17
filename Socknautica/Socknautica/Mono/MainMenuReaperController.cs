@@ -24,6 +24,7 @@ internal class MainMenuReaperController : MonoBehaviour
         {
             var position = Camera.current.transform.position + Vector3.forward * 60f + Random.insideUnitSphere * 50f;
             position.y = 0;
+            if (position.z > 26 && position.z < 43) return;
             var reaper = Instantiate(reaperPrefab, position + Vector3.down * 12f, Quaternion.identity);
             reaper.transform.localEulerAngles = new Vector3(-90, Random.value * 360f, 0);
             reaper.SetActive(true);
