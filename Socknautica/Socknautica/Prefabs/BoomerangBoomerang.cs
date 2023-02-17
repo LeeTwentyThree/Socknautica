@@ -21,7 +21,7 @@ internal class BoomerangBoomerang : Equipable
 
     public override TechGroup GroupForPDA => TechGroup.Personal;
 
-    public override string[] StepsToFabricatorTab => new string[] { "Personal", "Equipment" };
+    public override string[] StepsToFabricatorTab => new string[] { "Personal", "Tools" };
 
     public override float CraftingTime => 4f;
 
@@ -29,7 +29,10 @@ internal class BoomerangBoomerang : Equipable
     {
         var prefab = Object.Instantiate(CraftData.GetPrefabForTechType(TechType.Boomerang));
         Helpers.RemoveNonEssentialComponents(prefab);
-        prefab.AddComponent<ThrowBoomerang>();
+        var b = prefab.AddComponent<ThrowBoomerang>();
+        b.mainCollider = prefab.GetComponent<Collider>();
+        b.pickupable = prefab.GetComponent<Pickupable>();
+        prefab.EnsureComponent<TechTag>();
         return prefab;
     }
 

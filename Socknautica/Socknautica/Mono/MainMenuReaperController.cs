@@ -32,6 +32,14 @@ internal class MainMenuReaperController : MonoBehaviour
             timeSpawnAgain = Time.time + Random.Range(0.8f, 2f);
             reaper.AddComponent<MainMenuReaper>();
             reaper.EnsureComponent<SkyApplier>().SetSky(Skies.BaseInterior);
+            var renderer = reaper.GetComponentInChildren<Renderer>();
+            var materials = renderer.materials;
+            foreach (var m in materials)
+            {
+                m.SetFloat("_EmissiveLM", 0.3f);
+                m.SetFloat("_EmissiveLMNight", 0.3f);
+            }
+            renderer.materials = materials;
         }
     }
 

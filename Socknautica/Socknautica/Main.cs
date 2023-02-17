@@ -48,6 +48,7 @@ namespace Socknautica
             LanguageHandler.SetLanguageLine("SocksSignalSubtitles", "Detecting an Alien broadcast. Uploading coordinates to PDA.");
             LanguageHandler.SetLanguageLine("RocketSelfDestruct1", "You have chosen not to come home to Alterra.");
             LanguageHandler.SetLanguageLine("RocketSelfDestruct2", "Detecting multiple energy signatures originating from the ecological dead zone. Uploading coordinates to your PDA. Exploration is conducted at your own risk.");
+            LanguageHandler.SetLanguageLine("UseBoomerangBoomerang", "Throw Boomerang ({0})");
         }
 
         private static void PatchSubRecipes()
