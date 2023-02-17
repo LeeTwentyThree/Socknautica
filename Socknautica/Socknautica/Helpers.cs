@@ -73,6 +73,31 @@ internal static class Helpers
         return SearchChildRecursive(transform.gameObject, byName).transform;
     }
 
+    public static void RemoveNonEssentialComponents(GameObject prefab)
+    {
+        Type[] valid = new Type[]
+        {
+            typeof(Transform), typeof(Renderer), typeof(SkinnedMeshRenderer), typeof(Animator), typeof (MeshFilter),
+            typeof(PrefabIdentifier), typeof(LargeWorldEntity), typeof(TechTag), typeof(FPModel), typeof(Collider), typeof(Rigidbody),
+            typeof(Pickupable), typeof(WorldForces), typeof(SkyApplier)
+        };
+        foreach (Component component in prefab.GetComponentsInChildren<Component>())
+        {
+            bool any = false;
+            foreach (var v in valid)
+            {
+                if (v.IsAssignableFrom(component.GetType()))
+                {
+                    any = true;
+                }
+            }
+            if (!any)
+            {
+                Object.DestroyImmediate(component);
+            }
+        }
+    }
+
     private static GameObject SearchChildRecursive(GameObject gameObject, string byName)
     {
         foreach (Transform child in gameObject.transform)

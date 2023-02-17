@@ -49,7 +49,6 @@ public class LootGeneration : MonoBehaviour
         } */
         leviathanClassIDs.Add(Main.ancientBloop.ClassID);
         leviathanClassIDs.Add(Main.abyssalBlaza.ClassID);
-        leviathanClassIDs.Add(Main.anglerFish.ClassID);
 
         precursorTechClassIDs = new List<string>();
         precursorTechClassIDs.Add(Main.arenaLightPillar.ClassID);
@@ -138,7 +137,12 @@ public class LootGeneration : MonoBehaviour
         if (leviathanClassIDs == null || precursorTechClassIDs == null) DetermineClassIDs();
         if (Random.value < leviathanProbability)
         {
-            SpawnPrefab(leviathanClassIDs[Random.Range(0, leviathanClassIDs.Count)], transform.position + leviathanOffset, Quaternion.identity);
+            string classId = leviathanClassIDs[Random.Range(0, leviathanClassIDs.Count)];
+            if (Random.value < 0.25f && transform.position.y < 2000)
+            {
+                classId = Main.anglerFish.ClassID;
+            }
+            SpawnPrefab(classId, transform.position + leviathanOffset, Quaternion.identity);
         }
         var precursorSlots = Helpers.SearchAllTransforms(gameObject, "PrecursorTechSpawnPoint", ECCLibrary.ECCStringComparison.StartsWith);
         foreach (var precursorSlot in precursorSlots)

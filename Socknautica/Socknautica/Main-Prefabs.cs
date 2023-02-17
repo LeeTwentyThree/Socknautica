@@ -37,6 +37,8 @@ public partial class Main
     internal static AncientBloop ancientBloop;
     internal static AbyssalOculus abyssalOculus;
 
+    internal static BoomerangBoomerang boomerangBoomerang;
+
     private static void PatchPrefabsEarly()
     {
 
@@ -117,6 +119,9 @@ public partial class Main
 
         giantTooth = new GiantTooth();
         giantTooth.Patch();
+
+        boomerangBoomerang = new BoomerangBoomerang();
+        boomerangBoomerang.Patch();
     }
 
     private static void PatchAquariumIslandSegment(string classId, string prefabName, Vector3 offset)
