@@ -6,6 +6,7 @@ internal class MirageFishBehaviour : MonoBehaviour
     private Animator animator;
     private Rigidbody rb;
     private LastTarget lastTarget;
+    private LiveMixin live;
 
     private bool luring;
     private float showDistance = 56;
@@ -19,6 +20,7 @@ internal class MirageFishBehaviour : MonoBehaviour
         creature = GetComponent<Creature>();
         animator = gameObject.GetComponentInChildren<Animator>();
         lastTarget = gameObject.GetComponent<LastTarget>();
+        live = gameObject.GetComponent<LiveMixin>();
         rb = GetComponent<Rigidbody>();
         mesmerFx = gameObject.GetComponent<MesmerizedScreenFXController>();
         SetLureState(true);
@@ -31,7 +33,7 @@ internal class MirageFishBehaviour : MonoBehaviour
             SetLureState(false);
             return;
         }
-        if (luring)
+        if (luring && Time.time > timeLureAgain)
         {
             transform.LookAt(Player.main.transform.position);
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
@@ -53,7 +55,7 @@ internal class MirageFishBehaviour : MonoBehaviour
 
     private void JumpOut()
     {
-        timeLureAgain = Time.time + 30;
+        timeLureAgain = Time.time + 14;
         SetLureState(false);
         Utils.PlayFMODAsset(Helpers.GetFmodAsset("AnglerJumpscare"), Player.main.transform.position);
     }
@@ -68,7 +70,7 @@ internal class MirageFishBehaviour : MonoBehaviour
         if (mesmerFx) mesmerFx.StopHypnose();
     }
 
-    private void SetLureState(bool state)
+    public void SetLureState(bool state)
     {
         if (!luring && state)
         {
@@ -77,5 +79,6 @@ internal class MirageFishBehaviour : MonoBehaviour
         luring = state;
         animator.SetBool("lure", state);
         rb.isKinematic = state;
+        live.invincible = state;
     }
 }

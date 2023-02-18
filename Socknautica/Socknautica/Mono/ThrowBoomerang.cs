@@ -8,7 +8,7 @@ internal class ThrowBoomerang : PlayerTool
 
 	private float pushForce = 32;
 	private float returnForce = 70;
-	private float contactDamage = 500;
+	private float contactDamage = 750;
 	private float maxTravelTime = 2f;
 
 	private bool wasThrown;

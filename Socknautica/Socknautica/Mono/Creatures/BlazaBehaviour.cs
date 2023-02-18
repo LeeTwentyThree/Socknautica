@@ -26,7 +26,7 @@ namespace Socknautica.Mono.Creatures
         {
             creature = GetComponent<Creature>();
             vehicleGrabSound = AddVehicleGrabSound();
-            vehicleHoldPoint = gameObject.SearchChild("SeamothAttach_end").transform;
+            vehicleHoldPoint = gameObject.SearchChild("SeamothAttach").transform;
             seamothSounds = ECCAudio.CreateClipPool("AbyssalBlazaSeamoth");
             heavyVehicleSounds = ECCAudio.CreateClipPool("AbyssalBlazaExosuit");
             mouthAttack = GetComponent<BlazaMeleeAttack>();

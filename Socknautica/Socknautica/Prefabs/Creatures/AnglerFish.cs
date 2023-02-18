@@ -20,13 +20,15 @@ internal class AnglerFish : CreatureAsset
     public override void AddCustomBehaviour(CreatureComponents components)
     {
         prefab.EnsureComponent<MirageFishBehaviour>();
-        prefab.EnsureComponent<CreatureFollowPlayer>();
+        prefab.EnsureComponent<HuntDownPlayer>();
 
         GameObject mouth = prefab.SearchChild("MouthTrigger");
+        mouth.AddComponent<OnTouch>();
+
         AnglerMeleeAttack meleeAttack = prefab.AddComponent<AnglerMeleeAttack>();
         meleeAttack.mouth = mouth;
         meleeAttack.canBeFed = false;
-        meleeAttack.biteInterval = 2f;
+        meleeAttack.biteInterval = 5f;
         meleeAttack.eatHungerDecrement = 0.05f;
         meleeAttack.eatHappyIncrement = 0.1f;
         meleeAttack.biteAggressionDecrement = 0.02f;
@@ -35,11 +37,10 @@ internal class AnglerFish : CreatureAsset
         meleeAttack.creature = components.creature;
         meleeAttack.liveMixin = components.liveMixin;
         meleeAttack.animator = components.creature.GetAnimator();
-
     }
 
     public override AnimateByVelocityData AnimateByVelocitySettings => new AnimateByVelocityData(false, 30, 45, 0.5f);
-    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(1f, 30f, 20f, 20f, 25f, 23f);
+    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.9f, 30f, 20f, 20f, 25f, 23f);
 
     public override float MaxVelocityForSpeedParameter => 10;
 

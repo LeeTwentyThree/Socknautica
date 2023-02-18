@@ -23,6 +23,10 @@ internal class PrecursorZone
     {
         var occupied = GetOccupied(point);
         if (occupied != null) return occupied.GetClosenessPercent(point);
+        if (point.y < -2000)
+        {
+            return 0.6f;
+        }
         return 0f;
     }
 

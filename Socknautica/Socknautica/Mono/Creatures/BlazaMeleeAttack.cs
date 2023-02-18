@@ -105,9 +105,9 @@ namespace Socknautica.Mono.Creatures
 		}
 		private float GetBiteDamage(GameObject target)
 		{
-			if (target.GetComponent<SubControl>() != null)
+			if (target.GetComponent<SubRoot>() != null)
 			{
-				return 300f; //cyclops damage
+				return 350f; //cyclops damage
 			}
 			if (target.GetComponent<Creature>() != null)
 			{

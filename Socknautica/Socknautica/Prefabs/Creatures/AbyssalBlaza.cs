@@ -52,8 +52,8 @@ internal class AbyssalBlaza : CreatureAsset
         MakeAggressiveTo(150, 4, EcoTargetType.Shark, 0, 2);
         MakeAggressiveTo(60, 3, EcoTargetType.Leviathan, 0f, 0.5f);
 
-        BlazaBehaviour gulperBehaviour = prefab.AddComponent<BlazaBehaviour>();
-        gulperBehaviour.creature = components.creature;
+        BlazaBehaviour blazaBehaviour = prefab.AddComponent<BlazaBehaviour>();
+        blazaBehaviour.creature = components.creature;
 
         GameObject mouth = prefab.SearchChild("MouthTrigger");
         BlazaMeleeAttack meleeAttack = prefab.AddComponent<BlazaMeleeAttack>();
@@ -71,12 +71,12 @@ internal class AbyssalBlaza : CreatureAsset
         meleeAttack.animator = components.creature.GetAnimator();
 
         AttackCyclops actionAtkCyclops = prefab.AddComponent<AttackCyclops>();
-        actionAtkCyclops.swimVelocity = 15f;
+        actionAtkCyclops.swimVelocity = 30f;
         actionAtkCyclops.aggressiveToNoise = new CreatureTrait(0f, 0.01f);
         actionAtkCyclops.evaluatePriority = 0.6f;
         actionAtkCyclops.priorityMultiplier = ECCHelpers.Curve_Flat();
-        actionAtkCyclops.maxDistToLeash = 70f;
-        actionAtkCyclops.attackAggressionThreshold = 0.4f;
+        actionAtkCyclops.maxDistToLeash = 200f;
+        actionAtkCyclops.attackAggressionThreshold = 0.25f;
 
         mouth.AddComponent<OnTouch>();
     }
@@ -88,7 +88,7 @@ internal class AbyssalBlaza : CreatureAsset
 
     public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.6f, 45f, 8f, 15f, 24f, 8);
 
-    public override StayAtLeashData StayAtLeashSettings => new StayAtLeashData(0.5f, 100f);
+    public override StayAtLeashData StayAtLeashSettings => new StayAtLeashData(0.5f, 200f);
 
     public override void SetLiveMixinData(ref LiveMixinData liveMixinData)
     {

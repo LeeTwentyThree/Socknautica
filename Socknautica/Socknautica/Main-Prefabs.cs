@@ -129,6 +129,9 @@ public partial class Main
 
         var massiveLeviSpawner = new AbyssalLeviathanSpawner();
         massiveLeviSpawner.Patch();
+
+        var projector = new PrecursorProjector();
+        projector.Patch();
     }
 
     private static void PatchAquariumIslandSegment(string classId, string prefabName, Vector3 offset)
