@@ -3,7 +3,7 @@ using ECCLibrary;
 
 namespace Socknautica.Mono.Creatures
 {
-    public class BlazaMeleeAttack : MeleeAttack
+    public class AnglerMeleeAttack : MeleeAttack
     {
 		private AudioSource attackSource;
 		private ECCAudio.AudioClipPool biteClipPool;
@@ -19,6 +19,7 @@ namespace Socknautica.Mono.Creatures
 			gameObject.SearchChild("MouthTrigger").GetComponent<OnTouch>().onTouch = new OnTouch.OnTouchEvent();
 			gameObject.SearchChild("MouthTrigger").GetComponent<OnTouch>().onTouch.AddListener(OnTouch);
 		}
+
 		public override void OnTouch(Collider collider)
 		{
 			if (frozen)
@@ -59,11 +60,6 @@ namespace Socknautica.Mono.Creatures
 								return;
 							}
 						}
-						var sub = target.GetComponent<SubRoot>();
-						if (sub != null && Player.main.GetCurrentSub() != sub)
-                        {
-							return;
-                        }
 						LiveMixin liveMixin = target.GetComponent<LiveMixin>();
 						if (liveMixin == null) return;
 						if (!liveMixin.IsAlive())

@@ -79,7 +79,7 @@ internal static class Helpers
         {
             typeof(Transform), typeof(Renderer), typeof(SkinnedMeshRenderer), typeof(Animator), typeof (MeshFilter),
             typeof(PrefabIdentifier), typeof(LargeWorldEntity), typeof(TechTag), typeof(FPModel), typeof(Collider), typeof(Rigidbody),
-            typeof(Pickupable), typeof(WorldForces), typeof(SkyApplier)
+            typeof(Pickupable), typeof(WorldForces), typeof(SkyApplier), typeof(LODGroup)
         };
         foreach (Component component in prefab.GetComponentsInChildren<Component>())
         {

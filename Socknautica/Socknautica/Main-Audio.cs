@@ -48,6 +48,9 @@ public partial class Main
         PatchBossSounds("BossDeath", "BossDeath");
         PatchBossSounds("BossGrowl", "BossGrowl");
 
+        PatchCreatureSounds("AnglerJumpscare", "AnglerJumpscare", 200f);
+        PatchCreatureSounds("MassiveLeviathanIdle", "MassiveLeviathanIdle", 9999f);
+
         /*
         var gargJuvenileFarSounds = AudioUtils.CreateSounds(ECCAudio.CreateClipPool("garg_for_anth_distant").clips, k3DSoundModes).ToArray();
         for (int i = 0; i < gargJuvenileFarSounds.Length; i++)
@@ -73,6 +76,17 @@ public partial class Main
         for (int i = 0; i < roarSounds.Length; i++)
         {
             roarSounds[i].set3DMinMaxDistance(5f, 700f);
+        }
+        var roarEvent = new FModMultiSounds(roarSounds, kSFXBus, true);
+        CustomSoundHandler.RegisterCustomSound(eventName, roarEvent);
+    }
+
+    private static void PatchCreatureSounds(string clipPrefix, string eventName, float maxDist)
+    {
+        var roarSounds = AudioUtils.CreateSounds(ECCAudio.CreateClipPool(clipPrefix).clips, k3DSoundModes).ToArray();
+        for (int i = 0; i < roarSounds.Length; i++)
+        {
+            roarSounds[i].set3DMinMaxDistance(5f, maxDist);
         }
         var roarEvent = new FModMultiSounds(roarSounds, kSFXBus, true);
         CustomSoundHandler.RegisterCustomSound(eventName, roarEvent);

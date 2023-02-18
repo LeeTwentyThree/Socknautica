@@ -45,7 +45,12 @@ internal class IslandGenerator : MonoBehaviour
         {
             if ((LargeWorld.main.GetBiome(randomPoint).Equals("void") || randomPoint.y < -1400) && IsWithinNoOtherIslands(randomPoint))
             {
-                SpawnIsland(Main.GetRandomGenericIsland().ClassID, randomPoint);
+                var classId = Main.GetRandomGenericIsland().ClassID;
+                if (Random.value < 0.1f && transform.position.y < -1500)
+                {
+                    classId = Main.anglerFish.ClassID;
+                }
+                SpawnIsland(classId, randomPoint);
             }
         }
     }

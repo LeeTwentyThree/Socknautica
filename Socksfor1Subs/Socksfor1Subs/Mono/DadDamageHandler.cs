@@ -83,7 +83,7 @@ namespace Socksfor1Subs.Mono
             {
                 emergencyMusicEmitter.Stop();
             }
-            sub.live.invincible = Player.main.GetCurrentSub() != sub;
+            sub.live.invincible = sub.stealthManager.StealthEnabled || Player.main.GetCurrentSub() != sub;
         }
 
         private void DoVoiceLines()

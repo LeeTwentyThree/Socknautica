@@ -174,7 +174,6 @@ namespace Socksfor1Subs.Mono
                     _timeCanRechargeAgain = Time.time + rechargeDelay;
                 }
                 _timeLastChanged = Time.time;
-                sub.live.invincible = value;
             }
         }
 

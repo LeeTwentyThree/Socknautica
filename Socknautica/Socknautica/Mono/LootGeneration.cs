@@ -84,7 +84,7 @@ public class LootGeneration : MonoBehaviour
         {
             groups.Add(new LootGroup("GiantFloaterLocation", 1f, 0.1f, 0.1f, ClassIds.ancientFloater)); // ancient floater
             groups.Add(new PlantLootGroup("RandomPlantSpawn", 0.2f, 1f, 1f, ClassIds.rogueCradle, ClassIds.bloodVine1, ClassIds.bloodVine2, ClassIds.bloodVine3, ClassIds.bloodVine4, ClassIds.fansSmall, ClassIds.fans1, ClassIds.fans2, ClassIds.fans3));
-            groups.Add(new LootGroup("SpawnPointFish", 0.05f, 1f, 1f, Main.abyssalOculus.ClassID, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
+            groups.Add(new LootGroup("SpawnPointFish", 0.025f, 1f, 1f, Main.abyssalOculus.ClassID, ClassIds.hoverfish, ClassIds.spinefish, ClassIds.ghostray, ClassIds.crabsquid, ClassIds.boneshark, ClassIds.ampeel));
             var genericIslandResources = new LootGroup("ResourceSpawnPoint", 0.2f, 1f, 1f, ClassIds.sandstoneChunk, ClassIds.limestoneChunk, ClassIds.shaleChunk, ClassIds.pressurium, ClassIds.barnacle, ClassIds.magnetite, ClassIds.lithium);
             genericIslandResources.canSpawnAtmospherium = true;
             groups.Add(genericIslandResources);
@@ -138,10 +138,6 @@ public class LootGeneration : MonoBehaviour
         if (Random.value < leviathanProbability)
         {
             string classId = leviathanClassIDs[Random.Range(0, leviathanClassIDs.Count)];
-            if (Random.value < 0.25f && transform.position.y < 2000)
-            {
-                classId = Main.anglerFish.ClassID;
-            }
             SpawnPrefab(classId, transform.position + leviathanOffset, Quaternion.identity);
         }
         var precursorSlots = Helpers.SearchAllTransforms(gameObject, "PrecursorTechSpawnPoint", ECCLibrary.ECCStringComparison.StartsWith);

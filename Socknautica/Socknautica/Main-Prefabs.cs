@@ -38,6 +38,7 @@ public partial class Main
     internal static AbyssalOculus abyssalOculus;
 
     internal static BoomerangBoomerang boomerangBoomerang;
+    internal static MagmarangMagmarang magmarangMagmarang;
 
     private static void PatchPrefabsEarly()
     {
@@ -122,6 +123,12 @@ public partial class Main
 
         boomerangBoomerang = new BoomerangBoomerang();
         boomerangBoomerang.Patch();
+
+        magmarangMagmarang = new MagmarangMagmarang();
+        magmarangMagmarang.Patch();
+
+        var massiveLeviSpawner = new AbyssalLeviathanSpawner();
+        massiveLeviSpawner.Patch();
     }
 
     private static void PatchAquariumIslandSegment(string classId, string prefabName, Vector3 offset)

@@ -17,16 +17,29 @@ internal class AnglerFish : CreatureAsset
 
     public override EcoTargetType EcoTargetType => EcoTargetType.Leviathan;
 
-    public override StayAtLeashData StayAtLeashSettings => new StayAtLeashData(0.9f, 100f);
-
     public override void AddCustomBehaviour(CreatureComponents components)
     {
         prefab.EnsureComponent<MirageFishBehaviour>();
+        prefab.EnsureComponent<CreatureFollowPlayer>();
+
+        GameObject mouth = prefab.SearchChild("MouthTrigger");
+        AnglerMeleeAttack meleeAttack = prefab.AddComponent<AnglerMeleeAttack>();
+        meleeAttack.mouth = mouth;
+        meleeAttack.canBeFed = false;
+        meleeAttack.biteInterval = 2f;
+        meleeAttack.eatHungerDecrement = 0.05f;
+        meleeAttack.eatHappyIncrement = 0.1f;
+        meleeAttack.biteAggressionDecrement = 0.02f;
+        meleeAttack.biteAggressionThreshold = 0.1f;
+        meleeAttack.lastTarget = components.lastTarget;
+        meleeAttack.creature = components.creature;
+        meleeAttack.liveMixin = components.liveMixin;
+        meleeAttack.animator = components.creature.GetAnimator();
+
     }
 
     public override AnimateByVelocityData AnimateByVelocitySettings => new AnimateByVelocityData(false, 30, 45, 0.5f);
-    public override SmallVehicleAggressivenessSettings AggressivenessToSmallVehicles => new SmallVehicleAggressivenessSettings(0.4f, 100f);
-    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(0.9f, 30f, 20f, 20f, 25f, 23f);
+    public override AttackLastTargetSettings AttackSettings => new AttackLastTargetSettings(1f, 30f, 20f, 20f, 25f, 23f);
 
     public override float MaxVelocityForSpeedParameter => 10;
 

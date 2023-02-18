@@ -2,9 +2,9 @@
 
 namespace Socknautica.Prefabs;
 
-internal class BoomerangBoomerang : Equipable
+internal class MagmarangMagmarang : Equipable
 {
-    public BoomerangBoomerang() : base("BoomerangBoomerang", "Boomerang Boomerang", "A Boomerang fish that can be used as a boomerang.")
+    public MagmarangMagmarang() : base("MagmarangMagmarang", "Magmarang Magmarang", "A Magmarang fish that can be used as a... magmarang?")
     {
     }
 
@@ -12,7 +12,7 @@ internal class BoomerangBoomerang : Equipable
 
     protected override TechData GetBlueprintRecipe()
     {
-        return new TechData(new Ingredient(TechType.Boomerang, 4)) { craftAmount = 1 };
+        return new TechData(new Ingredient(TechType.LavaBoomerang, 4)) { craftAmount = 1 };
     }
 
     public override CraftTree.Type FabricatorType => CraftTree.Type.Fabricator;
@@ -27,9 +27,10 @@ internal class BoomerangBoomerang : Equipable
 
     public override GameObject GetGameObject()
     {
-        var prefab = Object.Instantiate(CraftData.GetPrefabForTechType(TechType.Boomerang));
+        var prefab = Object.Instantiate(CraftData.GetPrefabForTechType(TechType.LavaBoomerang));
         Helpers.RemoveNonEssentialComponents(prefab);
         var b = prefab.AddComponent<ThrowBoomerang>();
+        b.lava = true;
         b.mainCollider = prefab.GetComponent<Collider>();
         b.pickupable = prefab.GetComponent<Pickupable>();
         prefab.EnsureComponent<TechTag>();
@@ -38,6 +39,6 @@ internal class BoomerangBoomerang : Equipable
 
     protected override Atlas.Sprite GetItemSprite()
     {
-        return SpriteManager.Get(TechType.Boomerang);
+        return SpriteManager.Get(TechType.LavaBoomerang);
     }
 }

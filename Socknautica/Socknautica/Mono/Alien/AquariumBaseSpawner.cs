@@ -78,6 +78,10 @@ public class AquariumBaseSpawner : AlienBaseSpawner
         yield return SpawnPrefabGlobally("PressuriumCrystal", new Vector3(1395.2f, -1060.0f, -1480.6f), new Vector3(0.0f, 0.0f, 0.0f), Vector3.one);
         yield return SpawnPrefabGlobally("PressuriumCrystal", new Vector3(1399.7f, -1060.0f, -1486.0f), new Vector3(0.0f, 0.0f, 0.0f), Vector3.one);
         yield return SpawnPrefabGlobally("PressuriumCrystal", new Vector3(1401.7f, -1060.0f, -1479.7f), new Vector3(0.0f, 0.0f, 0.0f), Vector3.one);
+        if (OtherMods.DeExtinctionExists)
+        {
+            yield return SpawnPrefabGlobally("GulperEgg", new Vector3(1417.41f, -1060.00f, -1492.95f), new Vector3(0, 86, 0), Vector3.one);
+        }
 
         yield return SpawnPrefabGlobally("4fae8fa4-0280-43bd-bcf1-f3cba97eed77", new Vector3(1451.9f, -1059.6f, -1478.7f), new Vector3(0.0f, 15, 0.0f), Vector3.one);
         yield return SpawnPrefabGlobally("4fae8fa4-0280-43bd-bcf1-f3cba97eed77", new Vector3(1433.5f, -1059.6f, -1494.6f), new Vector3(0.0f, 15, 0.0f), Vector3.one);

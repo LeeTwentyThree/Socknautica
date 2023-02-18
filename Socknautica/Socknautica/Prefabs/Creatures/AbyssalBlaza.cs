@@ -70,6 +70,14 @@ internal class AbyssalBlaza : CreatureAsset
         meleeAttack.liveMixin = components.liveMixin;
         meleeAttack.animator = components.creature.GetAnimator();
 
+        AttackCyclops actionAtkCyclops = prefab.AddComponent<AttackCyclops>();
+        actionAtkCyclops.swimVelocity = 15f;
+        actionAtkCyclops.aggressiveToNoise = new CreatureTrait(0f, 0.01f);
+        actionAtkCyclops.evaluatePriority = 0.6f;
+        actionAtkCyclops.priorityMultiplier = ECCHelpers.Curve_Flat();
+        actionAtkCyclops.maxDistToLeash = 70f;
+        actionAtkCyclops.attackAggressionThreshold = 0.4f;
+
         mouth.AddComponent<OnTouch>();
     }
 

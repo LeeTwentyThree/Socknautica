@@ -5,10 +5,10 @@ internal class MirageFishBehaviour : MonoBehaviour
     private Creature creature;
     private Animator animator;
     private Rigidbody rb;
+    private LastTarget lastTarget;
 
     private bool luring;
-    private float hypnoseDistance = 90;
-    private float showDistance = 70;
+    private float showDistance = 56;
 
     private float timeLureAgain;
 
@@ -18,6 +18,7 @@ internal class MirageFishBehaviour : MonoBehaviour
     {
         creature = GetComponent<Creature>();
         animator = gameObject.GetComponentInChildren<Animator>();
+        lastTarget = gameObject.GetComponent<LastTarget>();
         rb = GetComponent<Rigidbody>();
         mesmerFx = gameObject.GetComponent<MesmerizedScreenFXController>();
         SetLureState(true);
@@ -33,11 +34,16 @@ internal class MirageFishBehaviour : MonoBehaviour
         if (luring)
         {
             transform.LookAt(Player.main.transform.position);
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
             var distance = Vector3.Distance(transform.position, Player.main.transform.position);
             if (distance < showDistance)
             {
                 JumpOut();
             }
+        }
+        else
+        {
+            lastTarget.target = Player.main.gameObject;
         }
         if (!luring && Time.time > timeLureAgain)
         {
@@ -49,6 +55,7 @@ internal class MirageFishBehaviour : MonoBehaviour
     {
         timeLureAgain = Time.time + 30;
         SetLureState(false);
+        Utils.PlayFMODAsset(Helpers.GetFmodAsset("AnglerJumpscare"), Player.main.transform.position);
     }
 
     private void KillPlayer()
@@ -63,9 +70,12 @@ internal class MirageFishBehaviour : MonoBehaviour
 
     private void SetLureState(bool state)
     {
+        if (!luring && state)
+        {
+            PlayerScreenFXHelper.PlayScreenFX(PlayerScreenFXHelper.ScreenFX.Mesmer, 5f, 2f);
+        }
         luring = state;
         animator.SetBool("lure", state);
         rb.isKinematic = state;
-        PlayerScreenFXHelper.PlayScreenFX(PlayerScreenFXHelper.ScreenFX.Mesmer, 5f, 2f);
     }
 }

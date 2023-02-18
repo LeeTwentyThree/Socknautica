@@ -6,11 +6,22 @@ internal class MainMenuReaperController : MonoBehaviour
 
     private float timeSpawnAgain;
 
+    private mset.Sky sky;
+
     private void Update()
     {
         if (reaperPrefab == null)
         {
             GetPrefab();
+        }
+        if (sky == null)
+        {
+            var marmoSkies = MarmoSkies.main;
+            if (marmoSkies)
+            {
+                var ss = marmoSkies.transform.GetChild(0);
+                if (ss != null) sky = ss.GetComponent<mset.Sky>();
+            }
         }
         if (reaperPrefab != null)
         {
@@ -31,7 +42,9 @@ internal class MainMenuReaperController : MonoBehaviour
             Helpers.RemoveNonEssentialComponents(reaper);
             timeSpawnAgain = Time.time + Random.Range(0.8f, 2f);
             reaper.AddComponent<MainMenuReaper>();
-            reaper.EnsureComponent<SkyApplier>().SetSky(Skies.BaseInterior);
+            var sa = reaper.EnsureComponent<SkyApplier>();
+            sa.SetSky(Skies.Custom);
+            if (sky != null) sa.SetCustomSky(sky);
             var renderer = reaper.GetComponentInChildren<Renderer>();
             var materials = renderer.materials;
             foreach (var m in materials)
