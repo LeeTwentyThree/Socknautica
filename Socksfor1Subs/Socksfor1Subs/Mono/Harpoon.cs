@@ -162,6 +162,10 @@ namespace Socksfor1Subs.Mono
             if (tank != null)
             {
                 AccountForTankVelocity();
+                foreach (var tankCollider in tank.GetComponentsInChildren<Collider>())
+                {
+                    Physics.IgnoreCollision(tankCollider, collider);
+                }
             }
             rb.velocity = transform.forward * TravelVelocity;
 

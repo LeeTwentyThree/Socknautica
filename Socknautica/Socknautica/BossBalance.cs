@@ -16,5 +16,6 @@ internal static class BossBalance
     public const float swimPriority = 0.1f;
     public const float chargePriority = 1f;
     public const float fireEnegyBallPriority = 0.95f;
+    public const float vomitPriority = 0.9f;
     public const float fireEnegyBallBallPriority = 0.95f;
 }

@@ -8,10 +8,20 @@ namespace Socknautica.Mono.Creatures;
 
 public class SwimRandomArena : CreatureAction
 {
-	private float swimRadius = 150;
+	private float swimRadius = 300;
 	private float swimVelocity = BossBalance.swimVelocity;
-	private bool performing;
+	private bool performing = true;
 	private float currentAngle;
+
+	// private GameObject sphere;
+
+	private void Start()
+    {
+		/* sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+		Destroy(sphere.GetComponent<Collider>());
+		sphere.GetComponent<Renderer>().material = new Material(MaterialUtils.StasisFieldMaterial);
+		sphere.transform.localScale = Vector3.one * 50f; */
+    }
 
 	public override void Perform(Creature creature, float deltaTime)
 	{
@@ -23,6 +33,7 @@ public class SwimRandomArena : CreatureAction
 		if (performing)
         {
 			Vector3 target = GetBossSwimTargetPosition();
+			// sphere.transform.position = target;
 			swimBehaviour.SwimTo(target, swimVelocity);
 		}
 		currentAngle = GetBossCurrentAngle();
@@ -30,12 +41,10 @@ public class SwimRandomArena : CreatureAction
 
     public override void StartPerform(Creature creature)
     {
-		performing = true;
     }
 
     public override void StopPerform(Creature creature)
     {
-		performing = false;
     }
 
     public override float Evaluate(Creature creature)
@@ -60,7 +69,7 @@ public class SwimRandomArena : CreatureAction
     {
 		var center = GetArenaCenterPosition();
 		Vector2 direction = (new Vector2(transform.position.x, transform.position.z) - new Vector2(center.x, center.z)).normalized;
-		var angle = Helpers.Angle(direction);
+		var angle = Helpers.Angle(direction) * Mathf.Rad2Deg;
 		//if (direction.y < 0) angle += 180;
 		return angle;
     }

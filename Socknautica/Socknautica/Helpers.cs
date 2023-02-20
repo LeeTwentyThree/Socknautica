@@ -45,6 +45,16 @@ internal static class Helpers
         return Mathf.Atan2(vector2.y, vector2.x);
     }
 
+    public static Vector3 Flatten(Vector3 direction)
+    {
+        if (direction.x == 0 && direction.z == 0)
+        {
+            var angle = Mathf.PI * 2f * Random.value;
+            return new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle));
+        }
+        return new Vector3(direction.x, 0, direction.z);
+    }
+
     public static GameObject SpawnPrecursorElectricSparks()
     {
         PrefabDatabase.TryGetPrefab("ff8e782e-e6f3-40a6-9837-d5b6dcce92bc", out var prefab);
@@ -60,6 +70,8 @@ internal static class Helpers
                 m.SetColor(ShaderPropertyID._Color, new Color(0.5f, 1f, 0.5f));
             }
         }
+        Object.Destroy(spawned.GetComponent<LargeWorldEntity>());
+        Object.Destroy(spawned.GetComponent<PrefabIdentifier>());
         return spawned;
     }
 
@@ -71,6 +83,24 @@ internal static class Helpers
     public static Transform Search(this Transform transform, string byName)
     {
         return SearchChildRecursive(transform.gameObject, byName).transform;
+    }
+
+    public static void MakeParticleSystemScaleable(GameObject root)
+    {
+        foreach (var ps in root.GetComponentsInChildren<ParticleSystem>())
+        {
+            var main = ps.main;
+            main.scalingMode = ParticleSystemScalingMode.Hierarchy;
+        }
+    }
+
+    public static void MakeParticleSystemLoopable(GameObject root)
+    {
+        foreach (var ps in root.GetComponentsInChildren<ParticleSystem>())
+        {
+            var main = ps.main;
+            main.loop = true;
+        }
     }
 
     public static void RemoveNonEssentialComponents(GameObject prefab)

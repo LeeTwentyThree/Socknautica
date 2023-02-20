@@ -71,3 +71,59 @@ public static class uGUI_RadiationWarning_Patches
         }
     }
 }
+
+public static class LiveMixin_Patches
+{
+    [HarmonyPatch(nameof(LiveMixin.Kill))]
+    [HarmonyPostfix()]
+    public static void Kill(LiveMixin __instance)
+    {
+        KilledLeviathanTracker.OnKill(__instance.gameObject);
+    }
+}
+
+[HarmonyPatch(typeof(PrecursorTeleporter))]
+public static class DeactivateExitPortal
+{
+    [HarmonyPatch(nameof(PrecursorTeleporter.InitializeDoor))]
+    [HarmonyPrefix()]
+    public static bool InitializeDoor(PrecursorTeleporter __instance)
+    {
+        if (ShouldDisable(__instance))
+        {
+            if (__instance.portalFxControl != null)
+            {
+                __instance.portalFxControl.Toggle(false);
+            }
+            return false;
+        }
+        return true;
+    }
+
+    [HarmonyPatch(nameof(PrecursorTeleporter.ToggleDoor))]
+    [HarmonyPrefix()]
+    public static bool ToggleDoor(PrecursorTeleporter __instance)
+    {
+        if (ShouldDisable(__instance))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    [HarmonyPatch(nameof(PrecursorTeleporter.OnActivateTeleporter))]
+    [HarmonyPrefix()]
+    public static bool OnActivateTeleporter(PrecursorTeleporter __instance)
+    {
+        if (ShouldDisable(__instance))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    private static bool ShouldDisable(PrecursorTeleporter teleporter)
+    {
+        return teleporter.teleporterIdentifier == "ArenaTeleporter" && Mathf.Approximately(teleporter.warpToPos.x, 647f);
+    }
+}

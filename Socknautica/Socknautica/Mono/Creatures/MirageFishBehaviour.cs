@@ -38,7 +38,7 @@ internal class MirageFishBehaviour : MonoBehaviour
             transform.LookAt(Player.main.transform.position);
             transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
             var distance = Vector3.Distance(transform.position, Player.main.transform.position);
-            if (distance < showDistance)
+            if (distance < showDistance && CanJumpOut())
             {
                 JumpOut();
             }
@@ -51,6 +51,12 @@ internal class MirageFishBehaviour : MonoBehaviour
         {
             SetLureState(true);
         }
+    }
+
+    private bool CanJumpOut()
+    {
+        if (Player.main.GetCurrentSub() != null && !Player.main.isPiloting) return false;
+        return true;
     }
 
     private void JumpOut()
@@ -72,7 +78,7 @@ internal class MirageFishBehaviour : MonoBehaviour
 
     public void SetLureState(bool state)
     {
-        if (!luring && state)
+        if (luring && !state)
         {
             PlayerScreenFXHelper.PlayScreenFX(PlayerScreenFXHelper.ScreenFX.Mesmer, 5f, 2f);
         }

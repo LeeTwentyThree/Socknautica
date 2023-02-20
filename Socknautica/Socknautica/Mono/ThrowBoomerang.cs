@@ -55,7 +55,7 @@ internal class ThrowBoomerang : PlayerTool
 
     public override string GetCustomUseText()
     {
-        return LanguageCache.GetButtonFormat("UseBoomerangBoomerang", GameInput.Button.LeftHand);
+        return LanguageCache.GetButtonFormat("UseBoomerangBoomerang", GameInput.Button.RightHand);
     }
 
 	public override void OnToolUseAnim(GUIHand guiHand)
@@ -100,7 +100,7 @@ internal class ThrowBoomerang : PlayerTool
 
 	public override bool OnRightHandDown()
 	{
-		return Inventory.CanDropItemHere(pickupable, true);
+		return Inventory.CanDropItemHere(pickupable, false);
 	}
 
 	private void OnCollisionEnter(Collision col)

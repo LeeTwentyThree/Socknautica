@@ -17,5 +17,6 @@ internal class GenericIsland : GenericWorldPrefab
         var lootGen = prefab.AddComponent<LootGeneration>();
         lootGen.preset = LootGeneration.Preset.GenericIsland;
         lootGen.maxPrecursorTechProbability = 0.83f;
+        prefab.AddComponent<Island>();
     }
 }

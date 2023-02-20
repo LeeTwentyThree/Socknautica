@@ -18,6 +18,7 @@ internal class ChargeAtPlayer : CreatureAction
 
     public override float Evaluate(Creature creature)
     {
+        return 0f;
         if (performing && Time.time <= timeLastCharge + duration)
         {
             return 1f;

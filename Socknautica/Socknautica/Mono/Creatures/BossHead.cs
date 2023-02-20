@@ -18,13 +18,26 @@ internal class BossHead : MonoBehaviour
 
     public void FireHomingEnergyBall()
     {
-        var ball = gameObject.GetComponent<Boss>().SpawnEnergyBall(jawTransform.position);
+        var ball = boss.SpawnEnergyBall(jawTransform.position, 3);
         ball.gameObject.AddComponent<HomingEnergyBall>();
+        foreach (var r in ball.GetComponentsInChildren<Renderer>())
+        {
+            foreach (var m in r.materials)
+            {
+                m.SetColor(ShaderPropertyID._Color, new Color(1f, 0.5f, 0f));
+            }
+        }
     }
 
-    public void FireStationaryEnergyBall()
+    public void FireBasicEnergyBall()
     {
-        var ball = gameObject.GetComponent<Boss>().SpawnEnergyBall(jawTransform.position);
+        var ball = boss.SpawnEnergyBall(jawTransform.position, 3);
         ball.lifetime = 120;
+        ball.gameObject.AddComponent<MineTravel>();
+    }
+
+    public void FireVomitGas()
+    {
+        boss.SpawnVomit(jawTransform.position);
     }
 }

@@ -3,8 +3,8 @@
 internal class FireEnergyBall : CreatureAction
 {
     public Boss boss;
-    private float minInterval = 15f;
-    private float maxInterval = 20f;
+    private float minInterval = 10f;
+    private float maxInterval = 15f;
     private float priority = BossBalance.fireEnegyBallPriority;
 
     private float timeLastFire;
@@ -30,5 +30,7 @@ internal class FireEnergyBall : CreatureAction
         timeFireAgain = Time.time + Random.Range(minInterval, maxInterval);
         boss.GetRandomHead().FireHomingEnergyBall();
         boss.creature.GetAnimator().SetTrigger("vomit");
+        boss.PlayAttackSound();
+
     }
 }

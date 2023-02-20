@@ -2,8 +2,8 @@
 
 internal class HomingEnergyBall : MonoBehaviour
 {
-    private float mSpeed = 20;
-    private float rSpeed = 100;
+    private float mSpeed = 40;
+    private float rSpeed = 80;
 
     private void Update()
     {

@@ -11,6 +11,12 @@ public class SignalPingDelayedInitialize : MonoBehaviour
 
     public static List<SignalPingDelayedInitialize> spawnedPings = new List<SignalPingDelayedInitialize>();
 
+    public void SetData(string label, int colorIndex)
+    {
+        this.label = label;
+        this.colorIndex = colorIndex;
+    }
+
     void Start()
     {
         Refresh();

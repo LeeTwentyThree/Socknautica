@@ -26,7 +26,7 @@ namespace Socknautica.Mono.Creatures
         {
             creature = GetComponent<Creature>();
             vehicleGrabSound = AddVehicleGrabSound();
-            vehicleHoldPoint = gameObject.SearchChild("SeamothAttach").transform;
+            vehicleHoldPoint = gameObject.SearchChild("SeamothAttach_end").transform;
             seamothSounds = ECCAudio.CreateClipPool("AbyssalBlazaSeamoth");
             heavyVehicleSounds = ECCAudio.CreateClipPool("AbyssalBlazaExosuit");
             mouthAttack = GetComponent<BlazaMeleeAttack>();
@@ -62,6 +62,11 @@ namespace Socknautica.Mono.Creatures
         public bool IsHoldingExosuit()
         {
             return heldVehicleType == VehicleType.Exosuit;
+        }
+
+        public bool IsHoldingTank()
+        {
+            return heldVehicleType == VehicleType.Tank;
         }
         private enum VehicleType
         {
@@ -162,11 +167,18 @@ namespace Socknautica.Mono.Creatures
             {
                 ReleaseVehicle();
             }
-            SafeAnimator.SetBool(creature.GetAnimator(), "vehicle_attack", IsHoldingGenericSub());
-            SafeAnimator.SetBool(creature.GetAnimator(), "vehicle_attack", IsHoldingExosuit());
+            SafeAnimator.SetBool(creature.GetAnimator(), "vehicle_attack", IsHoldingVehicle());
             if (heldVehicle != null)
             {
                 Transform holdPoint = GetHoldPoint();
+                if (IsHoldingTank())
+                {
+                    holdPoint.transform.localPosition = Vector3.up * 0.04f;
+                }
+                else
+                {
+                    holdPoint.transform.localPosition = Vector3.up * 0.01f;
+                }
                 float num = Mathf.Clamp01(Time.time - timeVehicleGrabbed);
                 if (num >= 1f)
                 {

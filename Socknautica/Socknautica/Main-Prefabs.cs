@@ -106,7 +106,7 @@ public partial class Main
         multigarg = new Multigarg();
         multigarg.Patch();
 
-        TeleporterNetwork network = new TeleporterNetwork("ArenaTeleporter", new Vector3(647, -2210, -1612), 0, new Vector3(0, -1999.77f, 430), 180);
+        TeleporterNetwork network = new TeleporterNetwork("ArenaTeleporter", new Vector3(647, -2210, -1612), 0, new Vector3(0, -1999.77f, 500), 180);
         network.Patch();
 
         ancientBloop = new AncientBloop();
@@ -151,7 +151,7 @@ public partial class Main
         var coordsBaseSignal = new GenericSignalPrefab("CoordBaseSignal", "PingIcon", "Outpost Cache [Approximate Location]", "Outpost Cache [Approximate Location]", new Vector3(1700, -1891, -173) + new Vector3(76, 150, -100));
         coordsBaseSignal.Patch();
 
-        var arenaTeleporterSignal = new GenericSignalPrefab("ArenaTeleporterSignal", "PingIcon", "Reactor Access [NO EXIT]", "Reactor Access [NO EXIT]", new Vector3(647, -2204, -1607));
+        var arenaTeleporterSignal = new GenericSignalPrefab("ArenaTeleporterSignal", "PingIcon", "Reactor Access [NO EXIT]", "Reactor Access [Approximate Location]\n[NO EXIT]", new Vector3(844, -2182, -1635));
         arenaTeleporterSignal.Patch();
 
         var terminalBuilder = new DataTerminalBuilder();

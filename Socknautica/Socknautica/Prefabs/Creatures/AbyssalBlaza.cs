@@ -92,6 +92,6 @@ internal class AbyssalBlaza : CreatureAsset
 
     public override void SetLiveMixinData(ref LiveMixinData liveMixinData)
     {
-        liveMixinData.maxHealth = 8000f;
+        liveMixinData.maxHealth = 5000f;
     }
 }

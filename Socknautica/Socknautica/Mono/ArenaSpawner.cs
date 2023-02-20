@@ -20,13 +20,16 @@ public class ArenaSpawner : MonoBehaviour
 
     private Vector3 teleportTankRadiusCenter = new Vector3(647, -2207, -1610);
     private float teleportTankRadius = 100f;
-    private Vector3 teleportTankDropIntoArenaPosition = new Vector3(0, -1996, 405);
+    private Vector3 teleportTankDropIntoArenaPosition = new Vector3(0, -1996, 475);
 
     public float arenaHeight = 180 * kScaleFactor;
 
-    private const float kScaleFactor = 1.5f;
+    private const float kScaleFactor = 2f;
 
     private List<EnergyPylonCharge> energyPylons = new List<EnergyPylonCharge>();
+
+    public static GameObject cyclopsObj;
+    public static GameObject seamothExplode;
 
     private bool exploded;
 
@@ -39,8 +42,21 @@ public class ArenaSpawner : MonoBehaviour
         new GameObject("ArenaSpawner").AddComponent<ArenaSpawner>();
     }
 
+    private IEnumerator LoadVFX()
+    {
+        seamothExplode = CraftData.GetPrefabForTechType(TechType.Seamoth).GetComponent<SeaMoth>().destructionEffect;
+        yield return new WaitUntil(() => LightmappedPrefabs.main);
+        LightmappedPrefabs.main.RequestScenePrefab("Cyclops", new LightmappedPrefabs.OnPrefabLoaded(OnSubPrefabLoaded));
+    }
+
+    public void OnSubPrefabLoaded(GameObject prefab)
+    {
+        cyclopsObj = prefab;
+    }
+
     private IEnumerator Start()
     {
+        StartCoroutine(LoadVFX());
         var arena = Instantiate(Main.assetBundle.LoadAsset<GameObject>("ArenaBasePrefab"));
         arena.transform.position = arenaPos;
         arena.transform.localScale = Vector3.one * kScaleFactor;
@@ -59,8 +75,8 @@ public class ArenaSpawner : MonoBehaviour
                 ringNum++;
             }
         }
-        SpawnObjects();
         center = arena.transform.Find("Center");
+        SpawnObjects();
         LoopingMusic.Play(bossMusicEvent, 288);
         LargeWorld.main.transform.parent.Find("Chunks").gameObject.SetActive(false);
         foreach (var ping in PingManager.pings.Values)
@@ -77,6 +93,17 @@ public class ArenaSpawner : MonoBehaviour
                     }
                     break;
                 }
+                else
+                {
+                    PingManager.SetVisible(PingManager.GetId(ping), false);
+                }
+            }
+        }
+        if (Main.config.NoFogInArena)
+        {
+            foreach (WaterscapeVolume waterscapeVolume in FindObjectsOfType<WaterscapeVolume>())
+            {
+                waterscapeVolume.enabled = false;
             }
         }
         yield return new WaitForSeconds(4f);
@@ -99,7 +126,19 @@ public class ArenaSpawner : MonoBehaviour
         SpawnCreature(TechType.GhostLeviathan, new Vector3(-90, -1881, -146));
         SpawnCreature(TechType.SeaDragon, new Vector3(52, -1873, -86));
         SpawnCreature(TechType.SeaDragon, new Vector3(-32, -1896, 140));
-        SpawnCreature(Main.multigarg.TechType, new Vector3(300, -1900, 0));
+        SpawnCreature(Main.abyssalBlaza.TechType, new Vector3(-304.66f, -1872.92f, -2.17f));
+        SpawnCreature(Main.ancientBloop.TechType, new Vector3(-7.32f, -1890.77f, -313.86f));
+        SpawnCreature(Main.abyssalBlaza.TechType, new Vector3(398.72f, -1845.19f, 56.60f));
+        SpawnCreature(Main.ancientBloop.TechType, new Vector3(4.51f, -1822.17f, 404.14f));
+        SpawnCreature(Main.multigarg.TechType, new Vector3(400, -1900, 0));
+        for (int i = 0; i < 50; i++)
+        {
+            var pos2d = Random.insideUnitCircle * 500f;
+            var pos3d = new Vector3(pos2d.x, arenaPos.y, pos2d.y);
+            if (Vector3.Distance(Helpers.Flatten(pos3d), Helpers.Flatten(center.position)) < 129) continue;
+            if (Vector3.Distance(Helpers.Flatten(pos3d), Helpers.Flatten(teleportTankDropIntoArenaPosition)) < 100) continue;
+            SpawnLightPillar(pos3d);
+        }
     }
 
     private void FixSpawnedObject(GameObject spawned)
@@ -112,6 +151,7 @@ public class ArenaSpawner : MonoBehaviour
     private void SpawnLightPillar(Vector3 locPos)
     {
         var spawned = CraftData.InstantiateFromPrefab(Main.arenaLightPillar.TechType);
+        spawned.transform.localScale = Vector3.one * Random.Range(8f, 12f);
         FixSpawnedObject(spawned);
         spawned.transform.localPosition = arenaPos + locPos;
     }
@@ -122,6 +162,8 @@ public class ArenaSpawner : MonoBehaviour
         FixSpawnedObject(spawned);
         spawned.transform.localPosition = globalPos;
         if (scale != default) spawned.transform.localScale = scale;
+        var leash = spawned.GetComponent<StayAtLeashPosition>();
+        if (leash != null) leash.leashDistance = 9999;
     }
 
     private void SpawnEnergyPylon(Vector3 loc, Vector3 eulers = default)
@@ -132,6 +174,15 @@ public class ArenaSpawner : MonoBehaviour
         spawned.transform.position = arenaPos + loc;
         spawned.transform.eulerAngles = eulers;
         energyPylons.Add(spawned.GetComponent<EnergyPylonCharge>());
+    }
+    
+    public static GameObject SpawnSeamothExplosion(Vector3 pos, float scale)
+    {
+        var go = Instantiate(seamothExplode, pos, Quaternion.identity);
+        Helpers.MakeParticleSystemScaleable(go);
+        go.transform.GetChild(1).gameObject.SetActive(false);
+        go.transform.localScale = Vector3.one * scale;
+        return go;
     }
 
     private void Update()

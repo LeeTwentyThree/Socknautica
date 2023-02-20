@@ -44,6 +44,7 @@ internal class Multigarg : CreatureAsset
         prefab.AddComponent<BossCollisions>();
         prefab.AddComponent<FireEnergyBall>().boss = boss;
         prefab.AddComponent<FireEnergyMines>().boss = boss;
+        prefab.AddComponent<Vomit>().boss = boss;
 
         components.swimRandom.swimForward = 0.7f;
         components.locomotion.freezeHorizontalRotation = true;
@@ -71,6 +72,12 @@ internal class Multigarg : CreatureAsset
         AddNeckTrailManager(components, spine1.Find("Neck1T"));
 
         boss.heads = new BossHead[] { AddHead("HeadLD"), AddHead("HeadLU"), AddHead("HeadRD"), AddHead("HeadRU"), AddHead("HeadT") };
+
+        /* var signal = prefab.AddComponent<PingInstance>();
+        signal.pingType = PingType.Signal;
+        signal.origin = prefab.transform;
+        signal.displayPingInManager = false;
+        prefab.AddComponent<SignalPingDelayedInitialize>().SetData("Hydragargantuan Leviathan", 2); */
     }
 
     private Transform Search(Transform inside, string lookingFor)
@@ -97,7 +104,10 @@ internal class Multigarg : CreatureAsset
             if (current.GetChild(0) != null && current.GetChild(0).name.StartsWith("Neck" + index))
             {
                 current = current.GetChild(0);
-                if (current != null) trailSpines.Add(current);
+                if (current != null)
+                {
+                    trailSpines.Add(current);
+                }
             }
             else
             {
@@ -106,7 +116,7 @@ internal class Multigarg : CreatureAsset
             index++;
         }
         while (current != null);
-        CreateTrail(root.gameObject, trailSpines.ToArray(), components, 20);
+        //CreateTrail(root.gameObject, trailSpines.ToArray(), components, 20);
     }
 
     public override void SetLiveMixinData(ref LiveMixinData liveMixinData)

@@ -1,11 +1,11 @@
 ﻿namespace Socknautica.Mono.Creatures;
 
-internal class FireEnergyMines : CreatureAction
+internal class Vomit : CreatureAction
 {
     public Boss boss;
-    private float minInterval = 20f;
-    private float maxInterval = 50f;
-    private float priority = BossBalance.fireEnegyBallBallPriority;
+    private float minInterval = 16f;
+    private float maxInterval = 35f;
+    private float priority = BossBalance.vomitPriority;
 
     private float timeLastFire;
     private float timeFireAgain;
@@ -17,6 +17,7 @@ internal class FireEnergyMines : CreatureAction
 
     public override float Evaluate(Creature creature)
     {
+        return 0f;
         if (Time.time > timeFireAgain)
         {
             return priority;
@@ -30,10 +31,8 @@ internal class FireEnergyMines : CreatureAction
         timeFireAgain = Time.time + Random.Range(minInterval, maxInterval);
         foreach (var head in boss.heads)
         {
-            head.FireBasicEnergyBall();
+            head.FireVomitGas();
         }
         boss.creature.GetAnimator().SetTrigger("vomit");
-        boss.PlayAttackSound();
-
     }
 }

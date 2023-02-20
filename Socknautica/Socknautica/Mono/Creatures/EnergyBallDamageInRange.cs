@@ -11,7 +11,7 @@ internal class EnergyBallDamageInRange : MonoBehaviour
     private List<LiveMixin> damagedTargets;
 
     private float damageRadius = 10;
-    private float damage = 40;
+    private float damage = 100;
 
     public float lifetime = 20f;
 
@@ -61,6 +61,6 @@ internal class EnergyBallDamageInRange : MonoBehaviour
 
     private void OnDestroy()
     {
-        ErrorMessage.AddMessage("Explosion FX");
+        ArenaSpawner.SpawnSeamothExplosion(transform.position, 10f);
     }
 }

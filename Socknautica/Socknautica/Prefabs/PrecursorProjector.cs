@@ -8,7 +8,7 @@ namespace Socknautica.Prefabs;
 
 internal class PrecursorProjector : SimpleBuildable
 {
-    public PrecursorProjector() : base("PrecursorProjector", "Precursor Projector", "A pedestal for the great creatures you have defeated.")
+    public PrecursorProjector() : base("PrecursorProjector", "Leviathan Holographic Projector", "A pedestal that displays great creatures that you have defeated.")
     {
     }
 
@@ -16,13 +16,13 @@ internal class PrecursorProjector : SimpleBuildable
 
     public override TechCategory CategoryForPDA => TechCategory.InteriorModule;
 
-    public override ConstructableSettings ConstructableSettings => new ConstructableSettings(true, true, false, false, true, false, false, true, false, 4f, 2f, 7f);
+    public override ConstructableSettings ConstructableSettings => new ConstructableSettings(true, true, true, false, true, false, true, true, false, 4, 2.3f, 7f);
 
     public override LargeWorldEntity.CellLevel CellLevel => LargeWorldEntity.CellLevel.Medium;
 
     public override GameObject Model => Main.assetBundle.LoadAsset<GameObject>("PrecursorPedestal_Prefab");
 
-    protected override OrientedBounds[] GetBounds => new OrientedBounds[] { new OrientedBounds(Vector3.up * 0.6f, Quaternion.identity, Vector3.one) };
+    protected override OrientedBounds[] GetBounds => new OrientedBounds[] { new OrientedBounds(Vector3.up * 0.6f, Quaternion.identity, Vector3.one * 0.5f) };
 
     public override bool UnlockedAtStart => true;
 
@@ -33,6 +33,11 @@ internal class PrecursorProjector : SimpleBuildable
 
     protected override Atlas.Sprite GetItemSprite()
     {
-        return SpriteManager.defaultSprite;
+        return new Atlas.Sprite(Main.assetBundle.LoadAsset<Sprite>("PrecursorPedestal_Icon"));
+    }
+
+    public override void ApplyChangesToPrefab(GameObject prefab)
+    {
+        prefab.EnsureComponent<ProjectorController>();
     }
 }

@@ -5,7 +5,7 @@ namespace Socknautica.Mono.Alien;
 internal class EnergyPylonCharge : MonoBehaviour
 {
     public Transform[] chargingPoints;
-    public float chargeRange = 70f;
+    public float chargeRange = 100f;
     public float energyPerSecond = 11.5f;
 
     private Vehicle currentTarget;
@@ -70,7 +70,7 @@ internal class EnergyPylonCharge : MonoBehaviour
                 minDist = dist;
             }
         }
-        if (closest != null)
+        if (closest != null && currentTarget != null)
         {
             currentTarget.AddEnergy(energyPerSecond * Time.deltaTime);
             if (!wasCharging)
