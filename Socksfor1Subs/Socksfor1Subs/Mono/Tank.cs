@@ -35,6 +35,8 @@ namespace Socksfor1Subs.Mono
 
         private bool _vehicleInMotion;
 
+        private GameObject _seamothExplode;
+
         public bool IsTurning
         {
             get
@@ -68,6 +70,7 @@ namespace Socksfor1Subs.Mono
             base.Start();
             SetRotationLocked(true);
             activeView = mainView;
+            _seamothExplode = CraftData.GetPrefabForTechType(TechType.Seamoth).GetComponent<SeaMoth>().destructionEffect;
         }
 
         public override void SetPlayerInside(bool inside)
@@ -429,6 +432,15 @@ namespace Socksfor1Subs.Mono
             ONLINE,
             UNPOWERED,
             DAMAGED
+        }
+
+        public GameObject SpawnSeamothExplosion(Vector3 pos, float scale)
+        {
+            var go = Instantiate(_seamothExplode, pos, Quaternion.identity);
+            Helpers.MakeParticleSystemScaleable(go);
+            go.transform.GetChild(1).gameObject.SetActive(false);
+            go.transform.localScale = Vector3.one * scale;
+            return go;
         }
     }
 }

@@ -31,9 +31,13 @@ internal class BossHead : MonoBehaviour
 
     public void FireBasicEnergyBall()
     {
-        var ball = boss.SpawnEnergyBall(jawTransform.position, 3);
-        ball.lifetime = 120;
+        var ball = boss.SpawnEnergyBall(jawTransform.position, 7);
+        ball.lifetime = 30;
         ball.gameObject.AddComponent<MineTravel>();
+        var damage = ball.gameObject.GetComponent<EnergyBallDamageInRange>();
+        damage.damageRadius = 25;
+        damage.damage = 50;
+        damage.destroyPylons = false;
     }
 
     public void FireVomitGas()

@@ -2,6 +2,8 @@
 
 internal class Boss : MonoBehaviour
 {
+    public static Boss main;
+
     public Creature creature;
 
     public GameObject projectilePrefab;
@@ -35,6 +37,8 @@ internal class Boss : MonoBehaviour
 
     private void Start()
     {
+        main = this;
+
         SeaMoth seamoth = CraftData.GetPrefabForTechType(TechType.Seamoth).GetComponent<SeaMoth>();
         projectilePrefab = Instantiate(seamoth.torpedoTypes[0].prefab.GetComponent<SeamothTorpedo>().explosionPrefab.GetComponent<PrefabSpawn>().prefab);
         Destroy(projectilePrefab.GetComponent<VFXDestroyAfterSeconds>());

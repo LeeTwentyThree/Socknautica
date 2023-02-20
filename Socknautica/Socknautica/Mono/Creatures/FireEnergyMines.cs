@@ -4,7 +4,7 @@ internal class FireEnergyMines : CreatureAction
 {
     public Boss boss;
     private float minInterval = 20f;
-    private float maxInterval = 50f;
+    private float maxInterval = 33f;
     private float priority = BossBalance.fireEnegyBallBallPriority;
 
     private float timeLastFire;

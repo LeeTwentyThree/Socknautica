@@ -10,12 +10,14 @@ internal class EnergyBallDamageInRange : MonoBehaviour
 
     private List<LiveMixin> damagedTargets;
 
-    private float damageRadius = 10;
-    private float damage = 100;
+    public float damageRadius = 10;
+    public float damage = 100;
 
     public float lifetime = 20f;
 
     private float timeSpawned;
+
+    public bool destroyPylons = true;
 
     private void Start()
     {
@@ -47,7 +49,7 @@ internal class EnergyBallDamageInRange : MonoBehaviour
                 destroySelf = true;
             }
             var pylon = go.GetComponent<EnergyPylonCharge>();
-            if (pylon != null)
+            if (destroyPylons && pylon != null)
             {
                 pylon.Explode();
                 destroySelf = true;

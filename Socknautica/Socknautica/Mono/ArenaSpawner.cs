@@ -112,7 +112,7 @@ public class ArenaSpawner : MonoBehaviour
     private void SpawnObjects()
     {
         float radius = 200 * kScaleFactor;
-        int num = 8;
+        int num = 6;
         float max = Mathf.PI * 2f;
         for (int i = 0; i < num; i++)
         {
@@ -137,6 +137,12 @@ public class ArenaSpawner : MonoBehaviour
             var pos3d = new Vector3(pos2d.x, arenaPos.y, pos2d.y);
             if (Vector3.Distance(Helpers.Flatten(pos3d), Helpers.Flatten(center.position)) < 129) continue;
             if (Vector3.Distance(Helpers.Flatten(pos3d), Helpers.Flatten(teleportTankDropIntoArenaPosition)) < 100) continue;
+            bool invalid = false;
+            foreach (var pylon in energyPylons)
+            {
+                if (pylon && Vector3.Distance(pylon.transform.position, pos3d) < 60) invalid = true;
+            }
+            if (invalid) continue;
             SpawnLightPillar(pos3d);
         }
     }
@@ -151,9 +157,11 @@ public class ArenaSpawner : MonoBehaviour
     private void SpawnLightPillar(Vector3 locPos)
     {
         var spawned = CraftData.InstantiateFromPrefab(Main.arenaLightPillar.TechType);
-        spawned.transform.localScale = Vector3.one * Random.Range(8f, 12f);
+        spawned.transform.localScale = Vector3.one * Random.Range(2f, 3f);
         FixSpawnedObject(spawned);
-        spawned.transform.localPosition = arenaPos + locPos;
+        spawned.transform.localPosition = locPos;
+        spawned.transform.localEulerAngles = new Vector3(0, Random.Range(0, 360), 0);
+        spawned.SetActive(true);
     }
 
     private void SpawnCreature(TechType techType, Vector3 globalPos, Vector3 scale = default)
@@ -164,6 +172,14 @@ public class ArenaSpawner : MonoBehaviour
         if (scale != default) spawned.transform.localScale = scale;
         var leash = spawned.GetComponent<StayAtLeashPosition>();
         if (leash != null) leash.leashDistance = 9999;
+        if (techType != Main.multigarg.TechType)
+        {
+            var swimRandom = spawned.GetComponent<SwimRandom>();
+            if (swimRandom)
+            {
+                spawned.AddComponent<Creatures.HuntDownPlayer>().velocity = swimRandom.swimVelocity;
+            }
+        }
     }
 
     private void SpawnEnergyPylon(Vector3 loc, Vector3 eulers = default)

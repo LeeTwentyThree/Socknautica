@@ -7,6 +7,15 @@ namespace Socksfor1Subs
 {
     public static class Helpers
     {
+        public static void MakeParticleSystemScaleable(GameObject root)
+        {
+            foreach (var ps in root.GetComponentsInChildren<ParticleSystem>())
+            {
+                var main = ps.main;
+                main.scalingMode = ParticleSystemScalingMode.Hierarchy;
+            }
+        }
+
         public static void ApplySNShaders(GameObject prefab, float shininess = 8f, float specularInt = 1f, float glowStrength = 1f, Material glassMaterial = null)
         {
             var renderers = prefab.GetComponentsInChildren<Renderer>(true);

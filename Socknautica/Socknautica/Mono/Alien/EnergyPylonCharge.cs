@@ -6,7 +6,7 @@ internal class EnergyPylonCharge : MonoBehaviour
 {
     public Transform[] chargingPoints;
     public float chargeRange = 100f;
-    public float energyPerSecond = 11.5f;
+    public float energyPerSecond = 6f;
 
     private Vehicle currentTarget;
     private bool wasCharging;
@@ -141,6 +141,16 @@ internal class EnergyPylonCharge : MonoBehaviour
     public void Explode()
     {
         Utils.PlayFMODAsset(explodeSound, transform.position);
+        var arena = ArenaSpawner.main;
+        if (arena != null)
+        {
+            ArenaSpawner.SpawnSeamothExplosion(transform.position, 10);
+        }
         Destroy(gameObject);
+    }
+
+    private void OnDestroy()
+    {
+        if (lineRenderer) Destroy(lineRenderer.gameObject);
     }
 }

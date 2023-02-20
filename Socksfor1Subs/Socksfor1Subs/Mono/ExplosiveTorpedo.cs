@@ -199,6 +199,10 @@ namespace Socksfor1Subs.Mono
                 MainCameraControl.main.ShakeCamera(3f, 3f, MainCameraControl.ShakeMode.Quadratic, 0.8f);
             }
             WorldForces.AddExplosion(location, DayNightCycle.main.timePassed, 500f, 10f);
+            if (tank)
+            {
+                tank.SpawnSeamothExplosion(transform.position, 2);
+            }
         }
     }
 }

@@ -28,7 +28,14 @@ internal class FireEnergyBall : CreatureAction
     {
         timeLastFire = Time.time;
         timeFireAgain = Time.time + Random.Range(minInterval, maxInterval);
-        boss.GetRandomHead().FireHomingEnergyBall();
+        int spawned = 0;
+        foreach (var head in boss.heads)
+        {
+            if (Random.value < 0.5f) continue;
+            head.FireHomingEnergyBall();
+            spawned++;
+        }
+        if (spawned == 0) boss.GetRandomHead().FireHomingEnergyBall();
         boss.creature.GetAnimator().SetTrigger("vomit");
         boss.PlayAttackSound();
 
