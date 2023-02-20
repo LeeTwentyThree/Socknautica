@@ -27,7 +27,7 @@ internal class BossHead : MonoBehaviour
                 m.SetColor(ShaderPropertyID._Color, new Color(1f, 0.5f, 0f));
             }
         }
-        ball.gameObject.GetComponent<EnergyBallDamageInRange>().lifetime = 60;
+        ball.gameObject.GetComponent<EnergyBallDamageInRange>().lifetime = 30;
     }
 
     public void FireBasicEnergyBall()

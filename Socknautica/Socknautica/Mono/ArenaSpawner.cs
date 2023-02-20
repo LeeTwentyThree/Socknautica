@@ -31,6 +31,8 @@ public class ArenaSpawner : MonoBehaviour
     public static GameObject cyclopsObj;
     public static GameObject seamothExplode;
 
+    public GameObject arena;
+
     private bool exploded;
 
     private void Awake()
@@ -57,7 +59,7 @@ public class ArenaSpawner : MonoBehaviour
     private IEnumerator Start()
     {
         StartCoroutine(LoadVFX());
-        var arena = Instantiate(Main.assetBundle.LoadAsset<GameObject>("ArenaBasePrefab"));
+        arena = Instantiate(Main.assetBundle.LoadAsset<GameObject>("ArenaBasePrefab"));
         arena.transform.position = arenaPos;
         arena.transform.localScale = Vector3.one * kScaleFactor;
         MaterialUtils.ApplySNShaders(arena);
