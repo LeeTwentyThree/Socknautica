@@ -14,7 +14,7 @@ internal class BossRoar : MonoBehaviour
     private void Start()
     {
         emitter = gameObject.AddComponent<FMOD_CustomEmitter>();
-        emitter.SetAsset(Helpers.GetFmodAsset(""));
+        emitter.SetAsset(Helpers.GetFmodAsset("BossRoar"));
         emitter.followParent = true;
     }
 
