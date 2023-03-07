@@ -49,7 +49,7 @@ namespace Socksfor1Subs.Mono
             _timeDangerTimeout = Time.time + _dangerDuration;
             if (!wasDangerous)
             {
-                if (Player.main.GetCurrentSub() == sub)
+                if (Player.main.GetCurrentSub() == sub && Mod.config.WarningVoiceLine)
                 {
                     sub.voice.PlayVoiceLine("DadHostileLifeform");
                 }

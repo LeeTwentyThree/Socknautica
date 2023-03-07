@@ -10,5 +10,7 @@ namespace Socksfor1Subs
         public bool EnableTorpedoFlash = false;
         [Toggle("Enable warning siren", Tooltip = "Check this box if you want the D.A.D. Sub to warn you of nearby leviathans.\nRESTART REQUIRED.")]
         public bool WarningSiren = false;
+        [Toggle("Enable warning voice line", Tooltip = "Check this box if you want the D.A.D. Sub to warn you of nearby leviathans with a voice line.\nRESTART REQUIRED.")]
+        public bool WarningVoiceLine = false;
     }
 }

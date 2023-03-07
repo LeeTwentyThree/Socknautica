@@ -58,6 +58,7 @@ public class ArenaSpawner : MonoBehaviour
 
     private IEnumerator Start()
     {
+        Story.StoryGoalManager.main.OnGoalComplete("BeginBossFight");
         StartCoroutine(LoadVFX());
         arena = Instantiate(Main.assetBundle.LoadAsset<GameObject>("ArenaBasePrefab"));
         arena.transform.position = arenaPos;

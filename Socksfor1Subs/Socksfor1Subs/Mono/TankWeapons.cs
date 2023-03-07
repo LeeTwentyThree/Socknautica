@@ -35,10 +35,11 @@ namespace Socksfor1Subs.Mono
         private float _torpedoFireDelay = 1.5f;
         private float _torpedoFireDuration = 0.5f;
         private float _torpedoRegenTime = 5f;
-        private float _torpedoDepletePunishment = 8f;
+        private float _torpedoDepletePunishment = 5f;
 
         private Harpoon _currentHarpoon;
         private bool _harpoonWasDeployed;
+        private float _harpoonDragTankVelocitySupercharged = 5f;
         private float _harpoonDragTankVelocity = 3f;
         private float _harpoonMirrorVelocityMultiplier = 0.9f;
         private float _harpoonMaxFollowDot = 0f;
@@ -47,7 +48,8 @@ namespace Socksfor1Subs.Mono
 
         private float _timeLastBoosted;
         private float _boostCooldown = 1.8f;
-        private float _boostForce = 60f;
+        private float _boostForce = 45f;
+        private float _boostForceSupercharged = 92f;
 
         private FMODAsset _torpedoFireSound = Helpers.GetFmodAsset("event:/sub/seamoth/torpedo_fire");
         private FMODAsset _harpoonFireSound = Helpers.GetFmodAsset("TankShootHarpoon");
@@ -276,7 +278,7 @@ namespace Socksfor1Subs.Mono
                 }
                 else if (reeledIn && !draggingInObject) // going to terrain
                 {
-                    force = (_currentHarpoon.transform.position - barrelEnd.position) * _harpoonDragTankVelocity * Time.deltaTime;
+                    force = (_currentHarpoon.transform.position - barrelEnd.position) * GetHarpoonDragVelocity() * Time.deltaTime;
                 }
                 tank.useRigidbody.AddForce(force, ForceMode.VelocityChange);
             }
@@ -549,10 +551,28 @@ namespace Socksfor1Subs.Mono
             }
         }
 
+        private float GetBoostForce()
+        {
+            if (Tank.IsSupercharged())
+            {
+                return _boostForceSupercharged;
+            }
+            return _boostForce;
+        }
+
+        private float GetHarpoonDragVelocity()
+        {
+            if (Tank.IsSupercharged())
+            {
+                return _harpoonDragTankVelocitySupercharged;
+            }
+            return _harpoonDragTankVelocity;
+        }
+
         private void Boost()
         {
             Utils.PlayFMODAsset(_boostSound, transform.position);
-            tank.useRigidbody.AddForce(MainCameraControl.main.transform.forward * _boostForce, ForceMode.VelocityChange);
+            if (transform.position.y < Ocean.main.GetOceanLevel()) tank.useRigidbody.AddForce(MainCameraControl.main.transform.forward * GetBoostForce(), ForceMode.VelocityChange);
             _timeLastBoosted = Time.time;
         }
     }

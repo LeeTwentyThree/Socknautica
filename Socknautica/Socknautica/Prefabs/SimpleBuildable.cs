@@ -17,6 +17,8 @@ public abstract class SimpleBuildable : Buildable
     {
     }
 
+    protected virtual bool ApplyMaterialsAutomatically => true;
+
     /// <summary>
     /// No need to override this
     /// </summary>
@@ -47,8 +49,11 @@ public abstract class SimpleBuildable : Buildable
         ApplyChangesToPrefab(_prefab);
         sky.renderers = _prefab.GetComponentsInChildren<Renderer>();
         _prefab.SetActive(true);
-        MaterialUtils.ApplySNShaders(_prefab, 8f, 1f, 1f);
-        MaterialUtils.ApplyPrecursorMaterials(_prefab, 2f);
+        if (ApplyMaterialsAutomatically)
+        {
+            MaterialUtils.ApplySNShaders(_prefab, 8f, 1f, 1f);
+            MaterialUtils.ApplyPrecursorMaterials(_prefab, 2f);
+        }
         return _prefab;
     }
 

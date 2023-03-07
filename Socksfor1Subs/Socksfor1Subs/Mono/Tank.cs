@@ -442,5 +442,10 @@ namespace Socksfor1Subs.Mono
             go.transform.localScale = Vector3.one * scale;
             return go;
         }
+
+        public static bool IsSupercharged()
+        {
+            return Story.StoryGoalManager.main.IsGoalComplete("BeginBossFight");
+        }
     }
 }

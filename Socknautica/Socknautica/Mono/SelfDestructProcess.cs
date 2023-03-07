@@ -46,9 +46,9 @@ internal class SelfDestructProcess : MonoBehaviour
 
         var explosionCenter = rocket.gameObject.transform.position + Vector3.up * 21 + Vector3.left * 15f;
 
-        timeExplode = Time.time + 15f;
+        timeExplode = Time.time + 30f;
 
-        yield return new WaitForSeconds(13.5f);
+        yield return new WaitForSeconds(28.5f);
 
         for (int i = 0; i < 5; i++)
         {

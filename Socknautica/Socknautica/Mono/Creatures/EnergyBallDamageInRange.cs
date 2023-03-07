@@ -11,7 +11,7 @@ internal class EnergyBallDamageInRange : MonoBehaviour
     private List<LiveMixin> damagedTargets;
 
     public float damageRadius = 10;
-    public float damage = 100;
+    public float damage = 30;
 
     public float lifetime = 20f;
 
@@ -27,7 +27,7 @@ internal class EnergyBallDamageInRange : MonoBehaviour
 
     private void Update()
     {
-        if (Time.time > timeSpawned + lifetime)
+        if (Time.time > timeSpawned + lifetime || (ArenaExplosion.main != null && ArenaExplosion.main.started))
         {
             Destroy(gameObject);
             return;

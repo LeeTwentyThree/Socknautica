@@ -13,6 +13,8 @@ internal class LoopingMusic : MonoBehaviour
     private float duration;
     private float runtimeLeft;
 
+    private static LoopingMusic current;
+
     public static LoopingMusic Play(FMODAsset asset, float duration)
     {
         var music = new GameObject("LoopingMusicPlayer").AddComponent<LoopingMusic>();
@@ -23,6 +25,7 @@ internal class LoopingMusic : MonoBehaviour
 
     private void Start()
     {
+        current = this;
         emitter = gameObject.EnsureComponent<FMOD_CustomEmitter>();
         emitter.SetAsset(asset);
         emitter.Play();
@@ -45,5 +48,11 @@ internal class LoopingMusic : MonoBehaviour
     public void Stop()
     {
         Destroy(gameObject);
+        emitter.Stop();
+    }
+
+    public static void StopCurrent()
+    {
+        if (current != null) current.Stop();
     }
 }

@@ -1,4 +1,4 @@
-﻿using Socknautica.Mono;
+﻿using UnityEngine.SceneManagement;
 
 namespace Socknautica.Patches;
 
@@ -11,5 +11,16 @@ internal class PlayerPatches
     {
         __instance.gameObject.AddComponent<IslandGenerator>();
         __instance.gameObject.AddComponent<InitiateArenaSpawnInRange>();
+        __instance.gameObject.AddComponent<UnlockTrophyOnGameStart>();
+    }
+
+    [HarmonyPatch(nameof(Player.OnKill))]
+    [HarmonyPostfix()]
+    public static void PlayerOnKill(Player __instance)
+    {
+        if (ArenaSpawner.main != null)
+        {
+            SceneManager.LoadSceneAsync("EndCreditsSceneCleaner", LoadSceneMode.Single);
+        }
     }
 }

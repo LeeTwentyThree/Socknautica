@@ -20,6 +20,7 @@ public partial class Main
     internal static EnergyPylon energyPylon;
     internal static ArenaLightPillar arenaLightPillar;
     internal static GiantTooth giantTooth;
+    internal static MultigargStatue statue;
 
     internal static Vector3 aquariumPos = new Vector3(1450, -1000, -1450);
     internal static Vector3 coordBasePos = new Vector3(1700, -1900, -200);
@@ -126,6 +127,9 @@ public partial class Main
 
         magmarangMagmarang = new MagmarangMagmarang();
         magmarangMagmarang.Patch();
+
+        statue = new MultigargStatue();
+        statue.Patch();
 
         var massiveLeviSpawner = new AbyssalLeviathanSpawner();
         massiveLeviSpawner.Patch();

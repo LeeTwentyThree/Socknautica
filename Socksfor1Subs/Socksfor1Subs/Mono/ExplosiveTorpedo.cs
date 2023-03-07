@@ -127,6 +127,15 @@ namespace Socksfor1Subs.Mono
             DamageInRadius(transform.position, 7f);
         }
 
+        private float GetDamage()
+        {
+            if (Tank.IsSupercharged())
+            {
+                return Balance.TankTorpedoDamageSupercharged;
+            }
+            return Balance.TankTorpedoDamage;
+        }
+
         private void DamageInRadius(Vector3 center, float radius)
         {
             var damagedList = new List<LiveMixin>();

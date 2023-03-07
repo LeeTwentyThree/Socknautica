@@ -11,6 +11,7 @@ namespace Socksfor1Subs.Mono
         public Collider collider;
 
         public float baseVelocity = 70f;
+        public float baseVelocitySupercharged = 200f;
         public float reelInVelocity = 150f;
         public float reelInCreatureVelocity = 30f;
         public float rotateToTargetAnglesPerSecond = 520f;
@@ -30,6 +31,7 @@ namespace Socksfor1Subs.Mono
         private float _timeReelInStart;
 
         private float _chainLimit = 300f;
+        private float _chainLimitSupercharged = 300f;
         private float _chainLimitWhileAttached = 500f;
 
         private LineRenderer _lineRenderer;
@@ -41,7 +43,7 @@ namespace Socksfor1Subs.Mono
         {
             get
             {
-                return baseVelocity + _addedVelocity;
+                return GetTravelVelocity() + _addedVelocity;
             }
         }
 
@@ -74,6 +76,10 @@ namespace Socksfor1Subs.Mono
                 if (AttachedToAnything)
                 {
                     return _chainLimitWhileAttached;
+                }
+                if (Tank.IsSupercharged())
+                {
+                    return _chainLimitSupercharged;
                 }
                 return _chainLimit;
             }
@@ -180,9 +186,10 @@ namespace Socksfor1Subs.Mono
 
         private void AccountForTankVelocity()
         {
-            var realisticVelocity = Mathf.Max(baseVelocity, tank.useRigidbody.velocity.magnitude);
-            _addedVelocity = realisticVelocity - baseVelocity;
-            _velocityScale = realisticVelocity / baseVelocity;
+            var vel = GetTravelVelocity();
+            var realisticVelocity = Mathf.Max(vel, tank.useRigidbody.velocity.magnitude);
+            _addedVelocity = realisticVelocity - vel;
+            _velocityScale = realisticVelocity / vel;
         }
 
         private void Update()
@@ -480,6 +487,15 @@ namespace Socksfor1Subs.Mono
             Terrain,
             Object,
             Creature
+        }
+
+        private float GetTravelVelocity()
+        {
+            if (Tank.IsSupercharged())
+            {
+                return baseVelocitySupercharged;
+            }
+            return baseVelocity;
         }
     }
 }

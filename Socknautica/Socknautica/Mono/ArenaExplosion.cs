@@ -11,11 +11,13 @@ internal class ArenaExplosion : MonoBehaviour
     private Light light;
     private float lightScale = 5f;
 
-    private bool started;
+    public bool started;
+
+    public static ArenaExplosion main;
 
     public static void Explode()
     {
-        new GameObject("ArenaExplosion").AddComponent<ArenaExplosion>();
+        main = new GameObject("ArenaExplosion").AddComponent<ArenaExplosion>();
     }
 
     private IEnumerator Start()
@@ -38,10 +40,12 @@ internal class ArenaExplosion : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         started = true;
+        SaveWithoutSaving.OnDefeatBoss();
         SpawnExplosion(ArenaSpawner.main.center.position);
         yield return new WaitForSeconds(5f);
         KillBoss();
         KillAll();
+        LoopingMusic.StopCurrent();
         ArenaSpawner.main.arena.transform.GetChild(1).gameObject.SetActive(false);
         FadingOverlay.PlayFX(Color.green, 0.1f, 1f, 0.1f);
         yield return new WaitForSeconds(3f);
@@ -75,6 +79,14 @@ internal class ArenaExplosion : MonoBehaviour
                 var lm = c.gameObject.GetComponent<LiveMixin>();
                 if (lm)
                     lm.TakeDamage(99999);
+            }
+        }
+        var energyOrbs = Object.FindObjectsOfType<EnergyBallDamageInRange>();
+        foreach (var o in energyOrbs)
+        {
+            if (o != null)
+            {
+                Destroy(o.gameObject);
             }
         }
     }

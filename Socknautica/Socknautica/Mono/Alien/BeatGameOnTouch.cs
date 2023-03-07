@@ -8,7 +8,7 @@ internal class BeatGameOnTouch : MonoBehaviour
     private void Update()
     {
         if (touched) return;
-        if (Vector3.Distance(Player.main.transform.position, transform.position) < 70f)
+        if (Vector3.Distance(Player.main.transform.position, transform.position) < 30f)
         {
             Touch();
         }
