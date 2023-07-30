@@ -19,3 +19,24 @@ internal class RocketPatches
         button.transform.localScale = Vector3.one * .25f;
     }
 }
+[HarmonyPatch(typeof(LaunchRocket))]
+internal class LaunchRocketPatches
+{
+    [HarmonyPatch(nameof(LaunchRocket.OnHandClick))]
+    [HarmonyPrefix()]
+    public static bool OnHandClickPrefix(LaunchRocket __instance)
+    {
+        if (LaunchRocket.launchStarted)
+        {
+            return true;
+        }
+        if (SaveWithoutSaving.GetBossDefeated())
+        {
+            return true;
+        }
+        LaunchRocket.SetLaunchStarted();
+        HandReticle.main.RequestCrosshairHide();
+        MultigargRocketCinematicController.PlayCinematic(__instance.GetComponentInParent<Rocket>());
+        return false;
+    }
+}

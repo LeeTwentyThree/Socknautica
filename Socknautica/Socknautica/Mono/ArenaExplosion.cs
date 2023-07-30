@@ -41,32 +41,41 @@ internal class ArenaExplosion : MonoBehaviour
         }
         started = true;
         SaveWithoutSaving.OnDefeatBoss();
-        SpawnExplosion(ArenaSpawner.main.center.position);
-        yield return new WaitForSeconds(5f);
+        for (int i = 0; i < 10; i++)
+        {
+            SpawnExplosion(ArenaSpawner.main.center.position + Random.insideUnitSphere * 20, Vector3.up * (i * 36));
+        }
+        FadingOverlay.PlayFX(Color.green, 0, 0.1f, 0.5f);
+        yield return null;
         KillBoss();
         KillAll();
+        ArenaSpawner.main.KnockOverLights();
+        MainCameraControl.main.ShakeCamera(5f, 5f);
         LoopingMusic.StopCurrent();
         ArenaSpawner.main.arena.transform.GetChild(1).gameObject.SetActive(false);
-        FadingOverlay.PlayFX(Color.green, 0.1f, 1f, 0.1f);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(10f);
         //Destroy(sphere);
         Destroy(gameObject);
         started = false;
         SpawnPortal();
     }
 
-    private void SpawnExplosion(Vector3 pos)
+    private void SpawnExplosion(Vector3 pos, Vector3 angle)
     {
         var destruction = ArenaSpawner.cyclopsObj.GetComponent<CyclopsDestructionEvent>();
         var spawned = Instantiate(destruction.fxControl.gameObject);
-        foreach (var system in spawned.GetComponentsInChildren<ParticleSystem>(true))
+        spawned.transform.localScale *= 50;
+        spawned.transform.position = pos;
+        spawned.transform.eulerAngles = angle;
+        var vfx = spawned.GetComponent<VFXController>();
+        vfx.Play(1);
+        vfx.emitters[1].fxPS.transform.localScale *= 10;
+        foreach (var system in vfx.emitters[1].fxPS.GetComponentsInChildren<ParticleSystem>(true))
         {
             var main = system.main;
             main.scalingMode = ParticleSystemScalingMode.Hierarchy;
         }
-        spawned.transform.localScale *= 50;
-        spawned.transform.position = pos;
-        spawned.GetComponent<VFXController>().Play(1);
+
     }
 
     private void KillAll()
@@ -111,13 +120,11 @@ internal class ArenaExplosion : MonoBehaviour
         var boss = Boss.main;
         if (boss)
         {
-            Utils.PlayFMODAsset(Helpers.GetFmodAsset("BossDeath"), boss.transform.position);
+            Utils.PlayFMODAsset(Helpers.GetFmodAsset("BossDeath"), Player.main.transform.position);
             boss.GetComponent<LiveMixin>().Kill();
-            var rb = boss.GetComponent<Rigidbody>();
-            rb.isKinematic = true;
-            boss.transform.localEulerAngles = new Vector3(180, 0, 0);
-            boss.gameObject.GetComponentInChildren<Animator>(true).enabled = false;
+            boss.gameObject.SetActive(false);
         }
+        BossCorpse.SpawnBossCorpse(Boss.main.transform.position);
     }
 
     private void Update()

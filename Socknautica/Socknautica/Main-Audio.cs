@@ -28,8 +28,17 @@ public partial class Main
     public const string kPDABus = "bus:/master/all/all voice/AI voice";
     public const string kCyclopsBus = "bus:/master/all/all voice/cyclops voice";
     public const string kRocketBus = "bus:/master/all/misc/rocket loops";
-    
+
     // 3D Min distance should never be more than 5m, otherwise the rolloff will have a rough time figuring out the best numbers.
+
+    public static FMODAsset sound_bossAmbience = Helpers.GetFmodAsset("BossAmbience");
+    public static FMODAsset sound_bossRoar = Helpers.GetFmodAsset("BossRoar");
+    public static FMODAsset sound_bossAttack = Helpers.GetFmodAsset("BossAttack");
+    public static FMODAsset sound_bossBite = Helpers.GetFmodAsset("BossBite");
+    public static FMODAsset sound_bossDeath = Helpers.GetFmodAsset("BossDeath");
+    public static FMODAsset sound_bossGrowl = Helpers.GetFmodAsset("BossGrowl");
+    public static FMODAsset sound_bossFear = Helpers.GetFmodAsset("BossFear");
+    public static FMODAsset sound_bossHypnosis = Helpers.GetFmodAsset("BossHypnosis");
 
     private static void PatchFMODAudio()
     {
@@ -47,6 +56,8 @@ public partial class Main
         PatchBossSounds("BossBite", "BossBite");
         PatchBossSounds("BossDeath", "BossDeath");
         PatchBossSounds("BossGrowl", "BossGrowl");
+        PatchBossSounds("BossFear", "BossFear");
+        PatchBossSounds("BossHypnosis", "BossHypnosis");
 
         PatchCreatureSounds("AnglerJumpscare", "AnglerJumpscare", 200f);
         PatchCreatureSounds("MassiveLeviathanIdle", "MassiveLeviathanIdle", 9999f);

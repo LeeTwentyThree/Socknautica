@@ -30,6 +30,11 @@ public class SwimRandomArena : CreatureAction
 
 	private void Update()
     {
+		if (ArenaExplosion.main != null)
+		{
+            swimBehaviour.SwimTo(ArenaSpawner.main.center.position, swimVelocity);
+            return;
+		}
 		if (performing)
         {
 			Vector3 target = GetBossSwimTargetPosition();

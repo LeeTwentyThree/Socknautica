@@ -27,6 +27,7 @@ public class ArenaSpawner : MonoBehaviour
     private const float kScaleFactor = 2f;
 
     private List<EnergyPylonCharge> energyPylons = new List<EnergyPylonCharge>();
+    private List<Transform> lightPillars = new List<Transform>();
 
     public static GameObject cyclopsObj;
     public static GameObject seamothExplode;
@@ -38,6 +39,14 @@ public class ArenaSpawner : MonoBehaviour
     private void Awake()
     {
         main = this;
+
+        ConsoleCommandsHandler.Main.RegisterConsoleCommand("killboss", () =>
+        {
+            foreach (var pylon in energyPylons)
+            {
+                Destroy(pylon.gameObject);
+            }
+        });
     }
     public static void SpawnArena()
     {
@@ -54,6 +63,18 @@ public class ArenaSpawner : MonoBehaviour
     public void OnSubPrefabLoaded(GameObject prefab)
     {
         cyclopsObj = prefab;
+    }
+
+    public void KnockOverLights()
+    {
+        foreach (var pillar in lightPillars)
+        {
+            if (!pillar) continue;
+            var rb = pillar.GetComponent<Rigidbody>();
+            rb.maxAngularVelocity = 100;
+            rb.isKinematic = false;
+            rb.AddTorque(new Vector3(100, 0, 0), ForceMode.VelocityChange);
+        }
     }
 
     private IEnumerator Start()
@@ -165,6 +186,7 @@ public class ArenaSpawner : MonoBehaviour
         spawned.transform.localPosition = locPos;
         spawned.transform.localEulerAngles = new Vector3(0, Random.Range(0, 360), 0);
         spawned.SetActive(true);
+        lightPillars.Add(spawned.transform);
     }
 
     private void SpawnCreature(TechType techType, Vector3 globalPos, Vector3 scale = default)

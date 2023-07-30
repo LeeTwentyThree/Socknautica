@@ -1,4 +1,5 @@
-﻿using UnityEngine.SceneManagement;
+﻿using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace Socknautica.Patches;
 
@@ -20,7 +21,13 @@ internal class PlayerPatches
     {
         if (ArenaSpawner.main != null)
         {
-            SceneManager.LoadSceneAsync("EndCreditsSceneCleaner", LoadSceneMode.Single);
+            UWE.CoroutineHost.StartCoroutine(KillCoroutine());
         }
+    }
+
+    private static IEnumerator KillCoroutine()
+    {
+        yield return new WaitForSeconds(5f);
+        SceneManager.LoadSceneAsync("EndCreditsSceneCleaner", LoadSceneMode.Single);
     }
 }
